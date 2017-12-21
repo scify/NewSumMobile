@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import {AlertProvider} from "../alert/alert";
 
 /*
   Generated class for the NotificationsProvider provider.
@@ -10,8 +11,16 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class NotificationsProvider {
 
-  constructor(public http: HttpClient) {
-    console.log('Hello NotificationsProvider Provider');
+  constructor(private http: HttpClient,
+              private alertProvider :AlertProvider ) {
+
   }
 
+  hasNotification():boolean {
+      return true;
+  }
+
+  displayNotification():void {
+      this.alertProvider.displayMessage("hello");
+  }
 }
