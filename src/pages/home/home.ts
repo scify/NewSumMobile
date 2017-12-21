@@ -12,4 +12,6 @@ export class HomePage {
     soapClient.getAvailableLanguages();
   }
 
+
 }
+
