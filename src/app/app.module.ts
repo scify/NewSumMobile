@@ -11,6 +11,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { NotificationsProvider } from '../providers/notifications/notifications';
+import { SoapClientProvider } from '../providers/soap-client/soap-client';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { NotificationsProvider } from '../providers/notifications/notifications'
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    NotificationsProvider
+    NotificationsProvider,
+    SoapClientProvider
   ]
 })
 export class AppModule {}
