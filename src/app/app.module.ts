@@ -43,7 +43,7 @@ import { HttpClient, HttpHandler } from "@angular/common/http";
     SoapClientProvider,
     AlertProvider,
     HttpClient,
-    // HttpHandler
+     HttpHandler
   ]
 })
 export class AppModule {}

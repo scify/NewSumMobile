@@ -11,7 +11,7 @@ import {AlertProvider} from "../alert/alert";
 @Injectable()
 export class NotificationsProvider {
 
-  constructor(private http: HttpClient,
+  constructor( private http: HttpClient,
               private alertProvider :AlertProvider ) {
 
   }

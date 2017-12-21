@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SOAPClient } from '../../lib/soapclient';
+import {HttpClient} from "@angular/common/http";
 
 
 @Injectable()
@@ -10,8 +11,9 @@ export class SoapClientProvider {
   private namespace:string = "http://NewSumFreeService.Server.NewSumServer.scify.org/";
   // private soap:string = "http://main.newsumservice.scify.org:60500/NewSumFreeService/NewSumFreeService";
     private  soapService: any
-  constructor() {
-    this.soapService = new SOAPClient();
+  constructor(httpClient: HttpClient) {
+
+    this.soapService = new SOAPClient(httpClient);
     console.log(this.soapService);
     // this.serverUrl, this.wsdlPath, this.namespace);
     // this.soapService.envelopeBuilder = this.envelopeBuilder;
@@ -26,4 +28,7 @@ export class SoapClientProvider {
         });
     //console.log(this.soapService.post('getLanguages', []));
   }
+
+
+
 }

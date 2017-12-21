@@ -8,7 +8,9 @@ import { SoapClientProvider } from "../../providers/soap-client/soap-client";
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, public soapClient: SoapClientProvider) {
+  constructor(public navCtrl: NavController
+    ,public soapClient: SoapClientProvider
+  ) {
     soapClient.getAvailableLanguages();
   }
 

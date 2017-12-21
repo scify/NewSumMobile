@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { AboutPage } from '../about/about';
 import { ContactPage } from '../contact/contact';
 import { HomePage } from '../home/home';
-import {SoapService} from "autopulous-angular2-soap/soap.service";
+//import {SoapService} from "autopulous-angular2-soap/soap.service";
 
 @Component({
   templateUrl: 'tabs.html',
