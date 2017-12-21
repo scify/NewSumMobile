@@ -15,11 +15,12 @@ export class AlertProvider {
   }
 
   displayMessage(message: String):Promise<any> {
-    let alert = this.alertCtrl.create({
+   /* let alert = this.alertCtrl.create({
       title: message,
       subTitle: message
     });
-    return alert.present();
+    return alert.present();*/
+   return null;
   }
 
 }
