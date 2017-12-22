@@ -13,7 +13,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { NotificationsProvider } from '../providers/notifications/notifications';
 import { SoapClientProvider } from '../providers/soap-client/soap-client';
 import { AlertProvider } from '../providers/alert/alert';
-import { HttpClient, HttpHandler } from "@angular/common/http";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -25,7 +25,8 @@ import { HttpClient, HttpHandler } from "@angular/common/http";
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+      HttpClientModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -41,9 +42,7 @@ import { HttpClient, HttpHandler } from "@angular/common/http";
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     NotificationsProvider,
     SoapClientProvider,
-    AlertProvider,
-    HttpClient,
-     HttpHandler
+    AlertProvider
   ]
 })
 export class AppModule {}
