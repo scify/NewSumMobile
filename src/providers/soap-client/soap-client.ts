@@ -12,18 +12,16 @@ export class SoapClientProvider {
 
   constructor() {
     this.soapService = new SOAPClient(this.namespace);
-    console.log(this.soapService);
     // this.serverUrl, this.wsdlPath, this.namespace);
     // this.soapService.envelopeBuilder = this.envelopeBuilder;
     // this.soapService.jsoResponseHandler = (response:{}) => {this.responseJso = response};
     // this.soapService.localNameMode = true;
   }
 
-  public getAvailableLanguages() {
-        //url, method, parameters, async, callback
-        this.soapService.invoke(this.serverUrl + this.wsdlPath, 'getLanguages', [], false, (data) => {
-            console.log(data);
-        });
-    //console.log(this.soapService.post('getLanguages', []));
+  public getResource(queryString) {
+    return this.soapService.invoke(this.serverUrl + this.wsdlPath, queryString, [], false, (data) => {
+        console.log(data);
+        return data;
+    });
   }
 }

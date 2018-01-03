@@ -14,6 +14,9 @@ import { NotificationsProvider } from '../providers/notifications/notifications'
 import { SoapClientProvider } from '../providers/soap-client/soap-client';
 import { AlertProvider } from '../providers/alert/alert';
 import {HttpClientModule} from "@angular/common/http";
+import { ContentLanguagesProvider } from '../providers/content-languages/content-languages';
+import { AppStorageProvider } from '../providers/app-storage/app-storage';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,8 @@ import {HttpClientModule} from "@angular/common/http";
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-      HttpClientModule
+    IonicStorageModule.forRoot(),
+    HttpClientModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -42,7 +46,9 @@ import {HttpClientModule} from "@angular/common/http";
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     NotificationsProvider,
     SoapClientProvider,
-    AlertProvider
+    AlertProvider,
+    ContentLanguagesProvider,
+    AppStorageProvider
   ]
 })
 export class AppModule {}

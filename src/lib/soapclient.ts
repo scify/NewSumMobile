@@ -150,6 +150,7 @@ export class SOAPClient {
   _onLoadWsdl(url, method, parameters, async, callback, req) {
     let wsdl = req.responseXML;
     console.log('My wsdl is: ', wsdl);
+    console.log('My parameters are: ', parameters);
     this.SOAPClient_cacheWsdl[url] = wsdl;	// save a copy in cache
     return this._sendSoapRequest(url, method, parameters, async, callback, wsdl);
   }
@@ -166,7 +167,8 @@ export class SOAPClient {
       "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
       "<soap:Body>" +
       "<" + method + " xmlns=\"" + ns + "\">" +
-      parameters.toXml() +
+      //TODO: should we remove that?
+      // parameters.toXml() +
       "</" + method + "></soap:Body></soap:Envelope>";
     // send request
     //todo: replace with HttpClient?

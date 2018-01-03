@@ -11,7 +11,6 @@ export class HomePage {
   constructor(public navCtrl: NavController
     ,public soapClient: SoapClientProvider
   ) {
-    soapClient.getAvailableLanguages();
   }
 
 
