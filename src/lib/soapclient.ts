@@ -19,7 +19,7 @@ export class SOAPClientParameters {
         case "number":
         case "boolean":
         case "object":
-          xml += "<" + p + ">" + this._serialize(this._pl[p]) + "</" + p + ">";
+          xml += "<" + p + " type=\"d:string\">" + this._serialize(this._pl[p]) + "</" + p + ">";
           break;
         default:
           break;
@@ -150,12 +150,24 @@ export class SOAPClient {
   _onLoadWsdl(url, method, parameters, async, callback, req) {
     let wsdl = req.responseXML;
     console.log('My wsdl is: ', wsdl);
-    console.log('My parameters are: ', parameters);
     this.SOAPClient_cacheWsdl[url] = wsdl;	// save a copy in cache
     return this._sendSoapRequest(url, method, parameters, async, callback, wsdl);
   }
 
+  static _getFormattedParameters(parameters): SOAPClientParameters {
+    let formattedParameters = new SOAPClientParameters();
+    if (parameters) {
+      for (let p in parameters) {
+        formattedParameters.add(p, parameters[p]);
+      }
+    }
+    return formattedParameters;
+  }
+
   _sendSoapRequest(url, method, parameters, async, callback, wsdl) {
+    parameters = SOAPClient._getFormattedParameters(parameters);
+    console.log('My parameters are: ', parameters);
+    console.log('My parameters are (XML): ', parameters.toXml());
     // get namespace
     let ns = (wsdl.documentElement.attributes["targetNamespace"] + "" == "undefined") ? wsdl.documentElement.attributes.getNamedItem("targetNamespace").nodeValue : wsdl.documentElement.attributes["targetNamespace"].value;
     // build SOAP request
@@ -167,8 +179,7 @@ export class SOAPClient {
       "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
       "<soap:Body>" +
       "<" + method + " xmlns=\"" + ns + "\">" +
-      //TODO: should we remove that?
-      // parameters.toXml() +
+      parameters.toXml() +
       "</" + method + "></soap:Body></soap:Envelope>";
     // send request
     //todo: replace with HttpClient?
@@ -180,7 +191,8 @@ export class SOAPClient {
     }
     else
       xmlHttp.open("POST", url, async);
-    let soapaction = ((ns.lastIndexOf("/") != ns.length - 1) ? ns + "/" : ns) + method;
+    // let soapaction = ((ns.lastIndexOf("/") != ns.length - 1) ? ns + "/" : ns) + method;
+    let soapaction = url + '?wsdl';
     xmlHttp.setRequestHeader("SOAPAction", soapaction);
     xmlHttp.setRequestHeader("Content-Type", "text/xml; charset=utf-8");
     if (async) {

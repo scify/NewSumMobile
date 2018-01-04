@@ -8,7 +8,7 @@ export class SoapClientProvider {
   private wsdlPath:string = "/NewSumFreeService/NewSumFreeService";//?wsdl";
   private namespace:string = "http://NewSumFreeService.Server.NewSumServer.scify.org/";
   // private soap:string = "http://main.newsumservice.scify.org:60500/NewSumFreeService/NewSumFreeService";
-  private  soapService: any;
+  private soapService: SOAPClient;
 
   constructor() {
     this.soapService = new SOAPClient(this.namespace);
@@ -18,8 +18,8 @@ export class SoapClientProvider {
     // this.soapService.localNameMode = true;
   }
 
-  public getResource(queryString) {
-    return this.soapService.invoke(this.serverUrl + this.wsdlPath, queryString, [], false, (data) => {
+  public getResource(methodToInvoke, parameters) {
+    return this.soapService.invoke(this.serverUrl + this.wsdlPath, methodToInvoke, parameters, false, (data) => {
         console.log(data);
         return data;
     });

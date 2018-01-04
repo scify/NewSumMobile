@@ -6,6 +6,7 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 import {TabsPage} from '../pages/tabs/tabs';
 import {NotificationsProvider} from "../providers/notifications/notifications";
 import {ContentLanguagesProvider} from "../providers/content-languages/content-languages";
+import {SourcesProvider} from "../providers/sources/sources";
 
 @Component({
   templateUrl: 'app.html'
@@ -17,18 +18,16 @@ export class MyApp {
               statusBar: StatusBar,
               splashScreen: SplashScreen,
               private contentLanguagesProvider: ContentLanguagesProvider,
+              private sourcesProvider: SourcesProvider,
               public notification: NotificationsProvider) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
-      splashScreen.hide();
-      this.contentLanguagesProvider.getSelectedContentLanguage().then((lang) => {
-        if(lang)
-          this.rootPage = TabsPage;
-      });
-      this.contentLanguagesProvider.contentLanguageUpdated.subscribe((newLang) => {
-        console.log("GOT A NEW LANG", newLang);
+      this.contentLanguagesProvider.getSelectedContentLanguageFromStorage().then((selectedLang) => {
+        if (!!selectedLang)
+          this.rootPage = TabsPage; // TODO: set different view if lang is not set
+        splashScreen.hide();
       });
     });
 

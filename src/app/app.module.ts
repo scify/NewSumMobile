@@ -17,6 +17,7 @@ import {HttpClientModule} from "@angular/common/http";
 import { ContentLanguagesProvider } from '../providers/content-languages/content-languages';
 import { AppStorageProvider } from '../providers/app-storage/app-storage';
 import { IonicStorageModule } from '@ionic/storage';
+import { SourcesProvider } from '../providers/sources/sources';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { IonicStorageModule } from '@ionic/storage';
     SoapClientProvider,
     AlertProvider,
     ContentLanguagesProvider,
-    AppStorageProvider
+    AppStorageProvider,
+    SourcesProvider
   ]
 })
 export class AppModule {}

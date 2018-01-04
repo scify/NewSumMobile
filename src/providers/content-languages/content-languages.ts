@@ -11,13 +11,17 @@ import {Subject} from "rxjs/Subject";
 */
 @Injectable()
 export class ContentLanguagesProvider {
-  languages: Array<string>;
-  contentLanguageUpdated: Subject<string>;
+  public contentLanguageUpdated: Subject<string>;
+  private languages: Array<string>;
+  private selectedLanguage: string;
 
   constructor(public soapClient: SoapClientProvider, public appStorage: AppStorageProvider) {
-    this.getContentLanguagesAPI();
-    this.getSelectedContentLanguage().then((selectedLang) => {
-      // TODO: make additional calls here to fetch topics or similar info
+    this.contentLanguageUpdated = new Subject<string>();
+    this.getContentLanguagesFromAPI();
+    this.getSelectedContentLanguageFromStorage().then((selectedLang) => {
+      this.selectedLanguage = selectedLang;
+      if (selectedLang)
+        this.contentLanguageUpdated.next(selectedLang);
     });
   }
 
@@ -25,16 +29,21 @@ export class ContentLanguagesProvider {
     return this.languages.splice(0);
   }
 
-  private getContentLanguagesAPI() {
-    this.languages = this.soapClient.getResource('getLanguages');
+  private getContentLanguagesFromAPI() {
+    this.languages = this.soapClient.getResource('getLanguages', null);
   }
 
-  public setSelectedContentLanguage(langCode) {
+  public setSelectedContentLanguage(langCode): Promise<any> {
     this.contentLanguageUpdated.next(langCode);
+    this.selectedLanguage = langCode;
     return this.appStorage.set('selected-language', langCode);
   }
 
-  public getSelectedContentLanguage(): Promise<any> {
+  public getSelectedContentLanguage(): string {
+    return this.selectedLanguage || 'EL';
+  }
+
+  public getSelectedContentLanguageFromStorage(): Promise<any> {
     return this.appStorage.get('selected-language');
   }
 }
