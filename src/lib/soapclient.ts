@@ -188,11 +188,11 @@ export class SOAPClient {
       xmlHttp.open("POST", url, async, this.userName, this.password);
       // Some WS implementations (i.e. BEA WebLogic Server 10.0 JAX-WS) don't support Challenge/Response HTTP BASIC, so we send authorization headers in the first request
       xmlHttp.setRequestHeader("Authorization", "Basic " + this._toBase64(this.userName + ":" + this.password));
-    }
-    else
+    } else {
       xmlHttp.open("POST", url, async);
+    }
     // let soapaction = ((ns.lastIndexOf("/") != ns.length - 1) ? ns + "/" : ns) + method;
-    let soapaction = url + '?wsdl';
+    let soapaction = url;
     xmlHttp.setRequestHeader("SOAPAction", soapaction);
     xmlHttp.setRequestHeader("Content-Type", "text/xml; charset=utf-8");
     if (async) {
