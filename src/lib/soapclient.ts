@@ -191,8 +191,9 @@ export class SOAPClient {
     } else {
       xmlHttp.open("POST", url, async);
     }
-    // let soapaction = ((ns.lastIndexOf("/") != ns.length - 1) ? ns + "/" : ns) + method;
-    let soapaction = url;
+    // TODO: we *most* probably do NOT need the SOAPAction header
+    let soapaction = ((ns.lastIndexOf("/") != ns.length - 1) ? ns + "/" : ns) + method;
+    // let soapaction = url.replace(/\/NewSumFreeService/g, '');
     xmlHttp.setRequestHeader("SOAPAction", soapaction);
     xmlHttp.setRequestHeader("Content-Type", "text/xml; charset=utf-8");
     if (async) {
