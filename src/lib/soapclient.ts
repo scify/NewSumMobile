@@ -19,7 +19,7 @@ export class SOAPClientParameters {
         case "number":
         case "boolean":
         case "object":
-          xml += "<" + p + " type=\"d:string\">" + this._serialize(this._pl[p]) + "</" + p + ">";
+          xml += "<" + p + ">" + this._serialize(this._pl[p]) + "</" + p + ">";
           break;
         default:
           break;
@@ -174,13 +174,11 @@ export class SOAPClient {
     let sr =
       "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
       "<soap:Envelope " +
-      "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
-      "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
       "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
-      "<soap:Body>" +
-      "<" + method + " xmlns=\"" + ns + "\">" +
+      "<soap:Header/><soap:Body>" +
+      "<ns2:" + method + " xmlns:ns2=\"" + ns + "\">" +
       parameters.toXml() +
-      "</" + method + "></soap:Body></soap:Envelope>";
+      "</ns2:" + method + "></soap:Body></soap:Envelope>";
     // send request
     //todo: replace with HttpClient?
     let xmlHttp = this._getXmlHttp();
@@ -191,10 +189,8 @@ export class SOAPClient {
     } else {
       xmlHttp.open("POST", url, async);
     }
-    // TODO: we *most* probably do NOT need the SOAPAction header
     let soapaction = ((ns.lastIndexOf("/") != ns.length - 1) ? ns + "/" : ns) + method;
-    // let soapaction = url.replace(/\/NewSumFreeService/g, '');
-    xmlHttp.setRequestHeader("SOAPAction", soapaction);
+    xmlHttp.setRequestHeader("SOAPAction", '"' + soapaction + '"');
     xmlHttp.setRequestHeader("Content-Type", "text/xml; charset=utf-8");
     if (async) {
       let self = this;

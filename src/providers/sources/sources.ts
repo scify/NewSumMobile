@@ -25,6 +25,6 @@ export class SourcesProvider {
   }
 
   private getSourcesFromAPI() {
-    return this.soapClient.getResource('getFeedSources', {sLang: '"' + this.selectedLang + '"'});
+    return this.soapClient.getResource('getFeedSources', {sLang: this.selectedLang});
   }
 }
