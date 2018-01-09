@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {SoapClientProvider} from "../soap-client/soap-client";
 import {AppStorageProvider} from "../app-storage/app-storage";
 import {Subject} from "rxjs/Subject";
+import {ServiceClientProvider} from "../service-client/service-client";
 
 /*
   Generated class for the ContentLanguagesProvider provider.
@@ -15,9 +15,9 @@ export class ContentLanguagesProvider {
   private languages: Array<string>;
   private selectedLanguage: string;
 
-  constructor(public soapClient: SoapClientProvider, public appStorage: AppStorageProvider) {
+  constructor(private serviceClient: ServiceClientProvider, private appStorage: AppStorageProvider) {
     this.contentLanguageUpdated = new Subject<string>();
-    this.getContentLanguagesFromAPI();
+    this.languages = this.serviceClient.getLanguages();
     this.getSelectedContentLanguageFromStorage().then((selectedLang) => {
       this.selectedLanguage = selectedLang;
       if (selectedLang)
@@ -29,10 +29,6 @@ export class ContentLanguagesProvider {
     return this.languages.splice(0);
   }
 
-  private getContentLanguagesFromAPI() {
-    this.languages = this.soapClient.getResource('getLanguages', null);
-  }
-
   public setSelectedContentLanguage(langCode): Promise<any> {
     this.contentLanguageUpdated.next(langCode);
     this.selectedLanguage = langCode;
@@ -40,6 +36,7 @@ export class ContentLanguagesProvider {
   }
 
   public getSelectedContentLanguage(): string {
+    // TODO: remove default, used only for testing purposes
     return this.selectedLanguage || 'EL';
   }
 

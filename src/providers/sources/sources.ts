@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import {SoapClientProvider} from "../soap-client/soap-client";
 import {ContentLanguagesProvider} from "../content-languages/content-languages";
+import {Subject} from "rxjs/Subject";
+import {ServiceClientProvider} from "../service-client/service-client";
 
 /*
   Generated class for the SourcesProvider provider.
@@ -10,21 +11,31 @@ import {ContentLanguagesProvider} from "../content-languages/content-languages";
 */
 @Injectable()
 export class SourcesProvider {
-  selectedLang: string;
-  sources: any;
+  public sourcesUpdated: Subject<any>;
+  public selectedLang: string;
+  private sources: Array<any> = [];
 
-  constructor(private soapClient: SoapClientProvider, private contentLanguagesProvider: ContentLanguagesProvider) {
+  constructor(private serviceClient: ServiceClientProvider, private contentLanguagesProvider: ContentLanguagesProvider) {
+    this.sourcesUpdated = new Subject<any>();
     this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
     this.contentLanguagesProvider.contentLanguageUpdated.subscribe((newLang) => {
         this.selectedLang = newLang;
-        if (newLang)
-          this.sources = this.getSourcesFromAPI();
+        if (newLang) {
+          this.sources = this.serviceClient.getFeedSources(this.selectedLang);
+          this.sourcesUpdated.next(this.sources);
+        }
     }, error => console.error(error));
-    if (this.selectedLang)
-      this.sources = this.getSourcesFromAPI();
+    if (this.selectedLang) {
+      this.sources = this.serviceClient.getFeedSources(this.selectedLang);
+      this.sourcesUpdated.next(this.sources);
+    }
   }
 
-  private getSourcesFromAPI() {
-    return this.soapClient.getResource('getFeedSources', {sLang: this.selectedLang});
+  public getSelectedSources() {
+    return this.sources.splice(0);
+  }
+
+  public getSelectedSourcesUrls() {
+    return this.sources.map(s => s.sFeedLink);
   }
 }

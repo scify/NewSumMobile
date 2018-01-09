@@ -18,6 +18,8 @@ import { ContentLanguagesProvider } from '../providers/content-languages/content
 import { AppStorageProvider } from '../providers/app-storage/app-storage';
 import { IonicStorageModule } from '@ionic/storage';
 import { SourcesProvider } from '../providers/sources/sources';
+import { CategoriesProvider } from '../providers/categories/categories';
+import { ServiceClientProvider } from '../providers/service-client/service-client';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { SourcesProvider } from '../providers/sources/sources';
     AlertProvider,
     ContentLanguagesProvider,
     AppStorageProvider,
-    SourcesProvider
+    SourcesProvider,
+    CategoriesProvider,
+    ServiceClientProvider
   ]
 })
 export class AppModule {}
