@@ -8,9 +8,9 @@ import {ServiceClientProvider} from "../../providers/service-client/service-clie
   templateUrl: 'home.html'
 })
 export class HomePage {
-  private newSumService:ServiceClientProvider;
-  constructor(public navCtrl: NavController,
-              public newSumService: ServiceClientProvider
+
+  constructor(private navCtrl: NavController,
+              private newSumService: ServiceClientProvider
   ) {
     this.newSumService = newSumService;
   }
