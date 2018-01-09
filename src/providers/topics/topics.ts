@@ -47,9 +47,7 @@ export class TopicsProvider {
     return this.topics;
   }
 
-  // TODO: pass keyword as parameter
-  public getTopicsByKeyword(): Array<any> {
-    let keyword = 'Συρία';
+  public getTopicsByKeyword(keyword: string): Array<any> {
     this.topicsByKeyword = this.serviceClient.getTopicsByKeyword(keyword, this.selectedSourcesUrls, this.selectedLang);
     return this.topicsByKeyword;
   }
