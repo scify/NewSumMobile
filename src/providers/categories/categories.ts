@@ -18,18 +18,18 @@ export class CategoriesProvider {
   private categories: Array<string> = [];
 
   constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
-              private contentLanguages: ContentLanguagesProvider) {
+              private contentLanguagesProvider: ContentLanguagesProvider) {
     this.categoriesUpdated = new Subject<any>();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
     this.sourcesProvider.sourcesUpdated.subscribe((newSources) => {
-      this.selectedLang = this.contentLanguages.getSelectedContentLanguage();
+      this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       if (newSources.length > 0) {
         this.categories = this.serviceClient.getCategories(this.sourcesProvider.getSelectedSourcesUrls(), this.selectedLang);
         this.categoriesUpdated.next(this.categories);
       }
     }, error => console.error(error));
     if (this.selectedSourcesUrls.length > 0) {
-      this.selectedLang = this.contentLanguages.getSelectedContentLanguage();
+      this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       this.categories = this.serviceClient.getCategories(this.selectedSourcesUrls, this.selectedLang);
       this.categoriesUpdated.next(this.categories);
     }

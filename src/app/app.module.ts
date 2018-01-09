@@ -21,6 +21,7 @@ import { SourcesProvider } from '../providers/sources/sources';
 import { CategoriesProvider } from '../providers/categories/categories';
 import { ServiceClientProvider } from '../providers/service-client/service-client';
 import { TopicsProvider } from '../providers/topics/topics';
+import { SummariesProvider } from '../providers/summaries/summaries';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { TopicsProvider } from '../providers/topics/topics';
     SourcesProvider,
     CategoriesProvider,
     ServiceClientProvider,
-    TopicsProvider
+    TopicsProvider,
+    SummariesProvider
   ]
 })
 export class AppModule {}

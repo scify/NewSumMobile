@@ -21,12 +21,12 @@ export class TopicsProvider {
   private topicsByKeyword: Array<any>;
 
   constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
-              private contentLanguages: ContentLanguagesProvider, private categoriesProvider: CategoriesProvider) {
+              private contentLanguagesProvider: ContentLanguagesProvider, private categoriesProvider: CategoriesProvider) {
     this.topicsUpdated = new Subject<any>();
     this.selectedCategories = this.categoriesProvider.getSelectedCategories();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
     this.categoriesProvider.categoriesUpdated.subscribe((newCategories) => {
-      this.selectedLang = this.contentLanguages.getSelectedContentLanguage();
+      this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       if (newCategories.length > 0) {
         this.selectedCategories = newCategories;
         this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
@@ -36,7 +36,7 @@ export class TopicsProvider {
       }
     }, error => console.error(error));
     if (this.selectedCategories.length > 0) {
-      this.selectedLang = this.contentLanguages.getSelectedContentLanguage();
+      this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
         this.selectedCategories[0], this.selectedLang);
       this.topicsUpdated.next(this.topics);
@@ -44,7 +44,7 @@ export class TopicsProvider {
   }
 
   public getTopics(): Array<any> {
-    return this.topics;
+    return this.topics.splice(0);
   }
 
   public getTopicsByKeyword(keyword: string): Array<any> {
