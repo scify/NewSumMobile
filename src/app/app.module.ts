@@ -33,7 +33,7 @@ import { SummariesProvider } from '../providers/summaries/summaries';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {tabsPlacement: 'top'}),
     IonicStorageModule.forRoot(),
     HttpClientModule
   ],

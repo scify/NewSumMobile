@@ -16,7 +16,7 @@ import {SummariesProvider} from "../providers/summaries/summaries";
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage: any = HomePage;
+  rootPage: any = TabsPage;
 
   constructor(platform: Platform,
               statusBar: StatusBar,
@@ -33,7 +33,7 @@ export class MyApp {
       statusBar.styleDefault();
       this.contentLanguagesProvider.getSelectedContentLanguageFromStorage().then((selectedLang) => {
         if (!!selectedLang)
-          this.rootPage = HomePage; // TODO: set different view if lang is not set
+          this.rootPage = TabsPage; // TODO: set different view if lang is not set
         splashScreen.hide();
       });
     });
