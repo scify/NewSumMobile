@@ -9,12 +9,13 @@ import {ContentLanguagesProvider} from "../providers/content-languages/content-l
 import {SourcesProvider} from "../providers/sources/sources";
 import {CategoriesProvider} from "../providers/categories/categories";
 import {TopicsProvider} from "../providers/topics/topics";
+import {HomePage} from "../pages/home/home";
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage: any = TabsPage;
+  rootPage: any = HomePage;
 
   constructor(platform: Platform,
               statusBar: StatusBar,
@@ -30,7 +31,7 @@ export class MyApp {
       statusBar.styleDefault();
       this.contentLanguagesProvider.getSelectedContentLanguageFromStorage().then((selectedLang) => {
         if (!!selectedLang)
-          this.rootPage = TabsPage; // TODO: set different view if lang is not set
+          this.rootPage = HomePage; // TODO: set different view if lang is not set
         splashScreen.hide();
       });
     });
