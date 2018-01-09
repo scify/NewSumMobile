@@ -16,7 +16,7 @@
         {{ article.Title}}
       </div>
       <div class="stats-info">
-        1 πηγή
+        {{article.FromArticles}} {{article.FromArticles==1? "πηγή":"πηγές"}}
       </div>
     </ion-card-content>
   </ion-card>
