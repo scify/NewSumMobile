@@ -6,11 +6,10 @@ export class SoapClientProvider {
 
   private serverUrl:string = "http://main.newsumservice.scify.org:60500";
   private wsdlPath:string = "/NewSumFreeService/NewSumFreeService";
-  private namespace:string = "http://NewSumFreeService.Server.NewSumServer.scify.org/";
   private soapClient:SOAPClient;
 
   constructor() {
-    this.soapClient = new SOAPClient(this.namespace);
+    this.soapClient = new SOAPClient();
   }
 
   public getResource(methodToInvoke, parameters): string {

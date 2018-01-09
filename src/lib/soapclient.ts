@@ -111,8 +111,6 @@ export class SOAPClient {
   private password = null;
   private SOAPClient_cacheWsdl = [];
 
-  constructor(private namespace:string) {}
-
   invoke = function (url, method, parameters, async, callback) {
     if (async)
       this._loadWsdl(url, method, parameters, async, callback);
