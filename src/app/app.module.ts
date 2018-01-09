@@ -20,6 +20,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { SourcesProvider } from '../providers/sources/sources';
 import { CategoriesProvider } from '../providers/categories/categories';
 import { ServiceClientProvider } from '../providers/service-client/service-client';
+import { TopicsProvider } from '../providers/topics/topics';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { ServiceClientProvider } from '../providers/service-client/service-clien
     AppStorageProvider,
     SourcesProvider,
     CategoriesProvider,
-    ServiceClientProvider
+    ServiceClientProvider,
+    TopicsProvider
   ]
 })
 export class AppModule {}

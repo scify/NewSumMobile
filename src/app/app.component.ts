@@ -8,6 +8,7 @@ import {NotificationsProvider} from "../providers/notifications/notifications";
 import {ContentLanguagesProvider} from "../providers/content-languages/content-languages";
 import {SourcesProvider} from "../providers/sources/sources";
 import {CategoriesProvider} from "../providers/categories/categories";
+import {TopicsProvider} from "../providers/topics/topics";
 
 @Component({
   templateUrl: 'app.html'
@@ -21,6 +22,7 @@ export class MyApp {
               private contentLanguagesProvider: ContentLanguagesProvider,
               private sourcesProvider: SourcesProvider,
               private categoriesProvider: CategoriesProvider,
+              private topicsProvider: TopicsProvider,
               public notification: NotificationsProvider) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.

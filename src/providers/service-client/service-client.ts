@@ -23,4 +23,18 @@ export class ServiceClientProvider {
   public getCategories(selectedSources: Array<string>, selectedLang: string): Array<string> {
     return JSON.parse(this.soapClient.getResource('getCategories', {sUserSources: selectedSources, sLang: selectedLang}));
   }
+
+  public getTopics(selectedSources: Array<string>, selectedCategory: string, selectedLang: string): Array<any> {
+    return JSON.parse(this.soapClient.getResource('getTopics',
+      {sUserSources: selectedSources, sCategory: selectedCategory, sLang: selectedLang}
+      )
+    );
+  }
+
+  public getTopicsByKeyword(keyword: string, selectedSources: Array<string>, selectedLang: string): Array<any> {
+    return JSON.parse(this.soapClient.getResource('getTopicsByKeyword',
+      {sKeyword: keyword, sUserSources: selectedSources, sLang: selectedLang}
+      )
+    );
+  }
 }

@@ -12,7 +12,7 @@ import {ServiceClientProvider} from "../service-client/service-client";
 @Injectable()
 export class SourcesProvider {
   public sourcesUpdated: Subject<any>;
-  public selectedLang: string;
+  private selectedLang: string;
   private sources: Array<any> = [];
 
   constructor(private serviceClient: ServiceClientProvider, private contentLanguagesProvider: ContentLanguagesProvider) {
