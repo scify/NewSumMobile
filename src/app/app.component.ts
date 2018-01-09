@@ -10,6 +10,7 @@ import {SourcesProvider} from "../providers/sources/sources";
 import {CategoriesProvider} from "../providers/categories/categories";
 import {TopicsProvider} from "../providers/topics/topics";
 import {HomePage} from "../pages/home/home";
+import {SummariesProvider} from "../providers/summaries/summaries";
 
 @Component({
   templateUrl: 'app.html'
@@ -24,6 +25,7 @@ export class MyApp {
               private sourcesProvider: SourcesProvider,
               private categoriesProvider: CategoriesProvider,
               private topicsProvider: TopicsProvider,
+              private summariesProvider: SummariesProvider,
               public notification: NotificationsProvider) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.

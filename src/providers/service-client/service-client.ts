@@ -37,4 +37,11 @@ export class ServiceClientProvider {
       )
     );
   }
+
+  public getSummary(topicId: string, selectedSources: Array<string>, selectedLang: string): Array<any> {
+    return JSON.parse(this.soapClient.getResource('getSummary',
+      {sTopicID: topicId, sUserSources: selectedSources, sLang: selectedLang}
+      )
+    );
+  }
 }
