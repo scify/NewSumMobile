@@ -62,6 +62,7 @@ export class TopicsProvider {
 
   private filterHotTopics() {
     let topicsCopy = this.getTopics();
+    // get the first *NUMBER_OF_HOT_TOPICS_TO_DISPLAY* topics with the most sources as hot topics
     topicsCopy.sort((a: any, b: any): any => {
       return a.FromArticles < b.FromArticles;
     });
