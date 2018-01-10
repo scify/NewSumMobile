@@ -16,7 +16,7 @@
 
 <ion-content class="card-background-page">
   <ion-card  *ngFor="let article of articles">
-    <div class="img-holder">
+    <div class="img-holder {{selectedCategoryClassName}}">
        <img *ngIf="article.imageUrls.length>0" src="{{article.imageUrls[0]}}"/>
     </div>
 

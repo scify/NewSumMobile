@@ -1,8 +1,40 @@
 page-home {
- .img-holder {
-   background-color:lightblue;
-   min-height:100px;
- }
+  .img-holder {
+    background: lightblue;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height:150px;
+    &.science {
+      background-image: url(../../assets/imgs/categories/science.jpg);
+    }
+    &.economics {
+      background-image: url(../../assets/imgs/categories/economics.jpg);
+    }
+    &.world {
+      background-image: url(../../assets/imgs/categories/world3.jpg);
+    }
+    &.civilization {
+      background-image: url(../../assets/imgs/categories/civilization.jpg);
+    }
+    &.sports {
+      background-image: url(../../assets/imgs/categories/sports.jpg);
+    }
+    &.tech {
+      background-image: url(../../assets/imgs/categories/tech.jpg);
+    }
+    &.greece {
+      background-image: url(../../assets/imgs/categories/civilization2.jpg);
+    }
+    &.scify {
+      background-size: auto;
+      background-position: center;
+      background-image: url(../../assets/imgs/categories/scify_logo.png);
+    }
+    &.general {
+      background-image: url(../../assets/imgs/categories/newspaper.jpg);
+    }
+
+  }
   .category{
     margin-top:-40px;
     height:40px;
