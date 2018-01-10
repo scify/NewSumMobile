@@ -1,1 +1,21 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-nav #header [root]="rootPage" swipeBackEnabled="false" #mainNav main></ion-nav>
+
+<ion-menu [content]="header">
+    <ion-header>
+        <ion-toolbar>
+            <ion-buttons right>
+                <button menuClose class="closeMenuBtn">
+                    <ion-icon name="md-close"></ion-icon>
+                </button>
+            </ion-buttons>
+            <ion-title>Menu</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <ion-content>
+        <ion-list>
+            <button menuClose ion-item *ngFor="let c of availableCategories" (click)="selectCategory(c)">
+                {{c}}
+            </button>
+        </ion-list>
+    </ion-content>
+</ion-menu>

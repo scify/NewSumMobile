@@ -17,6 +17,7 @@ import {SummariesProvider} from "../providers/summaries/summaries";
 })
 export class MyApp {
   rootPage: any = TabsPage;
+  availableCategories: Array<string>;
 
   constructor(platform: Platform,
               statusBar: StatusBar,
@@ -36,9 +37,18 @@ export class MyApp {
           this.rootPage = TabsPage; // TODO: set different view if lang is not set
         splashScreen.hide();
       });
+      this.availableCategories = this.categoriesProvider.getSelectedCategories();
+      this.categoriesProvider.categoriesUpdated.subscribe((newCategories) => {
+        this.availableCategories = newCategories;
+      });
+
     });
 
     if (notification.hasNotification())
       notification.displayNotification();
+  }
+
+  public selectCategory(newSelectedCategory: string) {
+    this.categoriesProvider.setSelectedCategory(newSelectedCategory);
   }
 }

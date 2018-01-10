@@ -1,11 +1,11 @@
 <ion-header>
   <ion-navbar>
     <ion-buttons left>
-      <button ion-button icon-only>
+      <button ion-button icon-only menuToggle>
         <ion-icon name="menu"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>Επιστήμη</ion-title>
+    <ion-title>{{selectedCategory}}</ion-title>
     <ion-buttons right>
       <button ion-button icon-only>
         <ion-icon name="search"></ion-icon>
@@ -21,7 +21,7 @@
     </div>
 
     <ion-card-content>
-      <div class="category"><span>Επιστημη</span><span>3:15</span></div>
+      <div class="category"><span>{{selectedCategoryForUppercase}}</span><span>3:15</span></div>
       <div class="title">
         {{ article.Title}}
       </div>

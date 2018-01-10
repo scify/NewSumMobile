@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
-import {ServiceClientProvider} from "../../providers/service-client/service-client";
 import {TopicsProvider} from "../../providers/topics/topics";
+import {CategoriesProvider} from "../../providers/categories/categories";
+import {TextManipulationService} from "../../lib/text-manipulation";
 
 
 @Component({
@@ -11,9 +12,12 @@ import {TopicsProvider} from "../../providers/topics/topics";
 export class HomePage {
 
   public articles: Array<any>;
+  public selectedCategory: string;
+  public selectedCategoryForUppercase: string;
 
   constructor(private navCtrl: NavController,
-              private topicsProvider: TopicsProvider) {
+              private topicsProvider: TopicsProvider,
+              private categoriesProvider: CategoriesProvider) {
   }
 
   ionViewDidLoad() {
@@ -23,8 +27,12 @@ export class HomePage {
       if(newTopics)
         this.articles = newTopics;
     }, error2 => console.log(error2));
+    this.categoriesProvider.selectedCategoryUpdated.subscribe((selectedCategory) => {
+      this.selectedCategory = selectedCategory;
+      this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
+    }, error => console.error(error));
+    this.selectedCategory = this.categoriesProvider.getSelectedCategory();
+    this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
   }
-
-
 }
 

@@ -14,7 +14,7 @@ import {Subject} from "rxjs/Subject";
 @Injectable()
 export class TopicsProvider {
   public topicsUpdated: Subject<any>;
-  private selectedCategories: Array<string>;
+  private selectedCategory: string;
   private selectedSourcesUrls: Array<string>;
   private selectedLang: string;
   private topics: Array<any>;
@@ -23,22 +23,20 @@ export class TopicsProvider {
   constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
               private contentLanguagesProvider: ContentLanguagesProvider, private categoriesProvider: CategoriesProvider) {
     this.topicsUpdated = new Subject<any>();
-    this.selectedCategories = this.categoriesProvider.getSelectedCategories();
+    this.selectedCategory = this.categoriesProvider.getSelectedCategory();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
-    this.categoriesProvider.categoriesUpdated.subscribe((newCategories) => {
+    this.categoriesProvider.selectedCategoryUpdated.subscribe((newCategory) => {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
-      if (newCategories.length > 0) {
-        this.selectedCategories = newCategories;
-        this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
-        this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
-          this.selectedCategories[0], this.selectedLang);
-        this.topicsUpdated.next(this.topics);
-      }
+      this.selectedCategory = newCategory;
+      this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
+      this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
+        this.selectedCategory, this.selectedLang);
+      this.topicsUpdated.next(this.topics);
     }, error => console.error(error));
-    if (this.selectedCategories.length > 0) {
+    if (this.selectedCategory) {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
-        this.selectedCategories[0], this.selectedLang);
+        this.selectedCategory, this.selectedLang);
       this.topicsUpdated.next(this.topics);
     }
   }
