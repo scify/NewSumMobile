@@ -9,7 +9,6 @@ import {ContentLanguagesProvider} from "../providers/content-languages/content-l
 import {SourcesProvider} from "../providers/sources/sources";
 import {CategoriesProvider} from "../providers/categories/categories";
 import {TopicsProvider} from "../providers/topics/topics";
-import {HomePage} from "../pages/home/home";
 import {SummariesProvider} from "../providers/summaries/summaries";
 
 @Component({

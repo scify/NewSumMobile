@@ -5,6 +5,9 @@ import {SourcesProvider} from "../sources/sources";
 import {CategoriesProvider} from "../categories/categories";
 import {Subject} from "rxjs/Subject";
 
+// TODO: move to configuration file
+const NUMBER_OF_HOT_TOPICS_TO_DISPLAY: number = 10;
+
 /*
   Generated class for the TopicsProvider provider.
 
@@ -18,6 +21,7 @@ export class TopicsProvider {
   private selectedSourcesUrls: Array<string>;
   private selectedLang: string;
   private topics: Array<any>;
+  private hotTopics: Array<any>;
   private topicsByKeyword: Array<any>;
 
   constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
@@ -31,22 +35,36 @@ export class TopicsProvider {
       this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
       this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
         this.selectedCategory, this.selectedLang);
+      this.filterHotTopics();
       this.topicsUpdated.next(this.topics);
     }, error => console.error(error));
     if (this.selectedCategory) {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
         this.selectedCategory, this.selectedLang);
+      this.filterHotTopics();
       this.topicsUpdated.next(this.topics);
     }
   }
 
   public getTopics(): Array<any> {
-    return this.topics.splice(0);
+    return this.topics.slice(0);
+  }
+
+  public getHotTopics(): Array<any> {
+    return this.hotTopics.slice(0);
   }
 
   public getTopicsByKeyword(keyword: string): Array<any> {
     this.topicsByKeyword = this.serviceClient.getTopicsByKeyword(keyword, this.selectedSourcesUrls, this.selectedLang);
     return this.topicsByKeyword;
+  }
+
+  private filterHotTopics() {
+    let topicsCopy = this.getTopics();
+    topicsCopy.sort((a: any, b: any): any => {
+      return a.FromArticles < b.FromArticles;
+    });
+    this.hotTopics = topicsCopy.slice(0, NUMBER_OF_HOT_TOPICS_TO_DISPLAY);
   }
 }

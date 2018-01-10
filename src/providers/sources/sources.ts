@@ -32,7 +32,7 @@ export class SourcesProvider {
   }
 
   public getSelectedSources() {
-    return this.sources.splice(0);
+    return this.sources.slice(0);
   }
 
   public getSelectedSourcesUrls() {

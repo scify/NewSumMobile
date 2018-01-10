@@ -7,6 +7,7 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
+import { HotTopicsPage } from "../pages/hot-topics/hot-topics";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -29,7 +30,8 @@ import { SummariesProvider } from '../providers/summaries/summaries';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    HotTopicsPage
   ],
   imports: [
     BrowserModule,
@@ -43,7 +45,8 @@ import { SummariesProvider } from '../providers/summaries/summaries';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    HotTopicsPage
   ],
   providers: [
     StatusBar,

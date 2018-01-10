@@ -26,7 +26,7 @@ export class ContentLanguagesProvider {
   }
 
   public getContentLanguages(): Array<string> {
-    return this.languages.splice(0);
+    return this.languages.slice(0);
   }
 
   public setSelectedContentLanguage(langCode): Promise<any> {

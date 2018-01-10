@@ -43,7 +43,7 @@ export class CategoriesProvider {
   }
 
   public getSelectedCategories(): Array<string> {
-    return this.categories.splice(0);
+    return this.categories.slice(0);
   }
 
   public getSelectedCategory(): string {
