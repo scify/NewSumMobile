@@ -23,7 +23,7 @@ export class HotTopicsPage {
   public hotTopics: Array<any>;
   public selectedCategory: string;
   public selectedCategoryForUppercase: string;
-  public selectedCategoryClassName: string;
+  public selectedCategoryDefaultImage: string;
 
   constructor(private navCtrl: NavController,
               private topicsProvider: TopicsProvider,
@@ -38,14 +38,14 @@ export class HotTopicsPage {
     this.categoriesProvider.selectedCategoryUpdated.subscribe((selectedCategory) => {
       this.selectedCategory = selectedCategory;
       this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
-      this.selectedCategoryClassName = CategoriesViewManager.getCategoryCssClassName(this.selectedCategory);
+      this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
       // when the category is changed, scroll to top,
       // otherwise the scroll will remain on the place it was before the category change
       this.content.scrollToTop();
     }, error => console.error(error));
     this.selectedCategory = this.categoriesProvider.getSelectedCategory();
     this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
-    this.selectedCategoryClassName = CategoriesViewManager.getCategoryCssClassName(this.selectedCategory);
+    this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
   }
 
   public selectHotTopicAndDisplaySummary(topicIndex: number) {

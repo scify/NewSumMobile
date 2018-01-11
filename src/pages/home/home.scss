@@ -1,39 +1,48 @@
 page-home {
   .img-holder {
-    background: lightblue;
-    background-size: cover;
-    background-repeat: no-repeat;
+    //background: lightblue;
+    //background-size: cover;
+    //background-repeat: no-repeat;
     min-height:150px;
-    &.science {
-      background-image: url('../../assets/imgs/categories/science.jpg');
+    //&.science {
+    //  background-image: url('../../assets/imgs/categories/science.jpg');
+    //}
+    //&.economics {
+    //  background-image: url('../../assets/imgs/categories/economics.jpg');
+    //}
+    //&.world {
+    //  background-image: url('../../assets/imgs/categories/world3.jpg');
+    //}
+    //&.civilization {
+    //  background-image: url('../../assets/imgs/categories/civilization.jpg');
+    //}
+    //&.sports {
+    //  background-image: url('../../assets/imgs/categories/sports.jpg');
+    //}
+    //&.tech {
+    //  background-image: url('../../assets/imgs/categories/tech.jpg');
+    //}
+    //&.greece {
+    //  background-image: url('../../assets/imgs/categories/civilization2.jpg');
+    //}
+    //&.scify {
+    //  background-size: auto;
+    //  background-position: center;
+    //  background-image: url('../../assets/imgs/categories/scify_logo.png');
+    //}
+    //&.general {
+    //  background-image: url('../../assets/imgs/categories/newspaper.jpg');
+    //}
+    .info-background {
+      position: relative;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 35px;
+      margin-top: -35px;
+      background-color: black;
+      opacity: 0.5;
     }
-    &.economics {
-      background-image: url('../../assets/imgs/categories/economics.jpg');
-    }
-    &.world {
-      background-image: url('../../assets/imgs/categories/world3.jpg');
-    }
-    &.civilization {
-      background-image: url('../../assets/imgs/categories/civilization.jpg');
-    }
-    &.sports {
-      background-image: url('../../assets/imgs/categories/sports.jpg');
-    }
-    &.tech {
-      background-image: url('../../assets/imgs/categories/tech.jpg');
-    }
-    &.greece {
-      background-image: url('../../assets/imgs/categories/civilization2.jpg');
-    }
-    &.scify {
-      background-size: auto;
-      background-position: center;
-      background-image: url('../../assets/imgs/categories/scify_logo.png');
-    }
-    &.general {
-      background-image: url('../../assets/imgs/categories/newspaper.jpg');
-    }
-
   }
   .category{
     margin-top:-40px;
@@ -42,6 +51,10 @@ page-home {
     text-transform: uppercase;
     display:flex;
     justify-content:space-between;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
   .stats-info
   {
