@@ -17,16 +17,19 @@ const NUMBER_OF_HOT_TOPICS_TO_DISPLAY: number = 10;
 @Injectable()
 export class TopicsProvider {
   public topicsUpdated: Subject<any>;
+  public selectedTopicUpdated: Subject<any>;
   private selectedCategory: string;
   private selectedSourcesUrls: Array<string>;
   private selectedLang: string;
   private topics: Array<any>;
   private hotTopics: Array<any>;
   private topicsByKeyword: Array<any>;
+  private selectedTopic: string;
 
   constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
               private contentLanguagesProvider: ContentLanguagesProvider, private categoriesProvider: CategoriesProvider) {
     this.topicsUpdated = new Subject<any>();
+    this.selectedTopicUpdated = new Subject<any>();
     this.selectedCategory = this.categoriesProvider.getSelectedCategory();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
     this.categoriesProvider.selectedCategoryUpdated.subscribe((newCategory) => {
@@ -58,6 +61,15 @@ export class TopicsProvider {
   public getTopicsByKeyword(keyword: string): Array<any> {
     this.topicsByKeyword = this.serviceClient.getTopicsByKeyword(keyword, this.selectedSourcesUrls, this.selectedLang);
     return this.topicsByKeyword;
+  }
+
+  public getSelectedTopic(): any {
+    return this.selectedTopic;
+  }
+
+  public setSelectedTopic(topicIndex: number) {
+    this.selectedTopic = this.topics[topicIndex];
+    this.selectedTopicUpdated.next(this.selectedTopic);
   }
 
   private filterHotTopics() {

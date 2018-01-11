@@ -8,6 +8,7 @@ import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { HotTopicsPage } from "../pages/hot-topics/hot-topics";
+import { SummaryPage } from "../pages/summary/summary";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -31,7 +32,8 @@ import { SummariesProvider } from '../providers/summaries/summaries';
     ContactPage,
     HomePage,
     TabsPage,
-    HotTopicsPage
+    HotTopicsPage,
+    SummaryPage
   ],
   imports: [
     BrowserModule,
@@ -46,7 +48,8 @@ import { SummariesProvider } from '../providers/summaries/summaries';
     ContactPage,
     HomePage,
     TabsPage,
-    HotTopicsPage
+    HotTopicsPage,
+    SummaryPage
   ],
   providers: [
     StatusBar,

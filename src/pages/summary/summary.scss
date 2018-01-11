@@ -1,0 +1,37 @@
+page-summary {
+  ion-title {
+    text-align: left;
+  }
+  #title {
+    font-weight: bold;
+  }
+  #subtitle {
+    font-size: small;
+    color: gray;
+    border-bottom: 1px solid black;
+    margin-bottom: 20px;
+    #timestamp {
+      text-align: right;
+    }
+  }
+  .summary-snippet {
+    color: black;
+    padding-top: 10px;
+    line-height: 1.5em;
+  }
+  #sources-list-title {
+    margin-top: 30px;
+    color: gray;
+  }
+  #sources-list {
+    margin: 0 0 30px;
+    padding-left: 20px;
+    .source {
+      padding-top: 5px;
+      a {
+        text-decoration: none;
+        color: black;
+      }
+    }
+  }
+}

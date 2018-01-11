@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {ContentLanguagesProvider} from "../content-languages/content-languages";
 import {SourcesProvider} from "../sources/sources";
 import {ServiceClientProvider} from "../service-client/service-client";
+import {TopicsProvider} from "../topics/topics";
+import {Subject} from "rxjs/Subject";
 
 /*
   Generated class for the SummariesProvider provider.
@@ -12,12 +14,34 @@ import {ServiceClientProvider} from "../service-client/service-client";
 @Injectable()
 export class SummariesProvider {
 
-  constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
-              private contentLanguagesProvider: ContentLanguagesProvider) {}
+  public summaryUpdated: Subject<any>;
+  private selectedTopic: any;
+  private selectedSourcesUrls: Array<string>;
+  private selectedLang: string;
+  private summary: any;
 
-  public getSummary(topicId: string) {
-    let selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
-    let selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
-    return this.serviceClient.getSummary(topicId, selectedSourcesUrls, selectedLang);
+  constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
+              private contentLanguagesProvider: ContentLanguagesProvider, private topicsProvider: TopicsProvider) {
+    this.summaryUpdated = new Subject<any>();
+    this.selectedTopic = this.topicsProvider.getSelectedTopic();
+    this.topicsProvider.selectedTopicUpdated.subscribe((newTopic) => {
+      this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
+      this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
+      if (newTopic) {
+        this.selectedTopic = newTopic;
+        this.summary = this.serviceClient.getSummary(this.selectedTopic.ID, this.selectedSourcesUrls, this.selectedLang);
+        this.summaryUpdated.next(this.summary);
+      }
+    });
+    if (this.selectedTopic) {
+      this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
+      this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
+      this.summary = this.serviceClient.getSummary(this.selectedTopic.ID, this.selectedSourcesUrls, this.selectedLang);
+      this.summaryUpdated.next(this.summary);
+    }
+  }
+
+  public getSummary(): string {
+    return this.summary;
   }
 }

@@ -4,6 +4,7 @@ import {TopicsProvider} from "../../providers/topics/topics";
 import {CategoriesProvider} from "../../providers/categories/categories";
 import {TextManipulationService} from "../../lib/text-manipulation";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
+import {SummaryPage} from "../summary/summary";
 
 /**
  * Generated class for the HotTopicsPage page.
@@ -47,4 +48,8 @@ export class HotTopicsPage {
     this.selectedCategoryClassName = CategoriesViewManager.getCategoryCssClassName(this.selectedCategory);
   }
 
+  public selectTopicAndDisplaySummary(topicIndex: number) {
+    this.topicsProvider.setSelectedTopic(topicIndex);
+    this.navCtrl.push(SummaryPage);
+  }
 }
