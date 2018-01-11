@@ -44,7 +44,9 @@
       <ion-col>
         <ul id="sources-list">
           <li class="source" *ngFor="let source of selectedSummary.Sources">
-            <a href="{{source.sourceURL}}" target="_blank">{{source.sourceLabel}}</a>
+            <a href="{{(source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + source.sourceURL}}" target="_blank">
+              {{source.sourceLabel}}
+            </a>
           </li>
         </ul>
       </ion-col>
