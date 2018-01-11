@@ -48,8 +48,8 @@ export class HotTopicsPage {
     this.selectedCategoryClassName = CategoriesViewManager.getCategoryCssClassName(this.selectedCategory);
   }
 
-  public selectTopicAndDisplaySummary(topicIndex: number) {
-    this.topicsProvider.setSelectedTopic(topicIndex);
+  public selectHotTopicAndDisplaySummary(topicIndex: number) {
+    this.topicsProvider.setSelectedHotTopic(topicIndex);
     this.navCtrl.push(SummaryPage);
   }
 }

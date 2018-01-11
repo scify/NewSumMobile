@@ -67,6 +67,11 @@ export class TopicsProvider {
     return this.selectedTopic;
   }
 
+  public setSelectedHotTopic(topicIndex: number) {
+    this.selectedTopic = this.hotTopics[topicIndex];
+    this.selectedTopicUpdated.next(this.selectedTopic);
+  }
+
   public setSelectedTopic(topicIndex: number) {
     this.selectedTopic = this.topics[topicIndex];
     this.selectedTopicUpdated.next(this.selectedTopic);
