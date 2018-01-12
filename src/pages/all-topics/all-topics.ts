@@ -8,10 +8,10 @@ import {SummaryPage} from "../summary/summary";
 
 
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-all-topics',
+  templateUrl: 'all-topics.html'
 })
-export class HomePage {
+export class AllTopics {
   @ViewChild(Content) content: Content;
 
   public articles: Array<any>;
@@ -19,9 +19,9 @@ export class HomePage {
   public selectedCategoryForUppercase: string;
   public selectedCategoryDefaultImage: string;
 
-  constructor(private navCtrl: NavController,
-              private topicsProvider: TopicsProvider,
-              private categoriesProvider: CategoriesProvider) {
+  constructor(protected navCtrl: NavController,
+              protected topicsProvider: TopicsProvider,
+              protected categoriesProvider: CategoriesProvider) {
   }
 
   ionViewDidLoad() {
@@ -30,6 +30,10 @@ export class HomePage {
         this.articles = newTopics;
     }, error2 => console.log(error2));
     this.articles = this.topicsProvider.getTopics();
+    this.fetchSelectedCategoryAndSubscribeToChanges();
+  }
+
+  protected fetchSelectedCategoryAndSubscribeToChanges() {
     this.categoriesProvider.selectedCategoryUpdated.subscribe((selectedCategory) => {
       this.selectedCategory = selectedCategory;
       this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
@@ -43,8 +47,8 @@ export class HomePage {
     this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
   }
 
-  public selectTopicAndDisplaySummary(topicIndex: number) {
-    this.topicsProvider.setSelectedTopic(topicIndex);
+  public selectTopicAndDisplaySummary(topic: any) {
+    this.topicsProvider.setSelectedTopic(topic);
     this.navCtrl.push(SummaryPage);
   }
 }

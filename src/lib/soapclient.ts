@@ -32,7 +32,7 @@ export class SOAPClientParameters {
     let s = "";
     switch (typeof(o)) {
       case "string":
-        s += o.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        s += '"' + o.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + '"';
         break;
       case "number":
       case "boolean":

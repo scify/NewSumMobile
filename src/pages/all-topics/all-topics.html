@@ -15,7 +15,7 @@
 </ion-header>
 
 <ion-content class="card-background-page">
-  <ion-card  *ngFor="let article of articles; let i=index" (click)="selectTopicAndDisplaySummary(i)">
+  <ion-card  *ngFor="let article of articles" (click)="selectTopicAndDisplaySummary(article)">
     <div class="img-holder">
       <img src="{{article.imageUrls.length > 0 ? article.imageUrls[0] : selectedCategoryDefaultImage}}"/>
       <div class="info-background"></div>

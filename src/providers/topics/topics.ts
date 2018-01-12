@@ -22,7 +22,6 @@ export class TopicsProvider {
   private selectedSourcesUrls: Array<string>;
   private selectedLang: string;
   private topics: Array<any>;
-  private hotTopics: Array<any>;
   private topicsByKeyword: Array<any>;
   private selectedTopic: string;
 
@@ -39,7 +38,6 @@ export class TopicsProvider {
       this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
         this.selectedCategory, this.selectedLang);
       this.formatDateAndTimeForTopics();
-      this.filterHotTopics();
       this.topicsUpdated.next(this.topics);
     }, error => console.error(error));
     if (this.selectedCategory) {
@@ -47,7 +45,6 @@ export class TopicsProvider {
       this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
         this.selectedCategory, this.selectedLang);
       this.formatDateAndTimeForTopics();
-      this.filterHotTopics();
       this.topicsUpdated.next(this.topics);
     }
   }
@@ -57,7 +54,7 @@ export class TopicsProvider {
   }
 
   public getHotTopics(): Array<any> {
-    return this.hotTopics.slice(0);
+    return this.filterHotTopics();
   }
 
   public getTopicsByKeyword(keyword: string): Array<any> {
@@ -69,17 +66,12 @@ export class TopicsProvider {
     return this.selectedTopic;
   }
 
-  public setSelectedHotTopic(topicIndex: number) {
-    this.selectedTopic = this.hotTopics[topicIndex];
+  public setSelectedTopic(topic: any) {
+    this.selectedTopic = topic;
     this.selectedTopicUpdated.next(this.selectedTopic);
   }
 
-  public setSelectedTopic(topicIndex: number) {
-    this.selectedTopic = this.topics[topicIndex];
-    this.selectedTopicUpdated.next(this.selectedTopic);
-  }
-
-  private filterHotTopics() {
+  private filterHotTopics(): Array<any> {
     let topicsCopy = this.getTopics();
     // get the first *NUMBER_OF_HOT_TOPICS_TO_DISPLAY* topics with the most sources as hot topics
     topicsCopy.sort((a: any, b: any): any => {
@@ -90,7 +82,7 @@ export class TopicsProvider {
         return -1;
       return 0;
     });
-    this.hotTopics = topicsCopy.slice(0, NUMBER_OF_HOT_TOPICS_TO_DISPLAY);
+    return topicsCopy.slice(0, NUMBER_OF_HOT_TOPICS_TO_DISPLAY);
   }
 
   private formatDateAndTimeForTopics() {

@@ -1,10 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
-import {Content, NavController} from 'ionic-angular';
-import {TopicsProvider} from "../../providers/topics/topics";
-import {CategoriesProvider} from "../../providers/categories/categories";
-import {TextManipulationService} from "../../lib/text-manipulation";
-import {CategoriesViewManager} from "../../lib/categories-view-manager";
-import {SummaryPage} from "../summary/summary";
+import {Content} from 'ionic-angular';
+import {AllTopics} from "../all-topics/all-topics";
 
 /**
  * Generated class for the HotTopicsPage page.
@@ -14,42 +10,17 @@ import {SummaryPage} from "../summary/summary";
  */
 
 @Component({
-  selector: 'page-home',
+  selector: 'page-all-topics',
   templateUrl: 'hot-topics.html',
 })
-export class HotTopicsPage {
+export class HotTopicsPage extends AllTopics {
   @ViewChild(Content) content: Content;
-
-  public hotTopics: Array<any>;
-  public selectedCategory: string;
-  public selectedCategoryForUppercase: string;
-  public selectedCategoryDefaultImage: string;
-
-  constructor(private navCtrl: NavController,
-              private topicsProvider: TopicsProvider,
-              private categoriesProvider: CategoriesProvider) {
-  }
 
   ionViewDidLoad() {
     this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
-      this.hotTopics = this.topicsProvider.getHotTopics();
+      this.articles = this.topicsProvider.getHotTopics();
     }, error => console.log(error));
-    this.hotTopics = this.topicsProvider.getHotTopics();
-    this.categoriesProvider.selectedCategoryUpdated.subscribe((selectedCategory) => {
-      this.selectedCategory = selectedCategory;
-      this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
-      this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
-      // when the category is changed, scroll to top,
-      // otherwise the scroll will remain on the place it was before the category change
-      this.content.scrollToTop();
-    }, error => console.error(error));
-    this.selectedCategory = this.categoriesProvider.getSelectedCategory();
-    this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
-    this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
-  }
-
-  public selectHotTopicAndDisplaySummary(topicIndex: number) {
-    this.topicsProvider.setSelectedHotTopic(topicIndex);
-    this.navCtrl.push(SummaryPage);
+    this.articles = this.topicsProvider.getHotTopics();
+    this.fetchSelectedCategoryAndSubscribeToChanges();
   }
 }

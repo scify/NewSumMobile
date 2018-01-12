@@ -15,19 +15,19 @@
 </ion-header>
 
 <ion-content class="card-background-page">
-  <ion-card *ngFor="let topic of hotTopics; let i=index" (click)="selectHotTopicAndDisplaySummary(i)">
+  <ion-card *ngFor="let article of articles" (click)="selectTopicAndDisplaySummary(article)">
     <div class="img-holder">
-      <img src="{{topic.imageUrls.length > 0 ? topic.imageUrls[0] : selectedCategoryDefaultImage}}"/>
+      <img src="{{article.imageUrls.length > 0 ? article.imageUrls[0] : selectedCategoryDefaultImage}}"/>
       <div class="info-background"></div>
     </div>
 
     <ion-card-content>
-      <div class="category"><span>{{selectedCategoryForUppercase}}</span><span>{{topic.TimeFormatted}}</span></div>
+      <div class="category"><span>{{selectedCategoryForUppercase}}</span><span>{{article.TimeFormatted}}</span></div>
       <div class="title">
-        {{ topic.Title}}
+        {{ article.Title}}
       </div>
       <div class="stats-info">
-        {{topic.FromArticles}} {{topic.FromArticles==1? "πηγή":"πηγές"}}
+        {{article.FromArticles}} {{article.FromArticles==1? "πηγή":"πηγές"}}
       </div>
     </ion-card-content>
   </ion-card>

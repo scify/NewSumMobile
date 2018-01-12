@@ -1,0 +1,32 @@
+page-all-topics {
+  .img-holder {
+    min-height:150px;
+    .info-background {
+      position: relative;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 35px;
+      margin-top: -35px;
+      background-color: black;
+      opacity: 0.5;
+    }
+  }
+  .category{
+    margin-top:-40px;
+    height:40px;
+    color:white;
+    text-transform: uppercase;
+    display:flex;
+    justify-content:space-between;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  .stats-info
+  {
+    color:gray;
+    font-size:1.2rem;
+  }
+}

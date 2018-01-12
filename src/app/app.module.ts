@@ -5,7 +5,7 @@ import { MyApp } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
-import { HomePage } from '../pages/home/home';
+import { AllTopics } from '../pages/all-topics/all-topics';
 import { TabsPage } from '../pages/tabs/tabs';
 import { HotTopicsPage } from "../pages/hot-topics/hot-topics";
 import { SummaryPage } from "../pages/summary/summary";
@@ -30,7 +30,7 @@ import { SummariesProvider } from '../providers/summaries/summaries';
     MyApp,
     AboutPage,
     ContactPage,
-    HomePage,
+    AllTopics,
     TabsPage,
     HotTopicsPage,
     SummaryPage
@@ -46,7 +46,7 @@ import { SummariesProvider } from '../providers/summaries/summaries';
     MyApp,
     AboutPage,
     ContactPage,
-    HomePage,
+    AllTopics,
     TabsPage,
     HotTopicsPage,
     SummaryPage

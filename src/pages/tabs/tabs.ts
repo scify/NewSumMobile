@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { HomePage } from '../home/home';
+import { AllTopics } from '../all-topics/all-topics';
 import { HotTopicsPage } from "../hot-topics/hot-topics";
 
 @Component({
@@ -9,5 +9,5 @@ import { HotTopicsPage } from "../hot-topics/hot-topics";
 })
 export class TabsPage {
   tab1Root = HotTopicsPage;
-  tab2Root = HomePage;
+  tab2Root = AllTopics;
 }
