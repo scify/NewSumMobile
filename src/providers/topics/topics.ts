@@ -38,6 +38,7 @@ export class TopicsProvider {
       this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
       this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
         this.selectedCategory, this.selectedLang);
+      this.formatDateAndTimeForTopics();
       this.filterHotTopics();
       this.topicsUpdated.next(this.topics);
     }, error => console.error(error));
@@ -45,6 +46,7 @@ export class TopicsProvider {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
         this.selectedCategory, this.selectedLang);
+      this.formatDateAndTimeForTopics();
       this.filterHotTopics();
       this.topicsUpdated.next(this.topics);
     }
@@ -84,5 +86,16 @@ export class TopicsProvider {
       return a.FromArticles < b.FromArticles;
     });
     this.hotTopics = topicsCopy.slice(0, NUMBER_OF_HOT_TOPICS_TO_DISPLAY);
+  }
+
+  private formatDateAndTimeForTopics() {
+    this.topics.map(t => {
+      let newestDate: any = t.NewestDate;
+      t.DateFormatted = (newestDate.dayOfMonth < 10 ? '0' : '') + newestDate.dayOfMonth + '-' +
+        ((newestDate.month + 1) < 10 ? '0' : '') + (newestDate.month + 1) + '-' + newestDate.year;
+      t.TimeFormatted = (newestDate.hourOfDay < 10 ? '0' : '') + newestDate.hourOfDay + ':' +
+        (newestDate.minute < 10 ? '0' : '') + newestDate.minute;
+      return t;
+    });
   }
 }
