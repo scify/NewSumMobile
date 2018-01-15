@@ -6,6 +6,7 @@ import {TextManipulationService} from "../../lib/text-manipulation";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
 import {SummaryPage} from "../summary/summary";
 import {SearchResultsPage} from "../search-results/search-results";
+import {SettingsPage} from "../settings/settings";
 
 
 @Component({
@@ -56,6 +57,10 @@ export class AllTopicsPage {
   public searchForTopic(searchInput: string) {
     if (searchInput)
       this.navCtrl.push(SearchResultsPage, {keyword: searchInput});
+  }
+
+  public displaySettingsPage() {
+    this.navCtrl.push(SettingsPage);
   }
 }
 
