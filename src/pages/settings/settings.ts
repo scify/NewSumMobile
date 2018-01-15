@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { ContentLanguagesProvider } from '../../providers/content-languages/content-languages';
+import {AboutPage} from "../about/about";
 
 /**
  * Generated class for the SettingsPage page.
@@ -29,7 +30,10 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
-    
+
+  }
+  goToAbout(){
+    this.navCtrl.push(AboutPage)
   }
 
   public selectLanguage() {

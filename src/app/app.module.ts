@@ -4,7 +4,6 @@ import {IonicApp, IonicModule, IonicErrorHandler, Alert} from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
 import { AllTopicsPage } from '../pages/all-topics/all-topics';
 import { TabsPage } from '../pages/tabs/tabs';
 import { HotTopicsPage } from "../pages/hot-topics/hot-topics";
@@ -31,7 +30,6 @@ import { SummariesProvider } from '../providers/summaries/summaries';
   declarations: [
     MyApp,
     AboutPage,
-    ContactPage,
     AllTopicsPage,
     TabsPage,
     HotTopicsPage,
@@ -49,7 +47,6 @@ import { SummariesProvider } from '../providers/summaries/summaries';
   entryComponents: [
     MyApp,
     AboutPage,
-    ContactPage,
     AllTopicsPage,
     TabsPage,
     HotTopicsPage,
