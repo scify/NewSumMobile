@@ -20,7 +20,7 @@ export class MyApp {
 
   constructor(platform: Platform,
               statusBar: StatusBar,
-              splashScreen: SplashScreen,
+              splashScreen: SplashScreen,              
               private contentLanguagesProvider: ContentLanguagesProvider,
               private sourcesProvider: SourcesProvider,
               private categoriesProvider: CategoriesProvider,

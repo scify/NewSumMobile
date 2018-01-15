@@ -5,10 +5,11 @@ import { MyApp } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
-import { AllTopics } from '../pages/all-topics/all-topics';
+import { AllTopicsPage } from '../pages/all-topics/all-topics';
 import { TabsPage } from '../pages/tabs/tabs';
 import { HotTopicsPage } from "../pages/hot-topics/hot-topics";
 import { SummaryPage } from "../pages/summary/summary";
+import { SearchResultsPage } from "../pages/search-results/search-results";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -30,10 +31,11 @@ import { SummariesProvider } from '../providers/summaries/summaries';
     MyApp,
     AboutPage,
     ContactPage,
-    AllTopics,
+    AllTopicsPage,
     TabsPage,
     HotTopicsPage,
-    SummaryPage
+    SummaryPage,
+    SearchResultsPage
   ],
   imports: [
     BrowserModule,
@@ -46,10 +48,11 @@ import { SummariesProvider } from '../providers/summaries/summaries';
     MyApp,
     AboutPage,
     ContactPage,
-    AllTopics,
+    AllTopicsPage,
     TabsPage,
     HotTopicsPage,
-    SummaryPage
+    SummaryPage,
+    SearchResultsPage
   ],
   providers: [
     StatusBar,
