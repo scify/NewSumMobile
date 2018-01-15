@@ -5,13 +5,14 @@ import {CategoriesProvider} from "../../providers/categories/categories";
 import {TextManipulationService} from "../../lib/text-manipulation";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
 import {SummaryPage} from "../summary/summary";
+import {SearchResultsPage} from "../search-results/search-results";
 
 
 @Component({
   selector: 'page-all-topics',
   templateUrl: 'all-topics.html'
 })
-export class AllTopics {
+export class AllTopicsPage {
   @ViewChild(Content) content: Content;
 
   public articles: Array<any>;
@@ -50,6 +51,11 @@ export class AllTopics {
   public selectTopicAndDisplaySummary(topic: any) {
     this.topicsProvider.setSelectedTopic(topic);
     this.navCtrl.push(SummaryPage);
+  }
+
+  public searchForTopic(searchInput: string) {
+    if (searchInput)
+      this.navCtrl.push(SearchResultsPage, {keyword: searchInput});
   }
 }
 
