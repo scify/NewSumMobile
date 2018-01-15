@@ -19,8 +19,8 @@ export class SourcesProvider {
     this.sourcesUpdated = new Subject<any>();
     this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
     this.contentLanguagesProvider.contentLanguageUpdated.subscribe((newLang) => {
-        this.selectedLang = newLang;
-        if (newLang) {
+        if (this.selectedLang !== newLang) {
+          this.selectedLang = newLang;
           this.sources = this.serviceClient.getFeedSources(this.selectedLang);
           this.sourcesUpdated.next(this.sources);
         }
