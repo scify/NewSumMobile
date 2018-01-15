@@ -18,17 +18,18 @@
     <ion-list-header>
       ΡΥΘΜΙΣΕΙΣ
     </ion-list-header>
-    <button ion-item>
-      Γλώσσα
+    <button ion-item (click)="selectLanguage()">
+      Επιλεγμένη Γλώσσα
+      <p class="selected-value">{{selectedLangName}}</p>
     </button>
     <button ion-item>
-      Προεπιλεγμένη Κατηγορία
+      Αγαπημένη Κατηγορία
     </button>
     <button ion-item>
-      Κατηγορίες
+      Προτιμώμενες Κατηγορίες
     </button>
     <button ion-item>
-      Πηγές
+      Προτιμώμενες Πηγές
     </button>
     <button ion-item>
       Φόρτωση Εικόνων

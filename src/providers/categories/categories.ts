@@ -25,7 +25,7 @@ export class CategoriesProvider {
     this.categoriesUpdated = new Subject<any>();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
     this.sourcesProvider.sourcesUpdated.subscribe((newSources) => {
-      this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
+      this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();      
       if (newSources.length > 0) {
         this.categories = this.serviceClient.getCategories(this.sourcesProvider.getSelectedSourcesUrls(), this.selectedLang);
         this.categoriesUpdated.next(this.categories);

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { ContentLanguagesProvider } from '../../providers/content-languages/content-languages';
 import {AboutPage} from "../about/about";
 
 /**
@@ -14,8 +15,18 @@ import {AboutPage} from "../about/about";
   templateUrl: 'settings.html',
 })
 export class SettingsPage {
+  public selectedLangName: string;
+  private static availableLanguages: any = {
+    'EL': 'Ελληνικά',
+    'EN': 'Αγγλικά'
+  }  
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              private alertCtrl: AlertController,
+              private contentLanguagesProvider: ContentLanguagesProvider) {
+    this.selectedLangName = SettingsPage.availableLanguages[
+      this.contentLanguagesProvider.getSelectedContentLanguage()
+    ];
   }
 
   ionViewDidLoad() {
@@ -25,4 +36,31 @@ export class SettingsPage {
     this.navCtrl.push(AboutPage)
   }
 
+  public selectLanguage() {
+    let alert = this.alertCtrl.create();
+    let selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();    
+    alert.setTitle('Επιλογή Γλώσσας');    
+
+    for (let prop in SettingsPage.availableLanguages) {
+      if (SettingsPage.availableLanguages.hasOwnProperty(prop)) {
+        alert.addInput({
+          type: 'radio',
+          label: SettingsPage.availableLanguages[prop],
+          value: prop,
+          checked: (prop === selectedLang)
+        });
+      }
+    }    
+
+    alert.addButton('ΑΚΥΡΩΣΗ');
+    alert.addButton({
+      text: 'ΕΠΙΛΟΓΗ',
+      handler: (lang: string) => {
+        this.selectedLangName = SettingsPage.availableLanguages[lang]
+        this.contentLanguagesProvider.setSelectedContentLanguage(lang);
+      }
+    });
+
+    alert.present();
+  }
 }
