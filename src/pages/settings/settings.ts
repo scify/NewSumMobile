@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { ContentLanguagesProvider } from '../../providers/content-languages/content-languages';
 import {AboutPage} from "../about/about";
+import {InAppBrowser} from "@ionic-native/in-app-browser";
 
 /**
  * Generated class for the SettingsPage page.
@@ -13,17 +14,19 @@ import {AboutPage} from "../about/about";
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.html',
+  providers:[InAppBrowser]
 })
 export class SettingsPage {
   public selectedLangName: string;
   private static availableLanguages: any = {
     'EL': 'Ελληνικά',
     'EN': 'Αγγλικά'
-  }  
+  }
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private alertCtrl: AlertController,
-              private contentLanguagesProvider: ContentLanguagesProvider) {
+              private contentLanguagesProvider: ContentLanguagesProvider,
+              private iab: InAppBrowser) {
     this.selectedLangName = SettingsPage.availableLanguages[
       this.contentLanguagesProvider.getSelectedContentLanguage()
     ];
@@ -35,11 +38,15 @@ export class SettingsPage {
   goToAbout(){
     this.navCtrl.push(AboutPage)
   }
+  goToPrivacyPolicy(){
+    const url = "http://www.scify.gr/site/el/impact-areas/169-newsum/433-newsum-privacy-policy";
+    this.iab.create(url , "_blank", "location=yes");
+  }
 
   public selectLanguage() {
     let alert = this.alertCtrl.create();
-    let selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();    
-    alert.setTitle('Επιλογή Γλώσσας');    
+    let selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
+    alert.setTitle('Επιλογή Γλώσσας');
 
     for (let prop in SettingsPage.availableLanguages) {
       if (SettingsPage.availableLanguages.hasOwnProperty(prop)) {
@@ -50,7 +57,7 @@ export class SettingsPage {
           checked: (prop === selectedLang)
         });
       }
-    }    
+    }
 
     alert.addButton('ΑΚΥΡΩΣΗ');
     alert.addButton({
