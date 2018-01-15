@@ -16,9 +16,7 @@
 <ion-content padding>
   <ion-grid>
     <ion-row>
-      <ion-col id="title">
-        {{selectedTopic.Title}}
-      </ion-col>
+      <ion-col id="title" [innerHtml]="selectedTopic.Title"></ion-col>
     </ion-row>
     <ion-row id="subtitle">
       <ion-col id="sources-number">
@@ -31,6 +29,7 @@
     <ion-row>
       <ion-col>
         <p class="summary-snippet" *ngFor="let sentence of selectedSummary.Sentences">
+          <span *ngIf="selectedSummary.Sources.length>1">{{sentence.Source.sourceLabel}}</span>
           {{sentence.Snippet}}
         </p>
       </ion-col>
@@ -44,7 +43,8 @@
       <ion-col>
         <ul id="sources-list">
           <li class="source" *ngFor="let source of selectedSummary.Sources">
-            <anchor href="{{(source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + source.sourceURL}}"  text="{{source.sourceLabel}}"></anchor>
+            <anchor href="{{(source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + source.sourceURL}}"
+                    text="{{source.sourceLabel}}"></anchor>
           </li>
         </ul>
       </ion-col>

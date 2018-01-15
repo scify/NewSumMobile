@@ -16,8 +16,15 @@ page-summary {
   }
   .summary-snippet {
     color: black;
-    padding-top: 10px;
+    padding: 0;
+    margin-top:0;
     line-height: 1.5em;
+
+    span{
+      display:block;
+      color:lightgrey;
+      font-size:11px;
+    }
   }
   #sources-list-title {
     margin-top: 20px;
@@ -34,4 +41,5 @@ page-summary {
       }
     }
   }
+
 }

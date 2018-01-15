@@ -31,7 +31,7 @@ export class CategoriesProvider {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();      
       if (newSources.length > 0) {
         this.categories = this.serviceClient.getCategories(this.sourcesProvider.getSelectedSourcesUrls(), this.selectedLang);
-        this.categoriesUpdated.next(this.categories);
+        this.categoriesUpdated.next(this.categories);        
         this.selectedCategory = this.categories[0];
         this.selectedCategoryUpdated.next(this.selectedCategory);
       }
@@ -42,11 +42,11 @@ export class CategoriesProvider {
       this.categoriesUpdated.next(this.categories);
       this.getFavoriteCategoryFromStorage().then((favoriteCategory) => {
         this.favoriteCategory = favoriteCategory;
-      }, error => {
-        this.favoriteCategory = this.categories[0];
-      });
-      this.selectedCategory = this.favoriteCategory;
-      this.selectedCategoryUpdated.next(this.selectedCategory);      
+        // make sure that favorite category is set
+        this.favoriteCategory = this.favoriteCategory || this.categories[0];
+        this.selectedCategory = this.favoriteCategory;      
+        this.selectedCategoryUpdated.next(this.selectedCategory);
+      }, error => console.error('Could not set properly the categories.'));            
     }
   }
 
@@ -58,7 +58,8 @@ export class CategoriesProvider {
     return this.selectedCategory;
   }
 
-  public getFavoriteCategory(): string {    
+  public getFavoriteCategory(): string {
+    console.error(this.favoriteCategory);
     return this.favoriteCategory;
   }
 

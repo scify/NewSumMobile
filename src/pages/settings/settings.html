@@ -22,8 +22,9 @@
       Επιλεγμένη Γλώσσα
       <p class="selected-value">{{selectedLangName}}</p>
     </button>
-    <button ion-item>
+    <button ion-item (click)="selectFavoriteCategory()">
       Αγαπημένη Κατηγορία
+      <p class="selected-value">{{favoriteCategory}}</p>
     </button>
     <button ion-item>
       Προτιμώμενες Κατηγορίες
@@ -42,7 +43,7 @@
     <button ion-item (click)="goToAbout()">
       Σχετικά
     </button>
-    <button ion-item (click)="goToAbout()">
+    <button ion-item (click)="goToPrivacyPolicy()">
       Privacy policy
     </button>
   </ion-list>

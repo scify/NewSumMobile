@@ -35,7 +35,8 @@ export class SummaryPage {
       if (newSummary) {
         this.selectedCategory = this.categoriesProvider.getSelectedCategory();
         this.selectedTopic = this.topicsProvider.getSelectedTopic();
-        this.selectedSummary = newSummary
+        this.selectedSummary = newSummary;
+        console.log(newSummary);
       }
     });
   }
