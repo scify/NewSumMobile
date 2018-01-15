@@ -17,14 +17,13 @@
 <ion-content class="card-background-page">
   <ion-card  *ngFor="let article of articles" (click)="selectTopicAndDisplaySummary(article)">
     <div class="img-holder">
-      <ion-img cache="true" src="{{article.imageUrls.length > 0 ? article.imageUrls[0] : selectedCategoryDefaultImage}}"/>
+      <ion-img cache="true" src="{{article.imageUrls.length > 0 ? article.imageUrls[0] : selectedCategoryDefaultImage}}"></ion-img>
       <div class="info-background"></div>
     </div>
 
     <ion-card-content>
       <div class="category"><span>{{selectedCategoryForUppercase}}</span><span>{{article.TimeFormatted}}</span></div>
-      <div class="title">
-        {{ article.Title}}
+      <div class="title" [innerHtml]="article.Title">
       </div>
       <div class="stats-info">
         {{article.FromArticles}} {{article.FromArticles==1? "πηγή":"πηγές"}}
