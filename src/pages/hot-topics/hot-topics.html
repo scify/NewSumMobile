@@ -23,8 +23,7 @@
 
     <ion-card-content>
       <div class="category"><span>{{selectedCategoryForUppercase}}</span><span>{{article.TimeFormatted}}</span></div>
-      <div class="title">
-        {{ article.Title}}
+      <div class="title"  [innerHtml]="article.Title">>
       </div>
       <div class="stats-info">
         {{article.FromArticles}} {{article.FromArticles==1? "πηγή":"πηγές"}}
