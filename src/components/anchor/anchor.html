@@ -1,0 +1,5 @@
+<!-- Generated template for the AnchorComponent component -->
+
+<a *ngIf="href && platform.is('core')" href="{{ href }}" target="_blank">{{text}}</a>
+<div *ngIf="href && !platform.is('core')" (click)="openLink(href)">{{text}}</div>
+

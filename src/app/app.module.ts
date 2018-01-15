@@ -25,6 +25,8 @@ import { CategoriesProvider } from '../providers/categories/categories';
 import { ServiceClientProvider } from '../providers/service-client/service-client';
 import { TopicsProvider } from '../providers/topics/topics';
 import { SummariesProvider } from '../providers/summaries/summaries';
+import {ComponentsModule} from "../components/components.module";
+import {InAppBrowser} from "@ionic-native/in-app-browser";
 
 @NgModule({
   declarations: [
@@ -41,7 +43,8 @@ import { SummariesProvider } from '../providers/summaries/summaries';
     BrowserModule,
     IonicModule.forRoot(MyApp, {tabsPlacement: 'top'}),
     IonicStorageModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
