@@ -11,6 +11,8 @@ import {CategoriesProvider} from "../providers/categories/categories";
 import {TopicsProvider} from "../providers/topics/topics";
 import {SummariesProvider} from "../providers/summaries/summaries";
 
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -26,11 +28,14 @@ export class MyApp {
               private categoriesProvider: CategoriesProvider,
               private topicsProvider: TopicsProvider,
               private summariesProvider: SummariesProvider,
+              private screenOrientation: ScreenOrientation,
               public notification: NotificationsProvider) {
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
+      // lock portrait orientation, it prevents the summary page from breaking on orientation change
+      this.screenOrientation.lock('portrait').then(() => console.log('Screen orientation locked successfully'),
+          error => console.error('An error occurred while trying to lock screen orientation', error)
+      );
       this.contentLanguagesProvider.getSelectedContentLanguageFromStorage().then((selectedLang) => {
         if (!!selectedLang)
           this.rootPage = TabsPage; // TODO: set different view if lang is not set

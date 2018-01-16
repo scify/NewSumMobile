@@ -24,6 +24,7 @@ import { CategoriesProvider } from '../providers/categories/categories';
 import { ServiceClientProvider } from '../providers/service-client/service-client';
 import { TopicsProvider } from '../providers/topics/topics';
 import { SummariesProvider } from '../providers/summaries/summaries';
+import {ScreenOrientation} from "@ionic-native/screen-orientation";
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { SummariesProvider } from '../providers/summaries/summaries';
     CategoriesProvider,
     ServiceClientProvider,
     TopicsProvider,
-    SummariesProvider
+    SummariesProvider,
+    ScreenOrientation
   ]
 })
 export class AppModule {}

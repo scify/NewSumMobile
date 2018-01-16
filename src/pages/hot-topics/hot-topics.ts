@@ -11,7 +11,7 @@ import {AllTopics} from "../all-topics/all-topics";
 
 @Component({
   selector: 'page-all-topics',
-  templateUrl: 'hot-topics.html',
+  templateUrl: '../all-topics/all-topics.html',
 })
 export class HotTopicsPage extends AllTopics {
   @ViewChild(Content) content: Content;
