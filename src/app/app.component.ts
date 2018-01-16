@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {Platform} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {NavController, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {TabsPage} from '../pages/tabs/tabs';
@@ -12,11 +12,13 @@ import {SummariesProvider} from "../providers/summaries/summaries";
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import {SearchResultsPage} from "../pages/search-results/search-results";
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
+  @ViewChild('mainNav') navCtrl: NavController;
   rootPage: any = TabsPage;
   availableCategories: Array<string>;
 
@@ -29,8 +31,8 @@ export class MyApp {
               private topicsProvider: TopicsProvider,
               private summariesProvider: SummariesProvider,
               private screenOrientation: ScreenOrientation,
-              public notification: NotificationsProvider,
-              private ga: GoogleAnalytics) {
+              private ga: GoogleAnalytics,
+              public notification: NotificationsProvider) {
     platform.ready().then(() => {
       statusBar.styleDefault();
       // lock portrait orientation, it prevents the summary page from breaking on orientation change
@@ -65,5 +67,10 @@ export class MyApp {
 
   public selectCategory(newSelectedCategory: string) {
     this.categoriesProvider.setSelectedCategory(newSelectedCategory);
+  }
+
+  public searchForTopic(searchInput: string) {
+    if (searchInput)
+      this.navCtrl.push(SearchResultsPage, {keyword: searchInput});
   }
 }
