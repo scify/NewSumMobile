@@ -28,14 +28,20 @@ export class CategoriesProvider {
     this.categoriesUpdated = new Subject<any>();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
     this.sourcesProvider.sourcesUpdated.subscribe((newSources) => {
-      this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();      
+      let newlySelectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       if (newSources.length > 0) {
-        this.categories = this.serviceClient.getCategories(this.sourcesProvider.getSelectedSourcesUrls(), this.selectedLang);
-        this.categoriesUpdated.next(this.categories);        
+        this.categories = this.serviceClient.getCategories(this.sourcesProvider.getSelectedSourcesUrls(), newlySelectedLang);
+        this.categoriesUpdated.next(this.categories);
+        // when language is set to a different value, update the favorite category as well
+        if (newlySelectedLang !== this.selectedLang) {
+          this.favoriteCategory = this.categories[0];
+          this.setFavoriteCategory(this.favoriteCategory);
+        }
+        this.selectedLang = newlySelectedLang;
         this.selectedCategory = this.categories[0];
         this.selectedCategoryUpdated.next(this.selectedCategory);
       }
-    }, error => console.error(error));    
+    }, error => console.error(error));
     if (this.selectedSourcesUrls.length > 0) {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       this.categories = this.serviceClient.getCategories(this.selectedSourcesUrls, this.selectedLang);

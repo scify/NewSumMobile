@@ -23,17 +23,14 @@ export class SettingsPage {
   private static availableLanguages: any = {
     'EL': 'Ελληνικά',
     'EN': 'Αγγλικά'
-  }
+  };
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private alertCtrl: AlertController,
               private contentLanguagesProvider: ContentLanguagesProvider,
               private categoryProvider: CategoriesProvider,
               private iab: InAppBrowser) {
-    this.selectedLangName = SettingsPage.availableLanguages[
-      this.contentLanguagesProvider.getSelectedContentLanguage()
-    ];
-    this.favoriteCategory = this.categoryProvider.getFavoriteCategory();
+    this.updateDefaultValues();
   }
 
   ionViewDidLoad() {
@@ -69,6 +66,7 @@ export class SettingsPage {
       handler: (lang: string) => {
         this.selectedLangName = SettingsPage.availableLanguages[lang];
         this.contentLanguagesProvider.setSelectedContentLanguage(lang);
+        this.updateDefaultValues();
       }
     });
 
@@ -100,5 +98,12 @@ export class SettingsPage {
     });
 
     alert.present();
+  }
+
+  private updateDefaultValues() {
+    this.selectedLangName = SettingsPage.availableLanguages[
+      this.contentLanguagesProvider.getSelectedContentLanguage()
+      ];
+    this.favoriteCategory = this.categoryProvider.getFavoriteCategory();
   }
 }
