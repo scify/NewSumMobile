@@ -1,8 +1,9 @@
-import {Component, ViewChild} from '@angular/core';
+import { Component , ViewChild} from '@angular/core';
 import { NavController } from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {SummariesProvider} from "../../providers/summaries/summaries";
 import {CategoriesProvider} from "../../providers/categories/categories";
+import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
 
 /**
@@ -26,7 +27,13 @@ export class SummaryPage {
   public selectedSummary: any;
 
   constructor(private navCtrl: NavController, private topicsProvider: TopicsProvider,
-              private summaryProvider: SummariesProvider, private categoriesProvider: CategoriesProvider) {
+              private summaryProvider: SummariesProvider,
+              private categoriesProvider: CategoriesProvider,
+              protected ga: GoogleAnalytics) {
+
+  }
+
+  ionViewDidEnter() {
     this.selectedSummary = this.summaryProvider.getSummary();
     if (this.selectedSummary) {
       this.selectedCategory = this.categoriesProvider.getSelectedCategory();

@@ -28,6 +28,7 @@ import { SummariesProvider } from '../providers/summaries/summaries';
 import {ScreenOrientation} from "@ionic-native/screen-orientation";
 import {ComponentsModule} from "../components/components.module";
 import {InAppBrowser} from "@ionic-native/in-app-browser";
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import {InAppBrowser} from "@ionic-native/in-app-browser";
   providers: [
     StatusBar,
     SplashScreen,
+    GoogleAnalytics,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     NotificationsProvider,
     SoapClientProvider,

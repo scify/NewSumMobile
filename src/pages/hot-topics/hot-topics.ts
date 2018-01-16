@@ -1,6 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {Content} from 'ionic-angular';
 import {AllTopicsPage} from "../all-topics/all-topics";
+import {GoogleAnalytics} from '@ionic-native/google-analytics';
 
 /**
  * Generated class for the HotTopicsPage page.
@@ -21,6 +22,6 @@ export class HotTopicsPage extends AllTopicsPage {
       this.articles = this.topicsProvider.getHotTopics();
     }, error => console.log(error));
     this.articles = this.topicsProvider.getHotTopics();
-    this.fetchSelectedCategoryAndSubscribeToChanges();
+    this.fetchSelectedCategoryAndSubscribeToChanges("Popular news");
   }
 }

@@ -4,6 +4,7 @@ import { ContentLanguagesProvider } from '../../providers/content-languages/cont
 import {AboutPage} from "../about/about";
 import { CategoriesProvider } from '../../providers/categories/categories';
 import {InAppBrowser} from "@ionic-native/in-app-browser";
+import {GoogleAnalytics} from '@ionic-native/google-analytics';
 
 /**
  * Generated class for the SettingsPage page.
@@ -32,7 +33,8 @@ export class SettingsPage {
               private alertCtrl: AlertController,
               private contentLanguagesProvider: ContentLanguagesProvider,
               private categoryProvider: CategoriesProvider,
-              private iab: InAppBrowser) {
+              private iab: InAppBrowser,
+              protected ga: GoogleAnalytics) {
     this.updateDefaultValues();
   }
 
@@ -43,6 +45,7 @@ export class SettingsPage {
     this.navCtrl.push(AboutPage)
   }
   goToPrivacyPolicy(){
+    this.ga.trackView("Privacy policy page");
     const url = "http://www.scify.gr/site/el/impact-areas/169-newsum/433-newsum-privacy-policy";
     this.iab.create(url , "_blank", "location=yes");
   }
@@ -80,16 +83,16 @@ export class SettingsPage {
     let alert = this.alertCtrl.create();
     let favoriteCategory = this.categoryProvider.getFavoriteCategory();
     let categories = this.categoryProvider.getSelectedCategories();
-    alert.setTitle('Επιλογή Αγαπημένης Κατηγορίας');    
+    alert.setTitle('Επιλογή Αγαπημένης Κατηγορίας');
 
-    for (let i = 0; i < categories.length; i++) {  
+    for (let i = 0; i < categories.length; i++) {
       alert.addInput({
         type: 'radio',
         label: categories[i],
         value: categories[i],
         checked: (categories[i] === favoriteCategory)
-      });      
-    }    
+      });
+    }
 
     alert.addButton('ΑΚΥΡΩΣΗ');
     alert.addButton({
