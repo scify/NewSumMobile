@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { ContentLanguagesProvider } from '../../providers/content-languages/content-languages';
 import {AboutPage} from "../about/about";
 import {InAppBrowser} from "@ionic-native/in-app-browser";
+import {GoogleAnalytics} from '@ionic-native/google-analytics';
 
 /**
  * Generated class for the SettingsPage page.
@@ -26,7 +27,8 @@ export class SettingsPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private alertCtrl: AlertController,
               private contentLanguagesProvider: ContentLanguagesProvider,
-              private iab: InAppBrowser) {
+              private iab: InAppBrowser,
+              protected ga: GoogleAnalytics) {
     this.selectedLangName = SettingsPage.availableLanguages[
       this.contentLanguagesProvider.getSelectedContentLanguage()
     ];
@@ -39,6 +41,7 @@ export class SettingsPage {
     this.navCtrl.push(AboutPage)
   }
   goToPrivacyPolicy(){
+    this.ga.trackView("Privacy policy page");
     const url = "http://www.scify.gr/site/el/impact-areas/169-newsum/433-newsum-privacy-policy";
     this.iab.create(url , "_blank", "location=yes");
   }
