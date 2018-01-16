@@ -3,18 +3,16 @@ page-summary {
     text-align: left;
   }
   #img-container {
+    position: relative;
     img {
       width: 100%;
     }
     #title-background {
-      position: relative;
+      position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 35px;
-      margin-top: -40px;
-      background-color: black;
-      opacity: 0.5;
+      background-color: rgba(0, 0, 0, 0.5);
     }
   }
   #title {

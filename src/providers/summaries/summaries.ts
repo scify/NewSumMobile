@@ -37,7 +37,7 @@ export class SummariesProvider {
     }
   }
 
-  public getSummary(): string {
+  public getSummary(): any {
     return this.summary;
   }
 }
