@@ -1,9 +1,10 @@
-import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import { Component , ViewChild} from '@angular/core';
+import { NavController } from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {SummariesProvider} from "../../providers/summaries/summaries";
 import {CategoriesProvider} from "../../providers/categories/categories";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
+import {CategoriesViewManager} from "../../lib/categories-view-manager";
 
 /**
  * Generated class for the SummaryPage page.
@@ -17,8 +18,11 @@ import {GoogleAnalytics} from '@ionic-native/google-analytics';
   templateUrl: 'summary.html',
 })
 export class SummaryPage {
+  @ViewChild('title') titleElement: any;
+  @ViewChild('titleBackground') titleBackgroundElement: any;
 
   public selectedCategory: string;
+  public selectedCategoryDefaultImage: string;
   public selectedTopic: any;
   public selectedSummary: any;
 
@@ -32,22 +36,20 @@ export class SummaryPage {
   ionViewDidEnter() {
     this.selectedSummary = this.summaryProvider.getSummary();
     if (this.selectedSummary) {
-      this.setPropertiesAndFireGoogleAnalyticsTrack();
+      this.selectedCategory = this.categoriesProvider.getSelectedCategory();
+      this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
+      this.selectedTopic = this.topicsProvider.getSelectedTopic();
     }
   }
 
   ionViewDidLoad() {
-    this.summaryProvider.summaryUpdated.subscribe((newSummary) => {
-      if (newSummary) {
-        this.selectedSummary = newSummary;
-        this.setPropertiesAndFireGoogleAnalyticsTrack();
-      }
-    });
+    this.displayTitleCorrectly();
   }
 
-  private setPropertiesAndFireGoogleAnalyticsTrack() {
-    this.selectedCategory = this.categoriesProvider.getSelectedCategory();
-    this.selectedTopic = this.topicsProvider.getSelectedTopic();
-    this.ga.trackView("Summary: " + this.selectedTopic.Title);
+  private displayTitleCorrectly() {
+    let titleElementOffsetHeight = this.titleElement.nativeElement.offsetHeight;
+    this.titleElement.nativeElement.style.marginTop = (-1 * titleElementOffsetHeight) + 'px';
+    this.titleBackgroundElement.nativeElement.style.height = titleElementOffsetHeight + 'px';
+    this.titleBackgroundElement.nativeElement.style.marginTop = (-1 * (titleElementOffsetHeight + 5)) + 'px';
   }
 }

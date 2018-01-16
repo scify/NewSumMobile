@@ -81,6 +81,7 @@
     <plugin name="cordova-plugin-device" spec="^1.1.4" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
     <plugin name="cordova-plugin-ionic-webview" spec="^1.1.16" />
+    <plugin name="cordova-plugin-screen-orientation" spec="^3.0.1" />
     <plugin name="cordova-plugin-inappbrowser" spec="^2.0.1" />
     <plugin name="cordova-plugin-google-analytics" spec="^1.8.3" />
     <engine name="ios" spec="4.5.4" />

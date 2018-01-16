@@ -14,7 +14,6 @@ import {Subject} from "rxjs/Subject";
 @Injectable()
 export class SummariesProvider {
 
-  public summaryUpdated: Subject<any>;
   private selectedTopic: any;
   private selectedSourcesUrls: Array<string>;
   private selectedLang: string;
@@ -22,7 +21,6 @@ export class SummariesProvider {
 
   constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
               private contentLanguagesProvider: ContentLanguagesProvider, private topicsProvider: TopicsProvider) {
-    this.summaryUpdated = new Subject<any>();
     this.selectedTopic = this.topicsProvider.getSelectedTopic();
     this.topicsProvider.selectedTopicUpdated.subscribe((newTopic) => {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
@@ -30,14 +28,12 @@ export class SummariesProvider {
       if (newTopic) {
         this.selectedTopic = newTopic;
         this.summary = this.serviceClient.getSummary(this.selectedTopic.ID, this.selectedSourcesUrls, this.selectedLang);
-        this.summaryUpdated.next(this.summary);
       }
     });
     if (this.selectedTopic) {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
       this.summary = this.serviceClient.getSummary(this.selectedTopic.ID, this.selectedSourcesUrls, this.selectedLang);
-      this.summaryUpdated.next(this.summary);
     }
   }
 

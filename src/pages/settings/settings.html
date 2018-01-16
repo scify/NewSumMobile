@@ -22,8 +22,9 @@
       Επιλεγμένη Γλώσσα
       <p class="selected-value">{{selectedLangName}}</p>
     </button>
-    <button ion-item>
+    <button ion-item (click)="selectFavoriteCategory()">
       Αγαπημένη Κατηγορία
+      <p class="selected-value">{{favoriteCategory}}</p>
     </button>
     <button ion-item>
       Προτιμώμενες Κατηγορίες

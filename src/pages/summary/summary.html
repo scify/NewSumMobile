@@ -13,40 +13,32 @@
 </ion-header>
 
 
-<ion-content padding>
-  <ion-grid>
-    <ion-row>
-      <ion-col id="title" [innerHtml]="selectedTopic.Title"></ion-col>
-    </ion-row>
+<ion-content>
+  <div id="img-container">
+    <img src="{{selectedTopic.imageUrls.length > 0 ? selectedTopic.imageUrls[0] : selectedCategoryDefaultImage}}"/>
+    <div id="title-background" #titleBackground></div>
+  </div>
+  <div id="title" #title>
+    {{selectedTopic.Title}}
+  </div>
+  <ion-grid padding>
     <ion-row id="subtitle">
       <ion-col id="sources-number">
         {{selectedTopic.FromArticles}} {{selectedTopic.FromArticles==1? "πηγή":"πηγές"}}
       </ion-col>
       <ion-col id="timestamp">
-        {{selectedTopic.DateFormatted + ' ' + selectedTopic.TimeFormatted}}
+        {{selectedTopic.DateFormatted + ', ' + selectedTopic.TimeFormatted}}
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <p class="summary-snippet" *ngFor="let sentence of selectedSummary.Sentences">
-          <span *ngIf="selectedSummary.Sources.length>1">{{sentence.Source.sourceLabel}}</span>
-          {{sentence.Snippet}}
-        </p>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col id="sources-list-title">
-        ΟΛΕΣ ΟΙ ΠΗΓΕΣ:
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ul id="sources-list">
-          <li class="source" *ngFor="let source of selectedSummary.Sources">
-            <anchor href="{{(source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + source.sourceURL}}"
-                    text="{{source.sourceLabel}}"></anchor>
-          </li>
-        </ul>
+        <div class="summary-snippet" *ngFor="let sentence of selectedSummary.Sentences">
+          <p>{{sentence.Snippet}}</p>
+          <p>
+            <anchor href="{{(sentence.Source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + sentence.Source.sourceURL}}"
+               class="source" text="{{sentence.Source.sourceLabel}}"></anchor>
+          </p>
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>

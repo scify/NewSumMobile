@@ -2,14 +2,32 @@ page-summary {
   ion-title {
     text-align: left;
   }
+  #img-container {
+    img {
+      width: 100%;
+    }
+    #title-background {
+      position: relative;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 35px;
+      margin-top: -40px;
+      background-color: black;
+      opacity: 0.5;
+    }
+  }
   #title {
-    font-weight: bold;
+    //font-weight: bold;
+    color: white;
+    padding: 12px;
+    position: relative;
   }
   #subtitle {
     font-size: small;
     color: gray;
     border-bottom: 1px solid black;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     #timestamp {
       text-align: right;
     }
@@ -26,20 +44,11 @@ page-summary {
       font-size:11px;
     }
   }
-  #sources-list-title {
-    margin-top: 20px;
+  .source a {
+    text-decoration: none;
     color: gray;
-  }
-  #sources-list {
-    margin: 0 0 30px;
-    padding-left: 20px;
-    .source {
-      padding-top: 5px;
-      a {
-        text-decoration: none;
-        color: black;
-      }
-    }
+    font-style: italic;
+    font-size: smaller;
   }
 
 }
