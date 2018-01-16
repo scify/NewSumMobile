@@ -2,13 +2,18 @@
 
 <ion-menu [content]="header">
     <ion-header>
-        <ion-toolbar>
-            <ion-buttons right>
+        <ion-toolbar>            
+            <ion-searchbar
+                [(ngModel)]="searchInput"
+                placeholder="Αναζήτηση"
+                debounce=1000
+                (ionInput)="searchForTopic(searchInput)">
+            </ion-searchbar>
+            <!-- <ion-buttons right>
                 <button menuClose class="closeMenuBtn">
-                    <ion-icon name="md-close"></ion-icon>
+                    <ion-icon name="md-close"></ion-icon>                    
                 </button>
-            </ion-buttons>
-            <ion-title>Menu</ion-title>
+            </ion-buttons> -->
         </ion-toolbar>
     </ion-header>
     <ion-content>

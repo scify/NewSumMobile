@@ -29,9 +29,9 @@ export class ContentLanguagesProvider {
     return this.languages.slice(0);
   }
 
-  public setSelectedContentLanguage(langCode): Promise<any> {
-    this.contentLanguageUpdated.next(langCode);
+  public setSelectedContentLanguage(langCode: string): Promise<any> {
     this.selectedLanguage = langCode;
+    this.contentLanguageUpdated.next(langCode);
     return this.appStorage.set('selected-language', langCode);
   }
 

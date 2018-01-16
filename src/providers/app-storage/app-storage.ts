@@ -9,7 +9,7 @@ export class AppStorageProvider {
     }
 
     set(dataKey, data): Promise<any> {
-        return this.storage.set(dataKey, JSON.stringify(data));
+        return this.storage.set(dataKey, data.toString());
     }
 
     get(dataKey): Promise<any> {

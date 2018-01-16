@@ -4,11 +4,12 @@ import {IonicApp, IonicModule, IonicErrorHandler, Alert} from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
-import { AllTopics } from '../pages/all-topics/all-topics';
+import { AllTopicsPage } from '../pages/all-topics/all-topics';
 import { TabsPage } from '../pages/tabs/tabs';
 import { HotTopicsPage } from "../pages/hot-topics/hot-topics";
 import { SummaryPage } from "../pages/summary/summary";
+import { SearchResultsPage } from "../pages/search-results/search-results";
+import { SettingsPage } from "../pages/settings/settings";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -25,32 +26,37 @@ import { ServiceClientProvider } from '../providers/service-client/service-clien
 import { TopicsProvider } from '../providers/topics/topics';
 import { SummariesProvider } from '../providers/summaries/summaries';
 import {ScreenOrientation} from "@ionic-native/screen-orientation";
+import {ComponentsModule} from "../components/components.module";
+import {InAppBrowser} from "@ionic-native/in-app-browser";
 
 @NgModule({
   declarations: [
     MyApp,
     AboutPage,
-    ContactPage,
-    AllTopics,
+    AllTopicsPage,
     TabsPage,
     HotTopicsPage,
-    SummaryPage
+    SummaryPage,
+    SearchResultsPage,
+    SettingsPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp, {tabsPlacement: 'top'}),
     IonicStorageModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     AboutPage,
-    ContactPage,
-    AllTopics,
+    AllTopicsPage,
     TabsPage,
     HotTopicsPage,
-    SummaryPage
+    SummaryPage,
+    SearchResultsPage,
+    SettingsPage
   ],
   providers: [
     StatusBar,

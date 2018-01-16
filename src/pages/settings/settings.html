@@ -1,0 +1,50 @@
+<!--
+  Generated template for the SettingsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title></ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+    <ion-list-header>
+      ΡΥΘΜΙΣΕΙΣ
+    </ion-list-header>
+    <button ion-item (click)="selectLanguage()">
+      Επιλεγμένη Γλώσσα
+      <p class="selected-value">{{selectedLangName}}</p>
+    </button>
+    <button ion-item (click)="selectFavoriteCategory()">
+      Αγαπημένη Κατηγορία
+      <p class="selected-value">{{favoriteCategory}}</p>
+    </button>
+    <button ion-item>
+      Προτιμώμενες Κατηγορίες
+    </button>
+    <button ion-item>
+      Προτιμώμενες Πηγές
+    </button>
+    <button ion-item>
+      Φόρτωση Εικόνων
+    </button>
+  </ion-list>
+  <ion-list>
+    <ion-list-header>
+      ΠΛΗΡΟΦΟΡΙΕΣ
+    </ion-list-header>
+    <button ion-item (click)="goToAbout()">
+      Σχετικά
+    </button>
+    <button ion-item (click)="goToPrivacyPolicy()">
+      Privacy policy
+    </button>
+  </ion-list>
+</ion-content>

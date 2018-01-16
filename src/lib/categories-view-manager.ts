@@ -7,7 +7,7 @@ export class CategoriesViewManager {
     'Αθλητισμός': 'assets/imgs/categories/sports.jpg',
     'Τεχνολογία': 'assets/imgs/categories/tech.jpg',
     'Ελλάδα': 'assets/imgs/categories/civilization2.jpg',
-    'SciFY News': 'assets/imgs/categories/scify_logo.png',
+    'SciFY News': 'assets/imgs/categories/scify_logo_bg.png',
     'Γενικά': 'assets/imgs/categories/newspaper.jpg'
   };
 

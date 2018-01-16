@@ -22,11 +22,6 @@
     {{selectedTopic.Title}}
   </div>
   <ion-grid padding>
-    <!--<ion-row>-->
-      <!--<ion-col id="title">-->
-        <!--{{selectedTopic.Title}}-->
-      <!--</ion-col>-->
-    <!--</ion-row>-->
     <ion-row id="subtitle">
       <ion-col id="sources-number">
         {{selectedTopic.FromArticles}} {{selectedTopic.FromArticles==1? "πηγή":"πηγές"}}
@@ -40,10 +35,8 @@
         <div class="summary-snippet" *ngFor="let sentence of selectedSummary.Sentences">
           <p>{{sentence.Snippet}}</p>
           <p>
-            <a href="{{(sentence.Source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + sentence.Source.sourceURL}}"
-               class="source" target="_blank">
-              {{sentence.Source.sourceLabel}}
-            </a>
+            <anchor href="{{(sentence.Source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + sentence.Source.sourceURL}}"
+               class="source" text="{{sentence.Source.sourceLabel}}"></anchor>
           </p>
         </div>
       </ion-col>
