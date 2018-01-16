@@ -26,8 +26,9 @@
       Αγαπημένη Κατηγορία
       <p class="selected-value">{{favoriteCategory}}</p>
     </button>
-    <button ion-item>
+    <button ion-item (click)="selectCategories()">
       Προτιμώμενες Κατηγορίες
+      <p class="selected-value">{{selectedCategoriesStringified}}</p>
     </button>
     <button ion-item>
       Προτιμώμενες Πηγές

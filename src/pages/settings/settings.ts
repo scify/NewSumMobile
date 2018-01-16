@@ -20,6 +20,9 @@ import {InAppBrowser} from "@ionic-native/in-app-browser";
 export class SettingsPage {
   public selectedLangName: string;
   public favoriteCategory: string;
+  public selectedCategoriesStringified: string;
+  private selectedCategories: Array<string>;
+  private allAvailableCategories: Array<string>;
   private static availableLanguages: any = {
     'EL': 'Ελληνικά',
     'EN': 'Αγγλικά'
@@ -100,10 +103,42 @@ export class SettingsPage {
     alert.present();
   }
 
+  public selectCategories() {
+    let alert = this.alertCtrl.create();
+    let selectedCategories = this.categoryProvider.getSelectedCategories();
+    let categories = this.categoryProvider.getAllAvailableCategories();
+    alert.setTitle('Επιλογή Κατηγοριών');
+
+    for (let i = 0; i < categories.length; i++) {
+      alert.addInput({
+        type: 'checkbox',
+        label: categories[i],
+        value: categories[i],
+        checked: (selectedCategories.indexOf(categories[i]) >= 0)
+      });
+    }
+
+    alert.addButton('ΑΚΥΡΩΣΗ');
+    alert.addButton({
+      text: 'ΕΠΙΛΟΓΗ',
+      handler: (selectedCategories: Array<string>) => {
+        this.selectedCategories = selectedCategories;
+        this.selectedCategoriesStringified = this.selectedCategories.join();
+        this.categoryProvider.setSelectedCategories(selectedCategories);
+        this.updateDefaultValues();
+      }
+    });
+
+    alert.present();
+  }
+
   private updateDefaultValues() {
     this.selectedLangName = SettingsPage.availableLanguages[
       this.contentLanguagesProvider.getSelectedContentLanguage()
       ];
     this.favoriteCategory = this.categoryProvider.getFavoriteCategory();
+    this.selectedCategories = this.categoryProvider.getSelectedCategories();
+    this.selectedCategoriesStringified = this.selectedCategories.join();
+    this.allAvailableCategories = this.categoryProvider.getAllAvailableCategories();
   }
 }

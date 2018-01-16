@@ -42,7 +42,7 @@ export class MyApp {
         splashScreen.hide();
       });
       this.availableCategories = this.categoriesProvider.getSelectedCategories();
-      this.categoriesProvider.categoriesUpdated.subscribe((newCategories) => {
+      this.categoriesProvider.selectedCategoriesUpdated.subscribe((newCategories) => {
         this.availableCategories = newCategories;
       });
 

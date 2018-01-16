@@ -14,9 +14,10 @@ import { AppStorageProvider } from '../app-storage/app-storage';
 @Injectable()
 export class CategoriesProvider {
   public selectedCategoryUpdated: Subject<any>;
-  public categoriesUpdated: Subject<any>;
+  public selectedCategoriesUpdated: Subject<any>;
   private favoriteCategory: string;
   private selectedCategory: string;
+  private selectedCategories: Array<string> = [];
   private selectedLang: string;
   private selectedSourcesUrls: Array<string>;
   private categories: Array<string> = [];
@@ -25,18 +26,18 @@ export class CategoriesProvider {
               private contentLanguagesProvider: ContentLanguagesProvider,
               private appStorage: AppStorageProvider) {
     this.selectedCategoryUpdated = new Subject<any>();
-    this.categoriesUpdated = new Subject<any>();
+    this.selectedCategoriesUpdated = new Subject<any>();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
     this.sourcesProvider.sourcesUpdated.subscribe((newSources) => {
       let newlySelectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       if (newSources.length > 0) {
         this.categories = this.serviceClient.getCategories(this.sourcesProvider.getSelectedSourcesUrls(), newlySelectedLang);
-        this.categoriesUpdated.next(this.categories);
         // when language is set to a different value, update the favorite category as well
         if (newlySelectedLang !== this.selectedLang) {
-          this.favoriteCategory = this.categories[0];
-          this.setFavoriteCategory(this.favoriteCategory);
+          this.selectedCategories = this.getAllAvailableCategories();
+          this.setFavoriteCategory(this.selectedCategories[0]);
         }
+        this.selectedCategoriesUpdated.next(this.getSelectedCategories());
         this.selectedLang = newlySelectedLang;
         this.selectedCategory = this.categories[0];
         this.selectedCategoryUpdated.next(this.selectedCategory);
@@ -45,19 +46,28 @@ export class CategoriesProvider {
     if (this.selectedSourcesUrls.length > 0) {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       this.categories = this.serviceClient.getCategories(this.selectedSourcesUrls, this.selectedLang);
-      this.categoriesUpdated.next(this.categories);
-      this.getFavoriteCategoryFromStorage().then((favoriteCategory) => {
-        this.favoriteCategory = favoriteCategory;
-        // make sure that favorite category is set
-        this.favoriteCategory = this.favoriteCategory || this.categories[0];
-        this.selectedCategory = this.favoriteCategory;      
-        this.selectedCategoryUpdated.next(this.selectedCategory);
-      }, error => console.error('Could not set properly the categories.'));            
+      this.getSelectedCategoriesFromStorage().then((selectedCategories) => {
+        this.selectedCategories = selectedCategories ? selectedCategories.split(',') : null;
+        this.selectedCategories = this.selectedCategories || this.getAllAvailableCategories();
+        this.selectedCategoriesUpdated.next(this.getSelectedCategories());
+        this.getFavoriteCategoryFromStorage().then((favoriteCategory) => {
+          this.favoriteCategory = favoriteCategory;
+          // make sure that favorite category is set
+          this.favoriteCategory = (this.favoriteCategory && selectedCategories.indexOf(this.favoriteCategory) > 0) ?
+            this.favoriteCategory : this.selectedCategories[0];
+          this.selectedCategory = this.favoriteCategory;
+          this.selectedCategoryUpdated.next(this.selectedCategory);
+        }, error => console.error('Could not set properly the categories.'));
+      });
     }
   }
 
-  public getSelectedCategories(): Array<string> {
+  public getAllAvailableCategories(): Array<string> {
     return this.categories.slice(0);
+  }
+
+  public getSelectedCategories(): Array<string> {
+    return this.selectedCategories.slice(0);
   }
 
   public getSelectedCategory(): string {    
@@ -65,8 +75,14 @@ export class CategoriesProvider {
   }
 
   public getFavoriteCategory(): string {
-    console.error(this.favoriteCategory);
     return this.favoriteCategory;
+  }
+
+  public setSelectedCategories(selectedCategories: Array<string>): Promise<any> {
+    this.selectedCategories = selectedCategories;
+    this.updateFavoriteCategory();
+    this.selectedCategoriesUpdated.next(this.getSelectedCategories());
+    return this.appStorage.set('selected-categories', this.selectedCategories.join());
   }
 
   public setSelectedCategory(newSelectedCategory: string) {
@@ -74,12 +90,21 @@ export class CategoriesProvider {
     this.selectedCategoryUpdated.next(this.selectedCategory);
   }
 
-  public setFavoriteCategory(newFavoriteCategory: string) {
+  public setFavoriteCategory(newFavoriteCategory: string): Promise<any> {
     this.favoriteCategory = newFavoriteCategory;
-    this.appStorage.set('favorite-category', this.favoriteCategory);
+    return this.appStorage.set('favorite-category', this.favoriteCategory);
   }
 
   private getFavoriteCategoryFromStorage(): Promise<any> {
     return this.appStorage.get('favorite-category');
+  }
+
+  private getSelectedCategoriesFromStorage(): Promise<any> {
+    return this.appStorage.get('selected-categories');
+  }
+
+  private updateFavoriteCategory() {
+    if (this.selectedCategories.indexOf(this.favoriteCategory) < 0)
+      this.setFavoriteCategory(this.selectedCategories[0]);
   }
 }
