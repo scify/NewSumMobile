@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="org.scify.newSumApp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>NewSumMobile</name>
+    <name>NewSum</name>
     <description>The brand new application for the NewSum summarization project.</description>
     <author href="http://scify.org/">SciFY NPO</author>
     <content src="index.html" />
