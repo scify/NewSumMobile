@@ -147,7 +147,7 @@ export class SOAPClient {
 
   _onLoadWsdl(url, method, parameters, async, callback, req) {
     let wsdl = req.responseXML;
-    console.log('My wsdl is: ', wsdl);
+    //console.log('My wsdl is: ', wsdl);
     this.SOAPClient_cacheWsdl[url] = wsdl;	// save a copy in cache
     return this._sendSoapRequest(url, method, parameters, async, callback, wsdl);
   }
@@ -164,8 +164,8 @@ export class SOAPClient {
 
   _sendSoapRequest(url, method, parameters, async, callback, wsdl) {
     parameters = SOAPClient._getFormattedParameters(parameters);
-    console.log('My parameters are: ', parameters);
-    console.log('My parameters are (XML): ', parameters.toXml());
+  //  console.log('My parameters are: ', parameters);
+  //  console.log('My parameters are (XML): ', parameters.toXml());
     // get namespace
     let ns = (wsdl.documentElement.attributes["targetNamespace"] + "" == "undefined") ? wsdl.documentElement.attributes.getNamedItem("targetNamespace").nodeValue : wsdl.documentElement.attributes["targetNamespace"].value;
     // build SOAP request
