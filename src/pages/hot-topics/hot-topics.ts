@@ -20,9 +20,8 @@ export class HotTopicsPage extends AllTopicsPage {
   @ViewChild(Content) content: Content;
 
   ionViewWillEnter(){
-    console.log("hot topics");
+    //set the state of the topic provider. We are viewing only hot topics
     this.topicsProvider.setTopicFilter(true);
-    console.log(this.topicsProvider);
   }
 
   ionViewDidLoad() {

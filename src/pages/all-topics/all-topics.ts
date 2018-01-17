@@ -28,9 +28,8 @@ export class AllTopicsPage {
 
   }
   ionViewWillEnter(){
-    console.log("all topics");
+    //set the state of the topic provider. We are viewing all topics
     this.topicsProvider.setTopicFilter(false);
-    console.log(this.topicsProvider);
   }
   ionViewDidLoad() {
     this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
