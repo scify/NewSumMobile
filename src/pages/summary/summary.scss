@@ -90,11 +90,12 @@ page-summary {
   .sentence-source {
     display:none;
   }
-  .many-sources {
-    .sentence-source {
+  .many-sources.displaySourcesUponSentence {
+     .sentence-source {
       display:block;
       color:lightgrey;
       font-size:11px;
     }
+
   }
 }

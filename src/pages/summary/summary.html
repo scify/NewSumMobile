@@ -13,18 +13,17 @@
 </ion-header>
 
 
-<ion-content class="{{selectedSummary.Sources.length>1? 'many-sources':''}}">
+<ion-content [ngClass]="{'many-sources':summaryIsConstructedByMoreThanOneSources,'displaySourcesUponSentence':displaySourcesUponEachSentence}" >
   <div id="img-container">
     <img src="{{selectedTopic.imageUrls.length > 0 ? selectedTopic.imageUrls[0] : selectedCategoryDefaultImage}}"/>
     <div id="title-background">
-      <div id="title">
-        {{selectedTopic.Title}}
-      </div>
+      <div id="title" [innerHtml]="selectedTopic.Title"></div>
     </div>
   </div>
   <ion-item id="display-sources-toggle">
     <ion-label> Εμφάνιση αναφορών</ion-label>
-    <ion-toggle checked="true"></ion-toggle>
+    <ion-toggle [(ngModel)]="displaySourcesUponEachSentence"
+                (ionChange)="toggleDisplaySources()"></ion-toggle>
   </ion-item>
   <ion-grid id="sources-grid" padding>
 
@@ -36,7 +35,7 @@
                <anchor href="{{(sentence.Source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + sentence.Source.sourceURL}}"
                  class="source" text="{{sentence.Source.sourceLabel}}"></anchor>
             </span>
-            {{sentence.Snippet}}
+            <span [innerHtml]="sentence.Snippet"></span>
           </p>
         </div>
       </ion-col>
