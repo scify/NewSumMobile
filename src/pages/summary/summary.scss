@@ -2,6 +2,36 @@ page-summary {
   ion-title {
     text-align: left;
   }
+/*  #sources-grid{
+    padding-top:0;
+  }*/
+
+  #display-sources-toggle
+  {
+    display:none;
+    ion-label {
+      text-align:right;
+      font-size:11px;
+      color:gray;
+      padding:0;
+      margin:0;
+      border:none;
+    }
+
+    .item-inner
+    {
+      border:none;
+    }
+  }
+  .many-sources   {
+    #display-sources-toggle {
+      display:block;
+    }
+    .grid {
+      padding-top:0;
+    }
+  }
+
   #img-container {
     position: relative;
     img {
@@ -39,11 +69,6 @@ page-summary {
       margin-top:0;
       margin-bottom:5px;
     }
-    span{
-      display:block;
-      color:lightgrey;
-      font-size:11px;
-    }
   }
 
   .source a{
@@ -60,6 +85,16 @@ page-summary {
       color: gray;
       font-size: smaller;
     }
+  }
 
+  .sentence-source {
+    display:none;
+  }
+  .many-sources {
+    .sentence-source {
+      display:block;
+      color:lightgrey;
+      font-size:11px;
+    }
   }
 }
