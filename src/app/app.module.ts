@@ -18,7 +18,6 @@ import { SoapClientProvider } from '../providers/soap-client/soap-client';
 import { AlertProvider } from '../providers/alert/alert';
 import {HttpClientModule} from "@angular/common/http";
 import { ContentLanguagesProvider } from '../providers/content-languages/content-languages';
-import { AppStorageProvider } from '../providers/app-storage/app-storage';
 import { IonicStorageModule } from '@ionic/storage';
 import { SourcesProvider } from '../providers/sources/sources';
 import { CategoriesProvider } from '../providers/categories/categories';
@@ -68,7 +67,6 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
     SoapClientProvider,
     AlertProvider,
     ContentLanguagesProvider,
-    AppStorageProvider,
     SourcesProvider,
     CategoriesProvider,
     ServiceClientProvider,
