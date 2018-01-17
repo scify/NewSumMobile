@@ -20,7 +20,7 @@ export class CategoriesProvider {
   private selectedCategories: Array<string> = [];
   private selectedLang: string;
   private selectedSourcesUrls: Array<string>;
-  private categories: Array<string> = [];
+  private allAvailableCategories: Array<string> = [];
 
   constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
               private contentLanguagesProvider: ContentLanguagesProvider,
@@ -31,7 +31,7 @@ export class CategoriesProvider {
     this.sourcesProvider.sourcesUpdated.subscribe((newSources) => {
       let newlySelectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       if (newSources.length > 0) {
-        this.categories = this.serviceClient.getCategories(this.sourcesProvider.getSelectedSourcesUrls(), newlySelectedLang);
+        this.allAvailableCategories = this.serviceClient.getCategories(this.sourcesProvider.getSelectedSourcesUrls(), newlySelectedLang);
         // when language is set to a different value, update the favorite category as well
         if (newlySelectedLang !== this.selectedLang) {
           this.selectedCategories = this.getAllAvailableCategories();
@@ -39,21 +39,23 @@ export class CategoriesProvider {
         }
         this.selectedCategoriesUpdated.next(this.getSelectedCategories());
         this.selectedLang = newlySelectedLang;
-        this.selectedCategory = this.categories[0];
+        this.selectedCategory = this.allAvailableCategories[0];
         this.selectedCategoryUpdated.next(this.selectedCategory);
       }
     }, error => console.error(error));
+
     if (this.selectedSourcesUrls.length > 0) {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
-      this.categories = this.serviceClient.getCategories(this.selectedSourcesUrls, this.selectedLang);
+      this.allAvailableCategories = this.serviceClient.getCategories(this.selectedSourcesUrls, this.selectedLang);
       this.getSelectedCategoriesFromStorage().then((selectedCategories) => {
         this.selectedCategories = selectedCategories ? selectedCategories.split(',') : null;
         this.selectedCategories = this.selectedCategories || this.getAllAvailableCategories();
         this.selectedCategoriesUpdated.next(this.getSelectedCategories());
+
         this.getFavoriteCategoryFromStorage().then((favoriteCategory) => {
           this.favoriteCategory = favoriteCategory;
           // make sure that favorite category is set
-          this.favoriteCategory = (this.favoriteCategory && selectedCategories.indexOf(this.favoriteCategory) > 0) ?
+          this.favoriteCategory = (this.favoriteCategory && this.selectedCategories.indexOf(this.favoriteCategory) > 0) ?
             this.favoriteCategory : this.selectedCategories[0];
           this.selectedCategory = this.favoriteCategory;
           this.selectedCategoryUpdated.next(this.selectedCategory);
@@ -63,11 +65,14 @@ export class CategoriesProvider {
   }
 
   public getAllAvailableCategories(): Array<string> {
-    return this.categories.slice(0);
+    return this.allAvailableCategories.slice(0);
   }
 
   public getSelectedCategories(): Array<string> {
-    return this.selectedCategories.slice(0);
+    if (this.selectedCategories !== null)
+      return this.selectedCategories.slice(0);
+    else
+      return [];
   }
 
   public getSelectedCategory(): string {
@@ -79,6 +84,7 @@ export class CategoriesProvider {
   }
 
   public setSelectedCategories(selectedCategories: Array<string>): Promise<any> {
+
     this.selectedCategories = selectedCategories;
     this.updateFavoriteCategory();
     this.selectedCategoriesUpdated.next(this.getSelectedCategories());
@@ -121,7 +127,7 @@ export class CategoriesProvider {
   public loadPreviousCategory() {
     let index = this.selectedCategories.indexOf(this.selectedCategory);
     if (index > 0) {
-      this.selectedCategory = this.selectedCategories[index-1];
+      this.selectedCategory = this.selectedCategories[index - 1];
       return true;
     }
     else
