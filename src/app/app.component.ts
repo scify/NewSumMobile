@@ -43,7 +43,7 @@ export class MyApp {
       this.contentLanguagesProvider.getSelectedContentLanguageFromStorage().then((selectedLang) => {
         if (!!selectedLang)
           this.rootPage = TabsPage; // TODO: set different view if lang is not set
-        splashScreen.hide();
+        // splashScreen.hide();
       });
       this.availableCategories = this.categoriesProvider.getSelectedCategories();
       this.categoriesProvider.selectedCategoriesUpdated.subscribe((newCategories) => {
