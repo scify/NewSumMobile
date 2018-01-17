@@ -38,8 +38,6 @@ export class SummaryPage {
               private viewCtrl: ViewController) {
 
     this.selectedSummary = this.summaryProvider.getSummary();
-    console.log("Summary page: is search");
-    console.log(this.navParams.get('isSearch'));
     this.isSearch = this.navParams.get('isSearch');
     if (this.selectedSummary) {
       if (!this.isSearch) {
@@ -64,16 +62,12 @@ export class SummaryPage {
     this.storage.set("displaySources", this.displaySourcesUponEachSentence);
   }
 
-
   loadSummary(animationDirection) {
-
     this.navCtrl.push(SummaryPage,{'forcedCategoryTitle':this.selectedCategory,'isSearch':this.isSearch},
       {animate: true, animation: 'ios-transition', direction: animationDirection}).then(() => {
       this.navCtrl.remove(this.viewCtrl.index);
-
     });
   }
-
 
   swipeActivity(event) {
     if (event.direction == 2) {

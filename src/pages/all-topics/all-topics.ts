@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Content, NavController} from 'ionic-angular';
+import {Content, NavController, ViewController} from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {CategoriesProvider} from "../../providers/categories/categories";
 import {TextManipulationService} from "../../lib/text-manipulation";
@@ -7,6 +7,7 @@ import {CategoriesViewManager} from "../../lib/categories-view-manager";
 import {SummaryPage} from "../summary/summary";
 import {SettingsPage} from "../settings/settings";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
+import {TabsPage} from "../tabs/tabs";
 
 
 @Component({
@@ -24,13 +25,16 @@ export class AllTopicsPage {
   constructor(protected navCtrl: NavController,
               protected topicsProvider: TopicsProvider,
               protected categoriesProvider: CategoriesProvider,
-              protected ga: GoogleAnalytics) {
+              protected ga: GoogleAnalytics,
+              private viewCtrl: ViewController) {
 
   }
-  ionViewWillEnter(){
+
+  ionViewWillEnter() {
     //set the state of the topic provider. We are viewing all topics
     this.topicsProvider.setTopicFilter(false);
   }
+
   ionViewDidLoad() {
     this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
       if (newTopics.length > 0)
@@ -49,7 +53,7 @@ export class AllTopicsPage {
       // otherwise the scroll will remain on the place it was before the category change
       this.content.scrollToTop();
       this.ga.trackView(nameOfFilter + ' page for ' + this.selectedCategory);
-    }, error => this.ga.trackException(error,false));//todo: add messages when an error occurs
+    }, error => this.ga.trackException(error, false));//todo: add messages when an error occurs
 
     this.selectedCategory = this.categoriesProvider.getSelectedCategory();
     this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
@@ -60,5 +64,26 @@ export class AllTopicsPage {
   public displaySettingsPage() {
     this.navCtrl.push(SettingsPage);
   }
+
+
+  loadCategory(animationDirection) {
+    this.navCtrl.push(TabsPage,null,
+      {animate: true, animation: 'ios-transition', direction: animationDirection}).then(() => {
+      this.navCtrl.remove(this.viewCtrl.index);
+    });
+  }
+
+  swipeActivity(event) {
+    if (event.direction == 2) {
+      if (this.categoriesProvider.loadNextCategory())
+        this.loadCategory('forward');
+
+    } else if (event.direction == 4) {
+      if (this.categoriesProvider.loadPreviousCategory())
+        this.loadCategory('back');
+    }
+  }
+
+
 }
 

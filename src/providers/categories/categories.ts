@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {SourcesProvider} from "../sources/sources";
 import {ServiceClientProvider} from "../service-client/service-client";
 import {ContentLanguagesProvider} from "../content-languages/content-languages";
@@ -6,11 +6,11 @@ import {Subject} from "rxjs/Subject";
 import {Storage} from "@ionic/storage";
 
 /*
-  Generated class for the CategoriesProvider provider.
+ Generated class for the CategoriesProvider provider.
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
+ See https://angular.io/guide/dependency-injection for more info on providers
+ and Angular DI.
+ */
 @Injectable()
 export class CategoriesProvider {
   public selectedCategoryUpdated: Subject<any>;
@@ -106,5 +106,25 @@ export class CategoriesProvider {
   private updateFavoriteCategory() {
     if (this.selectedCategories.indexOf(this.favoriteCategory) < 0)
       this.setFavoriteCategory(this.selectedCategories[0]);
+  }
+
+  public loadNextCategory() {
+    let index = this.selectedCategories.indexOf(this.selectedCategory);
+    if (index < this.selectedCategory.length - 1) {
+      this.selectedCategory = this.selectedCategories[index + 1];
+      return true;
+    }
+    else
+      return false;
+  }
+
+  public loadPreviousCategory() {
+    let index = this.selectedCategories.indexOf(this.selectedCategory);
+    if (index > 0) {
+      this.selectedCategory = this.selectedCategories[index-1];
+      return true;
+    }
+    else
+      return false;
   }
 }
