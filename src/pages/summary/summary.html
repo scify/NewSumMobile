@@ -23,23 +23,33 @@
     </div>
   </div>
   <ion-grid padding>
-    <ion-row id="subtitle">
-      <ion-col id="sources-number">
-        {{selectedTopic.FromArticles}} {{selectedTopic.FromArticles==1? "πηγή":"πηγές"}}
+
+    <ion-row>
+      <ion-col>
+        <div class="summary-snippet" *ngFor="let sentence of selectedSummary.Sentences">
+          <p>
+            <span *ngIf="selectedSummary.Sources.length>1">
+               <anchor href="{{(sentence.Source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + sentence.Source.sourceURL}}"
+                       class="source" text="{{sentence.Source.sourceLabel}}"></anchor>
+            </span>
+            {{sentence.Snippet}}</p>
+        </div>
       </ion-col>
+    </ion-row>
+    <ion-row id="date-info">
       <ion-col id="timestamp">
-        {{selectedTopic.DateFormatted + ', ' + selectedTopic.TimeFormatted}}
+        Τελευταία ενημέρωση: {{selectedTopic.DateFormatted + ', ' + selectedTopic.TimeFormatted}}
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <div class="summary-snippet" *ngFor="let sentence of selectedSummary.Sentences">
-          <p>{{sentence.Snippet}}</p>
-          <p>
-            <anchor href="{{(sentence.Source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + sentence.Source.sourceURL}}"
-               class="source" text="{{sentence.Source.sourceLabel}}"></anchor>
-          </p>
-        </div>
+        ΟΛΕΣ ΟΙ ΠΗΓΕΣ:<br>
+        <ul id="sources-list">
+          <li class="source" *ngFor="let source of selectedSummary.Sources">
+            <anchor href="{{(source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + source.sourceURL}}"
+                    class="source" text="{{source.sourceLabel}}"></anchor>
+          </li>
+        </ul>
       </ion-col>
     </ion-row>
   </ion-grid>

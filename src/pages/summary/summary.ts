@@ -33,6 +33,7 @@ export class SummaryPage {
       this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
       this.selectedTopic = this.topicsProvider.getSelectedTopic();
       this.ga.trackView("Summary: " + this.selectedTopic.Title);
+      console.log(this.selectedSummary);
     }
   }
 }

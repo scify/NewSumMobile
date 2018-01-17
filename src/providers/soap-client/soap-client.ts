@@ -14,7 +14,7 @@ export class SoapClientProvider {
 
   public getResource(methodToInvoke, parameters): string {
     return this.soapClient.invoke(this.serverUrl + this.wsdlPath, methodToInvoke, parameters, false, (data) => {
-      console.log('Response: ', data);
+      //console.log('Response: ', data);
       return data;
     });
   }

@@ -35,6 +35,7 @@ export class SummariesProvider {
       this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
       this.summary = this.serviceClient.getSummary(this.selectedTopic.ID, this.selectedSourcesUrls, this.selectedLang);
     }
+
   }
 
   public getSummary(): any {
