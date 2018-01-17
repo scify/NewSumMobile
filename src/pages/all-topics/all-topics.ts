@@ -65,7 +65,6 @@ export class AllTopicsPage {
     this.navCtrl.push(SettingsPage);
   }
 
-
   loadCategory(animationDirection) {
     this.navCtrl.push(TabsPage,null,
       {animate: true, animation: 'ios-transition', direction: animationDirection}).then(() => {
