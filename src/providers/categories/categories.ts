@@ -3,7 +3,7 @@ import {SourcesProvider} from "../sources/sources";
 import {ServiceClientProvider} from "../service-client/service-client";
 import {ContentLanguagesProvider} from "../content-languages/content-languages";
 import {Subject} from "rxjs/Subject";
-import { AppStorageProvider } from '../app-storage/app-storage';
+import {Storage} from "@ionic/storage";
 
 /*
   Generated class for the CategoriesProvider provider.
@@ -24,7 +24,7 @@ export class CategoriesProvider {
 
   constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
               private contentLanguagesProvider: ContentLanguagesProvider,
-              private appStorage: AppStorageProvider) {
+              private appStorage: Storage) {
     this.selectedCategoryUpdated = new Subject<any>();
     this.selectedCategoriesUpdated = new Subject<any>();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
@@ -70,7 +70,7 @@ export class CategoriesProvider {
     return this.selectedCategories.slice(0);
   }
 
-  public getSelectedCategory(): string {    
+  public getSelectedCategory(): string {
     return this.selectedCategory;
   }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {AppStorageProvider} from "../app-storage/app-storage";
+import {Storage} from "@ionic/storage"
 import {Subject} from "rxjs/Subject";
 import {ServiceClientProvider} from "../service-client/service-client";
 
@@ -15,7 +15,7 @@ export class ContentLanguagesProvider {
   private languages: Array<string>;
   private selectedLanguage: string;
 
-  constructor(private serviceClient: ServiceClientProvider, private appStorage: AppStorageProvider) {
+  constructor(private serviceClient: ServiceClientProvider, private appStorage: Storage) {
     this.contentLanguageUpdated = new Subject<string>();
     this.languages = this.serviceClient.getLanguages();
     this.getSelectedContentLanguageFromStorage().then((selectedLang) => {
