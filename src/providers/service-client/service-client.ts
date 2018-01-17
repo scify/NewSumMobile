@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {SoapClientProvider} from "../soap-client/soap-client";
-import {Subject} from "rxjs";
+
 
 /*
   Generated class for the ServiceClientProvider provider.

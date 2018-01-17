@@ -25,8 +25,13 @@ export class AllTopicsPage {
               protected topicsProvider: TopicsProvider,
               protected categoriesProvider: CategoriesProvider,
               protected ga: GoogleAnalytics) {
-  }
 
+  }
+  ionViewWillEnter(){
+    console.log("all topics");
+    this.topicsProvider.setTopicFilter(false);
+    console.log(this.topicsProvider);
+  }
   ionViewDidLoad() {
     this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
       if (newTopics.length > 0)

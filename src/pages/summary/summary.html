@@ -13,7 +13,9 @@
 </ion-header>
 
 
-<ion-content [ngClass]="{'many-sources':summaryIsConstructedByMoreThanOneSources,'displaySourcesUponSentence':displaySourcesUponEachSentence}" >
+<ion-content
+  (swipe)="swipeActivity($event)"
+  [ngClass]="{'many-sources':summaryIsConstructedByMoreThanOneSources,'displaySourcesUponSentence':displaySourcesUponEachSentence}" >
   <div id="img-container">
     <img src="{{selectedTopic.imageUrls.length > 0 ? selectedTopic.imageUrls[0] : selectedCategoryDefaultImage}}"/>
     <div id="title-background">
