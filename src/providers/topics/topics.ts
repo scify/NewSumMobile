@@ -37,14 +37,14 @@ export class TopicsProvider {
       this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
       this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
         this.selectedCategory, this.selectedLang);
-      this.formatDateAndTimeForTopics();
+      this.formatDateAndTimeForTopics(this.topics);
       this.topicsUpdated.next(this.topics);
     }, error => console.error(error));    
     if (this.selectedCategory) {      
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
         this.selectedCategory, this.selectedLang);
-      this.formatDateAndTimeForTopics();
+      this.formatDateAndTimeForTopics(this.topics);
       this.topicsUpdated.next(this.topics);
     }    
   }
@@ -59,6 +59,7 @@ export class TopicsProvider {
 
   public getTopicsByKeyword(keyword: string): Array<any> {
     this.topicsByKeyword = this.serviceClient.getTopicsByKeyword(keyword, this.selectedSourcesUrls, this.selectedLang);
+    this.formatDateAndTimeForTopics(this.topicsByKeyword);
     return this.topicsByKeyword;
   }
 
@@ -85,8 +86,8 @@ export class TopicsProvider {
     return topicsCopy.slice(0, NUMBER_OF_HOT_TOPICS_TO_DISPLAY);
   }
 
-  private formatDateAndTimeForTopics() {
-    this.topics.map(t => {
+  private formatDateAndTimeForTopics(topics: Array<any>) {
+    topics.map(t => {
       let newestDate: any = t.NewestDate;
       t.DateFormatted = (newestDate.dayOfMonth < 10 ? '0' : '') + newestDate.dayOfMonth + '-' +
         ((newestDate.month + 1) < 10 ? '0' : '') + (newestDate.month + 1) + '-' + newestDate.year;

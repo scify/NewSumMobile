@@ -1,0 +1,25 @@
+articles-list {
+  .img-holder {
+    position:relative;
+    .info-background {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color:rgba(0,0,0,0.5);
+      padding:07px 16px;
+    }
+  }
+  .category{
+    color:white;
+    text-transform: uppercase;
+    display:flex;
+    justify-content:space-between;
+
+  }
+  .stats-info
+  {
+    color:gray;
+    font-size:1.2rem;
+  }
+}

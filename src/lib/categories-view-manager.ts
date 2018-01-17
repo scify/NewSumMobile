@@ -15,7 +15,8 @@ export class CategoriesViewManager {
     'Technology': 'assets/imgs/categories/tech.jpg',
     'Top News': 'assets/imgs/categories/newspaper.jpg',
     'Europe': 'assets/imgs/categories/europe.jpg',
-    'Open Source': 'assets/imgs/categories/open_source.jpg'
+    'Open Source': 'assets/imgs/categories/open_source.jpg',
+    'Search': 'assets/imgs/categories/search_results.jpg'
   };
 
   public static getCategoryDefaultImage(category: string): string {

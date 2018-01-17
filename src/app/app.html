@@ -6,8 +6,7 @@
             <ion-searchbar
                 [(ngModel)]="searchInput"
                 placeholder="Αναζήτηση"
-                debounce=1000
-                (ionInput)="searchForTopic(searchInput)">
+                (keyup)="searchForTopic($event, searchInput)">
             </ion-searchbar>
             <!-- <ion-buttons right>
                 <button menuClose class="closeMenuBtn">

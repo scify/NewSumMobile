@@ -1,5 +1,5 @@
-import {Component, ViewChild} from '@angular/core';
-import { NavController } from 'ionic-angular';
+import {Component} from '@angular/core';
+import {NavController, NavParams} from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {SummariesProvider} from "../../providers/summaries/summaries";
 import {CategoriesProvider} from "../../providers/categories/categories";
@@ -23,14 +23,21 @@ export class SummaryPage {
   public selectedCategoryDefaultImage: string;
   public selectedTopic: any;
   public selectedSummary: any;
+  public isSearch: boolean;
 
-  constructor(private navCtrl: NavController, private topicsProvider: TopicsProvider,
+  constructor(private navCtrl: NavController, private navParams: NavParams, private topicsProvider: TopicsProvider,
               private summaryProvider: SummariesProvider, private categoriesProvider: CategoriesProvider,
               protected ga: GoogleAnalytics) {
     this.selectedSummary = this.summaryProvider.getSummary();
+    this.isSearch = this.navParams.get('isSearch');
     if (this.selectedSummary) {
-      this.selectedCategory = this.categoriesProvider.getSelectedCategory();
-      this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
+      if (!this.isSearch) {
+        this.selectedCategory = this.categoriesProvider.getSelectedCategory();
+        this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
+      } else {
+        this.selectedCategory = this.navParams.get('forcedCategoryTitle');
+        this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage('Search');
+      }
       this.selectedTopic = this.topicsProvider.getSelectedTopic();
       this.ga.trackView("Summary: " + this.selectedTopic.Title);
     }

@@ -16,7 +16,7 @@ import {GoogleAnalytics} from '@ionic-native/google-analytics';
 export class AllTopicsPage {
   @ViewChild(Content) content: Content;
 
-  public articles: Array<any>;
+  public topics: Array<any>;
   public selectedCategory: string;
   public selectedCategoryForUppercase: string;
   public selectedCategoryDefaultImage: string;
@@ -30,9 +30,9 @@ export class AllTopicsPage {
   ionViewDidLoad() {
     this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
       if (newTopics.length > 0)
-        this.articles = newTopics;
+        this.topics = newTopics;
     }, error2 => console.log(error2));
-    this.articles = this.topicsProvider.getTopics();
+    this.topics = this.topicsProvider.getTopics();
     this.fetchSelectedCategoryAndSubscribeToChanges("All news");
   }
 
@@ -51,11 +51,6 @@ export class AllTopicsPage {
     this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
     this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
     this.ga.trackView('All news for ' + this.selectedCategory);
-  }
-
-  public selectTopicAndDisplaySummary(topic: any) {
-    this.topicsProvider.setSelectedTopic(topic);
-    this.navCtrl.push(SummaryPage);
   }
 
   public displaySettingsPage() {

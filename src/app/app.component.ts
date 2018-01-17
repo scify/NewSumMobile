@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {NavController, Platform} from 'ionic-angular';
+import {NavController, Platform, MenuController} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {TabsPage} from '../pages/tabs/tabs';
@@ -25,6 +25,7 @@ export class MyApp {
   constructor(platform: Platform,
               statusBar: StatusBar,
               splashScreen: SplashScreen,
+              public menuCtrl: MenuController,
               private contentLanguagesProvider: ContentLanguagesProvider,
               private sourcesProvider: SourcesProvider,
               private categoriesProvider: CategoriesProvider,
@@ -69,8 +70,10 @@ export class MyApp {
     this.categoriesProvider.setSelectedCategory(newSelectedCategory);
   }
 
-  public searchForTopic(searchInput: string) {
-    if (searchInput)
+  public searchForTopic(e: any, searchInput: string) {
+    if (e.keyCode === 13 && searchInput) {
       this.navCtrl.push(SearchResultsPage, {keyword: searchInput});
+      this.menuCtrl.close();
+    }
   }
 }

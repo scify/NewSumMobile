@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { TopicsProvider } from '../../providers/topics/topics';
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
+import {CategoriesViewManager} from "../../lib/categories-view-manager";
 
 /**
  * Generated class for the SearchResultsPage page.
@@ -17,11 +18,16 @@ import {GoogleAnalytics} from '@ionic-native/google-analytics';
 export class SearchResultsPage {
   public keyword: string;
   public results: Array<any>;
+  public selectedCategoryDefaultImage: string;
+  public selectedCategoryForUppercase: string = 'ΑΠΟΤΕΛΕΣΜΑ';
+  public forcedCategoryTitle: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private topicsProvider: TopicsProvider,
               protected ga: GoogleAnalytics) {
     this.keyword = this.navParams.get('keyword');
+    this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage('Search');
+    this.forcedCategoryTitle = 'Αναζήτηση';
     this.results = this.topicsProvider.getTopicsByKeyword(this.keyword);
   }
 }

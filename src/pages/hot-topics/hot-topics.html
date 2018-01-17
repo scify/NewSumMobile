@@ -16,20 +16,20 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content class="card-background-page">
-  <ion-card *ngFor="let article of articles" (click)="selectTopicAndDisplaySummary(article)">
-    <div class="img-holder">
-      <img src="{{article.imageUrls.length > 0 ? article.imageUrls[0] : selectedCategoryDefaultImage}}"/>
-      <div class="info-background"></div>
-    </div>
+<!--<ion-content class="card-background-page">-->
+  <!--<ion-card *ngFor="let article of articles" (click)="selectTopicAndDisplaySummary(article)">-->
+    <!--<div class="img-holder">-->
+      <!--<img src="{{article.imageUrls.length > 0 ? article.imageUrls[0] : selectedCategoryDefaultImage}}"/>-->
+      <!--<div class="info-background"></div>-->
+    <!--</div>-->
 
-    <ion-card-content>
-      <div class="category"><span>{{selectedCategoryForUppercase}}</span><span>{{article.TimeFormatted}}</span></div>
-      <div class="title"  [innerHtml]="article.Title">>
-      </div>
-      <div class="stats-info">
-        {{article.FromArticles}} {{article.FromArticles==1? "πηγή":"πηγές"}}
-      </div>
-    </ion-card-content>
-  </ion-card>
-</ion-content>
+    <!--<ion-card-content>-->
+      <!--<div class="category"><span>{{selectedCategoryForUppercase}}</span><span>{{article.TimeFormatted}}</span></div>-->
+      <!--<div class="title"  [innerHtml]="article.Title">>-->
+      <!--</div>-->
+      <!--<div class="stats-info">-->
+        <!--{{article.FromArticles}} {{article.FromArticles==1? "πηγή":"πηγές"}}-->
+      <!--</div>-->
+    <!--</ion-card-content>-->
+  <!--</ion-card>-->
+<!--</ion-content>-->
