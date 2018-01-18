@@ -1,6 +1,10 @@
 articles-list {
   .img-holder {
     position:relative;
+    height:150px;
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-position:center center;
     .info-background {
       position: absolute;
       bottom: 0;

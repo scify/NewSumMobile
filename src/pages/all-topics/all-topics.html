@@ -15,7 +15,9 @@
 </ion-header>
 
 <ion-content  (swipe)="swipeActivity($event)">
-  <articles-list [articles]="topics" [selectedCategoryDefaultImage]="selectedCategoryDefaultImage"
+  <articles-list
+    [articles]="topics"
+    [selectedCategoryDefaultImage]="selectedCategoryDefaultImage"
     [selectedCategoryForUppercase]="selectedCategoryForUppercase">
   </articles-list>
 </ion-content>
