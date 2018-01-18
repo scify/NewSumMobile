@@ -1,26 +1,63 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import {AlertProvider} from "../alert/alert";
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {AlertController} from "ionic-angular";
+import {ContentLanguagesProvider} from "../content-languages/content-languages";
+import {APP_CONFIG} from "../../app/app-config";
+import {Storage} from "@ionic/storage";
 
-/*
-  Generated class for the NotificationsProvider provider.
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class NotificationsProvider {
 
-  constructor( private http: HttpClient,
-              private alertProvider :AlertProvider ) {
-
+  constructor(private http: HttpClient,
+              private appStorage: Storage,
+              private contentLanguagesProvider: ContentLanguagesProvider,
+              private alert: AlertController) {
   }
 
-  hasNotification():boolean {
-      return true;
+  startCheckingForNotifications() {
+    window.setInterval(this.displayAnyNewNotifications.bind(this), 5*60*1000); //check every 5 minutes
   }
 
-  displayNotification():void {
-      this.alertProvider.displayMessage("hello");
+
+  announcementIsLessThan30DaysOld(lastModified) {
+    let currentDate = (new Date()).getTime();
+    let daysDiff = (currentDate - lastModified) / 24 * 60 * 60 * 1000;
+    return daysDiff < 30;
+  }
+
+  checkIfItsAlreadyDisplayedAndShow(language, announcementDate, url) {
+    this.appStorage.get(language + "notificationsDate").then((lastSavedDate) => {
+      if (
+        lastSavedDate === null || // if we dont have a notification saved
+        lastSavedDate != announcementDate //or the the one we have is another one
+      ) {
+        this.http.get(url, {observe: 'response', "responseType": "text"}).subscribe(html => {
+          this.appStorage.set(language + "notificationsDate", announcementDate);
+          let doc = (new DOMParser()).parseFromString(html.body, 'text/html');
+          let alert = this.alert.create({
+            title: doc.querySelector("title").innerText,
+            subTitle: doc.querySelector("body").innerHTML,
+            buttons: [{text: 'Ok'}]
+          });
+          alert.present();
+        });
+      }
+    });
+  }
+
+  displayAnyNewNotifications(): void {
+    let language = this.contentLanguagesProvider.getSelectedContentLanguage();
+    if (language) {
+      let url = APP_CONFIG.notificationsURL + (language == "EL" ? "GR.html" : "EN.html");
+      this.http
+        .head(url, {observe: 'response', "responseType": "text"})
+        .subscribe(headResponse => {
+          let announcementDate = Date.parse(headResponse.headers.get("Last-modified"));
+          //if it was modified the past 1 month, it is elligible to be displayed
+          if (this.announcementIsLessThan30DaysOld(announcementDate))
+            this.checkIfItsAlreadyDisplayedAndShow(language, announcementDate, url);
+        });
+    }
   }
 }

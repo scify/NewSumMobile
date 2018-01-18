@@ -15,7 +15,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { NotificationsProvider } from '../providers/notifications/notifications';
 import { SoapClientProvider } from '../providers/soap-client/soap-client';
-import { AlertProvider } from '../providers/alert/alert';
 import {HttpClientModule} from "@angular/common/http";
 import { ContentLanguagesProvider } from '../providers/content-languages/content-languages';
 import { IonicStorageModule } from '@ionic/storage';
@@ -26,7 +25,6 @@ import { TopicsProvider } from '../providers/topics/topics';
 import { SummariesProvider } from '../providers/summaries/summaries';
 import {ScreenOrientation} from "@ionic-native/screen-orientation";
 import {ComponentsModule} from "../components/components.module";
-import {InAppBrowser} from "@ionic-native/in-app-browser";
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 @NgModule({
@@ -65,7 +63,6 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     NotificationsProvider,
     SoapClientProvider,
-    AlertProvider,
     ContentLanguagesProvider,
     SourcesProvider,
     CategoriesProvider,

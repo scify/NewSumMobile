@@ -51,7 +51,6 @@ export class AllTopicsPage {
       this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
       // when the category is changed, scroll to top,
       // otherwise the scroll will remain on the place it was before the category change
-      console.log(this.content);
       this.content.scrollToTop();
       this.ga.trackView(nameOfFilter + ' page for ' + this.selectedCategory);
     }, error => this.ga.trackException(error, false));//todo: add messages when an error occurs
