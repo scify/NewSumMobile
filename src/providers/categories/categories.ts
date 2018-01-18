@@ -117,7 +117,7 @@ export class CategoriesProvider {
   public loadNextCategory() {
     let index = this.selectedCategories.indexOf(this.selectedCategory);
     if (index < this.selectedCategory.length - 1) {
-      this.selectedCategory = this.selectedCategories[index + 1];
+      this.setSelectedCategory(this.selectedCategories[index + 1]);
       return true;
     }
     else
@@ -127,7 +127,7 @@ export class CategoriesProvider {
   public loadPreviousCategory() {
     let index = this.selectedCategories.indexOf(this.selectedCategory);
     if (index > 0) {
-      this.selectedCategory = this.selectedCategories[index - 1];
+      this.setSelectedCategory(this.selectedCategories[index - 1]);
       return true;
     }
     else

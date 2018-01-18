@@ -84,8 +84,8 @@
     <plugin name="cordova-plugin-screen-orientation" spec="^3.0.1" />
     <plugin name="cordova-plugin-inappbrowser" spec="^2.0.1" />
     <plugin name="cordova-plugin-google-analytics" spec="^1.8.3" />
+    <allow-navigation href="http://192.168.1.20:8100" />
     <engine name="ios" spec="4.5.4" />
     <engine name="browser" spec="5.0.3" />
-    <engine name="android" spec="7.0.0" />
-    <allow-navigation href="http://192.168.1.20:8100" />
+    <engine name="android" spec="^7.0.0" />
 </widget>

@@ -14,49 +14,52 @@
 
 
 <ion-content
-  (swipe)="swipeActivity($event)"
-  [ngClass]="{'many-sources':summaryIsConstructedByMoreThanOneSources,'displaySourcesUponSentence':displaySourcesUponEachSentence}" >
-  <div id="img-container">
-    <img src="{{selectedTopic.imageUrls.length > 0 ? selectedTopic.imageUrls[0] : selectedCategoryDefaultImage}}"/>
-    <div id="title-background">
-      <div id="title" [innerHtml]="selectedTopic.Title"></div>
+  [ngClass]="{'many-sources':summaryIsConstructedByMoreThanOneSources,'displaySourcesUponSentence':displaySourcesUponEachSentence}">
+  <div (swipe)="swipeActivity($event)">
+    <div id="img-container">
+      <img src="{{selectedTopic.imageUrls.length > 0 ? selectedTopic.imageUrls[0] : selectedCategoryDefaultImage}}"/>
+      <div id="title-background">
+        <div id="title" [innerHtml]="selectedTopic.Title"></div>
+      </div>
     </div>
-  </div>
-  <ion-item id="display-sources-toggle">
-    <ion-label> Εμφάνιση αναφορών</ion-label>
-    <ion-toggle [(ngModel)]="displaySourcesUponEachSentence"
-                (ionChange)="toggleDisplaySources()"></ion-toggle>
-  </ion-item>
-  <ion-grid id="sources-grid" padding>
+    <ion-item id="display-sources-toggle">
+      <ion-label> Εμφάνιση αναφορών</ion-label>
+      <ion-toggle [(ngModel)]="displaySourcesUponEachSentence"
+                  (ionChange)="toggleDisplaySources()"></ion-toggle>
+    </ion-item>
+    <ion-grid id="sources-grid" padding>
 
-    <ion-row>
-      <ion-col>
-        <div class="summary-snippet" *ngFor="let sentence of selectedSummary.Sentences">
-          <p>
+      <ion-row>
+        <ion-col>
+          <div class="summary-snippet" *ngFor="let sentence of selectedSummary.Sentences">
+            <p>
             <span class="sentence-source">
-               <anchor href="{{(sentence.Source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + sentence.Source.sourceURL}}"
+               <anchor
+                 href="{{(sentence.Source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + sentence.Source.sourceURL}}"
                  class="source" text="{{sentence.Source.sourceLabel}}"></anchor>
             </span>
-            <span [innerHtml]="sentence.Snippet"></span>
-          </p>
-        </div>
-      </ion-col>
-    </ion-row>
-    <ion-row id="date-info">
-      <ion-col id="timestamp">
-        Τελευταία ενημέρωση: {{selectedTopic.DateFormatted + ', ' + selectedTopic.TimeFormatted}}
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        ΟΛΕΣ ΟΙ ΠΗΓΕΣ:<br>
-        <ul id="sources-list">
-          <li class="source" *ngFor="let source of selectedSummary.Sources">
-            <anchor href="{{(source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + source.sourceURL}}"
-                    class="source" text="{{source.sourceLabel}}"></anchor>
-          </li>
-        </ul>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+              <span [innerHtml]="sentence.Snippet"></span>
+            </p>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row id="date-info">
+        <ion-col id="timestamp">
+          Τελευταία ενημέρωση: {{selectedTopic.DateFormatted + ', ' + selectedTopic.TimeFormatted}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          ΟΛΕΣ ΟΙ ΠΗΓΕΣ:<br>
+          <ul id="sources-list">
+            <li class="source" *ngFor="let source of selectedSummary.Sources">
+              <anchor href="{{(source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + source.sourceURL}}"
+                      class="source" text="{{source.sourceLabel}}"></anchor>
+            </li>
+          </ul>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
 </ion-content>

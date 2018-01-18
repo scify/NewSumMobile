@@ -14,10 +14,12 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content  (swipe)="swipeActivity($event)">
-  <articles-list
-    [articles]="topics"
-    [selectedCategoryDefaultImage]="selectedCategoryDefaultImage"
-    [selectedCategoryForUppercase]="selectedCategoryForUppercase">
-  </articles-list>
+<ion-content>
+  <div (swipe)="swipeActivity($event)">
+    <articles-list
+      [articles]="topics"
+      [selectedCategoryDefaultImage]="selectedCategoryDefaultImage"
+      [selectedCategoryForUppercase]="selectedCategoryForUppercase">
+    </articles-list>
+  </div>
 </ion-content>
