@@ -27,10 +27,7 @@ export class MyApp {
               splashScreen: SplashScreen,
               public menuCtrl: MenuController,
               private contentLanguagesProvider: ContentLanguagesProvider,
-              private sourcesProvider: SourcesProvider,
               private categoriesProvider: CategoriesProvider,
-              private topicsProvider: TopicsProvider,
-              private summariesProvider: SummariesProvider,
               private screenOrientation: ScreenOrientation,
               private ga: GoogleAnalytics,
               public notification: NotificationsProvider) {
