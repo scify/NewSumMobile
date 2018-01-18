@@ -120,8 +120,10 @@ export class CategoriesProvider {
       this.setSelectedCategory(this.selectedCategories[index + 1]);
       return true;
     }
-    else
-      return false;
+    else {
+      this.setSelectedCategory(this.selectedCategories[0]); //switch to first
+      return true;
+    }
   }
 
   public loadPreviousCategory() {
@@ -130,7 +132,10 @@ export class CategoriesProvider {
       this.setSelectedCategory(this.selectedCategories[index - 1]);
       return true;
     }
-    else
-      return false;
+    else {
+      this.setSelectedCategory(this.selectedCategories[this.selectedCategories.length - 1]); //switch to last
+      return true;
+    }
+
   }
 }

@@ -25,10 +25,12 @@ export class TopicsProvider {
   private topicsByKeyword: Array<any>;
   private selectedTopic: string;
   public getOnlyHotTopics: boolean;
-  public dateOfCreation:Date = new Date();
+  public dateOfCreation: Date = new Date();
 
-  constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
-              private contentLanguagesProvider: ContentLanguagesProvider, private categoriesProvider: CategoriesProvider) {
+  constructor(private serviceClient: ServiceClientProvider,
+              private sourcesProvider: SourcesProvider,
+              private contentLanguagesProvider: ContentLanguagesProvider,
+              private categoriesProvider: CategoriesProvider) {
     this.topicsUpdated = new Subject<any>();
     this.getOnlyHotTopics = true; //todo :load from local storage
 
@@ -36,15 +38,19 @@ export class TopicsProvider {
     this.selectedCategory = this.categoriesProvider.getSelectedCategory();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
     this.categoriesProvider.selectedCategoryUpdated.subscribe(this.selectedCategoryUpdatedHandler.bind(this), error => console.error(error));
+
     if (this.selectedCategory) {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
-      this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
-        this.selectedCategory, this.selectedLang);
+      this.topics = this.serviceClient.getTopics(
+                                        this.selectedSourcesUrls,
+                                        this.selectedCategory,
+                                        this.selectedLang);
       this.formatDateAndTimeForTopics(this.topics);
       this.topicsUpdated.next(this.topics);
     }
   }
-  private selectedCategoryUpdatedHandler(newCategory){
+
+  private selectedCategoryUpdatedHandler(newCategory) {
     this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
     this.selectedCategory = newCategory;
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
@@ -82,11 +88,13 @@ export class TopicsProvider {
     this.selectedTopicUpdated.next(this.selectedTopic);
   }
 
-  public loadNextTopic(isSearch:boolean) {
-    let existingTopics = isSearch? this.topicsByKeyword:this.getTopics() ;
+  public loadNextTopic(isSearch: boolean) {
+    let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
     let index = existingTopics.indexOf(this.selectedTopic);
     if (index == existingTopics.length - 1)
-      return false;
+    { //we have reached the end
+      this.categoriesProvider.loadNextCategory();
+    }
     else {
       let topic = existingTopics[index + 1];
       this.setSelectedTopic(topic);
@@ -94,11 +102,13 @@ export class TopicsProvider {
     }
   }
 
-  public loadPreviousTopic(isSearch:boolean) {
-    let existingTopics= isSearch? this.topicsByKeyword: this.getTopics() ;
+  public loadPreviousTopic(isSearch: boolean) {
+    let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
     let index = existingTopics.indexOf(this.selectedTopic);
-    if (index == 0)
+    if (index == 0){ //we have reached the start,
+      this.categoriesProvider.loadPreviousCategory();
       return false;
+    }
     else {
       let topic = existingTopics[index - 1];
       this.setSelectedTopic(topic);
@@ -109,16 +119,16 @@ export class TopicsProvider {
   private filterHotTopics(): Array<any> {
     let topicsCopy = this.topics.slice(0);
     // get the first *NUMBER_OF_HOT_TOPICS_TO_DISPLAY* topics with the most sources as hot topics
-    topicsCopy= topicsCopy
-      .filter((topic)=> topic.FromArticles>1)
+    topicsCopy = topicsCopy
+      .filter((topic) => topic.FromArticles > 1)
       .sort((a: any, b: any): any => {
-      // sorting with DESC order
-      if (a.FromArticles < b.FromArticles)
-        return 1;
-      else if (a.FromArticles > b.FromArticles)
-        return -1;
-      return 0;
-    });
+        // sorting with DESC order
+        if (a.FromArticles < b.FromArticles)
+          return 1;
+        else if (a.FromArticles > b.FromArticles)
+          return -1;
+        return 0;
+      });
     return topicsCopy.slice(0, NUMBER_OF_HOT_TOPICS_TO_DISPLAY);
   }
 

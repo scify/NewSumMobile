@@ -19,8 +19,10 @@ export class SummariesProvider {
   private selectedLang: string;
   private summary: any;
 
-  constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
-              private contentLanguagesProvider: ContentLanguagesProvider, private topicsProvider: TopicsProvider) {
+  constructor(private serviceClient: ServiceClientProvider,
+              private sourcesProvider: SourcesProvider,
+              private contentLanguagesProvider: ContentLanguagesProvider,
+              private topicsProvider: TopicsProvider) {
     this.selectedTopic = this.topicsProvider.getSelectedTopic();
     this.topicsProvider.selectedTopicUpdated.subscribe((newTopic) => {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
