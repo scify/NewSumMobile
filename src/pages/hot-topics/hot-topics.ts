@@ -19,13 +19,16 @@ import {GoogleAnalytics} from "@ionic-native/google-analytics";
 export class HotTopicsPage extends AllTopicsPage {
   @ViewChild(Content) content: Content;
 
-  ionViewWillEnter(){
+  ionViewWillEnter(){ // 	Runs when the page is about to enter and become the active page.
     //set the state of the topic provider. We are viewing only hot topics
+    console.log("hot topics ionViewWillEnter");
     this.topicsProvider.setTopicFilter(true);
+    this.initPage();
   }
 
   ionViewDidLoad() {
+    console.log("hot topics page did load");
     this.subscribeToChanges("Popular news");
-    this.initPage();
+
   }
 }

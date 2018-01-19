@@ -15,7 +15,8 @@
 
 <ion-content
   [ngClass]="{'many-sources':summaryIsConstructedByMoreThanOneSources,'displaySourcesUponSentence':displaySourcesUponEachSentence}">
-  <div (swipe)="swipeActivity($event)">
+
+  <div *ngIf="selectedSummary" (swipe)="swipeActivity($event)">
     <div id="img-container">
       <img src="{{selectedTopic.imageUrls.length > 0 ? selectedTopic.imageUrls[0] : selectedCategoryDefaultImage}}"/>
       <div id="title-background">

@@ -19,12 +19,14 @@ export class TopicsProvider {
   public topicsUpdated: Subject<any>;
   public fetchingNewTopics: Subject<any>;
   public selectedTopicUpdated: Subject<any>;
+  public fetchingSummary: Subject<any>;
   private selectedCategory: string;
   private selectedSourcesUrls: Array<string>;
   private selectedLang: string;
   private topics: Array<any> = [];
   private topicsByKeyword: Array<any>;
   private selectedTopic: string;
+  private selectedSummary:any;
   public getOnlyHotTopics: boolean;
   public dateOfCreation: Date = new Date();
 
@@ -32,11 +34,13 @@ export class TopicsProvider {
               private sourcesProvider: SourcesProvider,
               private contentLanguagesProvider: ContentLanguagesProvider,
               private categoriesProvider: CategoriesProvider) {
+
     this.fetchingNewTopics = new Subject<any>();
     this.topicsUpdated = new Subject<any>();
     this.getOnlyHotTopics = true; //todo :load from local storage
 
     this.selectedTopicUpdated = new Subject<any>();
+    this.fetchingSummary = new Subject<any>();
     this.selectedCategory = this.categoriesProvider.getSelectedCategory();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
     this.categoriesProvider.selectedCategoryUpdated.subscribe(this.selectedCategoryUpdatedHandler.bind(this), error => console.error(error));
@@ -69,6 +73,7 @@ export class TopicsProvider {
   }
 
   public getTopics(): Array<any> {
+    console.log("Get only hot topics:"+this.getOnlyHotTopics + " from instance: "+ this.dateOfCreation);
     if (this.getOnlyHotTopics)
       return this.filterHotTopics();
     else {
@@ -85,6 +90,9 @@ export class TopicsProvider {
   public getSelectedTopic(): any {
     return this.selectedTopic;
   }
+  public getSelectedSummary():any{
+    return this.selectedSummary;
+  }
 
   public setTopicFilter(getOnlyHotTopics: boolean) {
     //set to local storage for later use;
@@ -92,8 +100,17 @@ export class TopicsProvider {
   }
 
   public setSelectedTopic(topic: any) {
-    this.selectedTopic = topic;
-    this.selectedTopicUpdated.next(this.selectedTopic);
+    this.selectedTopic = null;
+    this.selectedSummary = null;
+    this.fetchingSummary.next(topic); //fire event
+    this.serviceClient
+      .getSummary(topic.ID, this.selectedSourcesUrls, this.selectedLang)
+      .then((summary) => {
+        this.selectedTopic = topic;
+        this.selectedSummary = summary;
+        this.selectedTopicUpdated.next({topic:topic,summary:summary});
+      })
+
   }
 
   public loadNextTopic(isSearch: boolean) {

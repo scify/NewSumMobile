@@ -22,7 +22,6 @@ import { SourcesProvider } from '../providers/sources/sources';
 import { CategoriesProvider } from '../providers/categories/categories';
 import { ServiceClientProvider } from '../providers/service-client/service-client';
 import { TopicsProvider } from '../providers/topics/topics';
-import { SummariesProvider } from '../providers/summaries/summaries';
 import {ScreenOrientation} from "@ionic-native/screen-orientation";
 import {ComponentsModule} from "../components/components.module";
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
@@ -68,7 +67,6 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
     CategoriesProvider,
     ServiceClientProvider,
     TopicsProvider,
-    SummariesProvider,
     ScreenOrientation
   ]
 })

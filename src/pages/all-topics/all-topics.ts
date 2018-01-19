@@ -8,6 +8,7 @@ import {SummaryPage} from "../summary/summary";
 import {SettingsPage} from "../settings/settings";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {TabsPage} from "../tabs/tabs";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -21,6 +22,9 @@ export class AllTopicsPage {
   public selectedCategory: string;
   public selectedCategoryForUppercase: string;
   public selectedCategoryDefaultImage: string;
+  private fetchingNewTopicsSubscription: Subscription;
+  private topicsUpdatedSubscription: Subscription;
+  private categoryUpdatedSubscription:Subscription;
 
   constructor(protected navCtrl: NavController,
               protected topicsProvider: TopicsProvider,
@@ -30,14 +34,21 @@ export class AllTopicsPage {
 
   }
 
-  ionViewWillEnter() {
+  ionViewWillEnter() { // 	Runs when the page is about to enter and become the active page.
     //set the state of the topic provider. We are viewing all topics
+    console.log("all topics ionViewWillEnter");
     this.topicsProvider.setTopicFilter(false);
+    this.initPage();
   }
 
   ionViewDidLoad() {
+    console.log("all topics page did load");
     this.subscribeToChanges("All news");
-    this.initPage();
+
+
+  }
+  ionViewDidLeave() {
+    this.unsubscribeToChanges()
   }
 
   protected initPage() {
@@ -47,15 +58,19 @@ export class AllTopicsPage {
     this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
     this.ga.trackView('All news for ' + this.selectedCategory);
   }
-
+  protected unsubscribeToChanges(){
+    this.fetchingNewTopicsSubscription.unsubscribe();
+    this.topicsUpdatedSubscription.unsubscribe();
+    this.categoryUpdatedSubscription.unsubscribe();
+  }
   protected subscribeToChanges(nameOfFilter) {
 
-    this.topicsProvider.fetchingNewTopics.subscribe((categoryName) => {
+    this.fetchingNewTopicsSubscription = this.topicsProvider.fetchingNewTopics.subscribe((categoryName) => {
       this.topics = [];
       //present loader
     });
 
-    this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
+    this.topicsUpdatedSubscription = this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
       //hide loader
       if (newTopics.length > 0)
         this.topics = newTopics;
@@ -65,7 +80,7 @@ export class AllTopicsPage {
     }, error2 => console.log(error2));
 
 
-    this.categoriesProvider.selectedCategoryUpdated.subscribe((selectedCategory) => {
+    this.categoryUpdatedSubscription= this.categoriesProvider.selectedCategoryUpdated.subscribe((selectedCategory) => {
       this.selectedCategory = selectedCategory;
       this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
       this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
