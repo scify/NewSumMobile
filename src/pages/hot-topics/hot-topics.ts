@@ -25,10 +25,7 @@ export class HotTopicsPage extends AllTopicsPage {
   }
 
   ionViewDidLoad() {
-    this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
-      this.topics = this.topicsProvider.getTopics();;
-    }, error => console.log(error));
-    this.topics = this.topicsProvider.getTopics();
-    this.fetchSelectedCategoryAndSubscribeToChanges("Popular news");
+    this.subscribeToChanges("Popular news");
+    this.initPage();
   }
 }

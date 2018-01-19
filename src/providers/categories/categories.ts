@@ -28,21 +28,7 @@ export class CategoriesProvider {
     this.selectedCategoryUpdated = new Subject<any>();
     this.selectedCategoriesUpdated = new Subject<any>();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
-    this.sourcesProvider.sourcesUpdated.subscribe((newSources) => {
-      let newlySelectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
-      if (newSources.length > 0) {
-        this.allAvailableCategories = this.serviceClient.getCategories(this.sourcesProvider.getSelectedSourcesUrls(), newlySelectedLang);
-        // when language is set to a different value, update the favorite category as well
-        if (newlySelectedLang !== this.selectedLang) {
-          this.selectedCategories = this.getAllAvailableCategories();
-          this.setFavoriteCategory(this.selectedCategories[0]);
-        }
-        this.selectedCategoriesUpdated.next(this.getSelectedCategories());
-        this.selectedLang = newlySelectedLang;
-        this.selectedCategory = this.allAvailableCategories[0];
-        this.selectedCategoryUpdated.next(this.selectedCategory);
-      }
-    }, error => console.error(error));
+    this.sourcesProvider.sourcesUpdated.subscribe(this.sourcesUpdatedHandler.bind(this), error => console.error(error));
 
     if (this.selectedSourcesUrls.length > 0) {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
@@ -62,6 +48,23 @@ export class CategoriesProvider {
         }, error => console.error('Could not set properly the categories.'));
       });
     }
+  }
+
+  private sourcesUpdatedHandler(newSources){
+    let newlySelectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
+    if (newSources.length > 0) {
+      this.allAvailableCategories = this.serviceClient.getCategories(this.sourcesProvider.getSelectedSourcesUrls(), newlySelectedLang);
+      // when language is set to a different value, update the favorite category as well
+      if (newlySelectedLang !== this.selectedLang) {
+        this.selectedCategories = this.getAllAvailableCategories();
+        this.setFavoriteCategory(this.selectedCategories[0]);
+      }
+      this.selectedCategoriesUpdated.next(this.getSelectedCategories());
+      this.selectedLang = newlySelectedLang;
+      this.selectedCategory = this.allAvailableCategories[0];
+      this.selectedCategoryUpdated.next(this.selectedCategory);
+    }
+
   }
 
   public getAllAvailableCategories(): Array<string> {

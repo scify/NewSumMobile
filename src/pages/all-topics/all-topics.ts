@@ -36,15 +36,35 @@ export class AllTopicsPage {
   }
 
   ionViewDidLoad() {
-    this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
-      if (newTopics.length > 0)
-        this.topics = newTopics;
-    }, error2 => console.log(error2));
-    this.topics = this.topicsProvider.getTopics();
-    this.fetchSelectedCategoryAndSubscribeToChanges("All news");
+    this.subscribeToChanges("All news");
+    this.initPage();
   }
 
-  protected fetchSelectedCategoryAndSubscribeToChanges(nameOfFilter) {
+  protected initPage() {
+    this.topics = this.topicsProvider.getTopics();
+    this.selectedCategory = this.categoriesProvider.getSelectedCategory();
+    this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
+    this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
+    this.ga.trackView('All news for ' + this.selectedCategory);
+  }
+
+  protected subscribeToChanges(nameOfFilter) {
+
+    this.topicsProvider.fetchingNewTopics.subscribe((categoryName) => {
+      this.topics = [];
+      //present loader
+    });
+
+    this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
+      //hide loader
+      if (newTopics.length > 0)
+        this.topics = newTopics;
+      else {
+        //display no topics found message
+      }
+    }, error2 => console.log(error2));
+
+
     this.categoriesProvider.selectedCategoryUpdated.subscribe((selectedCategory) => {
       this.selectedCategory = selectedCategory;
       this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
@@ -55,10 +75,7 @@ export class AllTopicsPage {
       this.ga.trackView(nameOfFilter + ' page for ' + this.selectedCategory);
     }, error => this.ga.trackException(error, false));//todo: add messages when an error occurs
 
-    this.selectedCategory = this.categoriesProvider.getSelectedCategory();
-    this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
-    this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
-    this.ga.trackView('All news for ' + this.selectedCategory);
+
   }
 
   public displaySettingsPage() {
@@ -66,7 +83,7 @@ export class AllTopicsPage {
   }
 
   loadCategory(animationDirection) {
-    this.navCtrl.push(TabsPage,null,
+    this.navCtrl.push(TabsPage, null,
       {animate: true, animation: 'ios-transition', direction: animationDirection}).then(() => {
       this.navCtrl.remove(this.viewCtrl.index);
     });
