@@ -21,14 +21,12 @@ export class HotTopicsPage extends AllTopicsPage {
 
   ionViewWillEnter(){ // 	Runs when the page is about to enter and become the active page.
     //set the state of the topic provider. We are viewing only hot topics
-    console.log("hot topics ionViewWillEnter");
     this.topicsProvider.setTopicFilter(true);
     this.initPage();
+    this.subscribeToChanges("Popular news");
   }
 
-  ionViewDidLoad() {
-    console.log("hot topics page did load");
-    this.subscribeToChanges("Popular news");
-
+  ionViewDidLeave() {
+    this.unsubscribeToChanges();
   }
 }

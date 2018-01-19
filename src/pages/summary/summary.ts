@@ -53,13 +53,11 @@ export class SummaryPage {
   }
   subscribeToChanges() {
    this.fetchingSummarySubscription= this.topicsProvider.fetchingSummary.subscribe(() => {
-      console.log("fetching summaries");
       //todo: display loading;
       this.selectedSummary = null;
       this.selectedTopic = null;
     });
     this.topicUpdatedSubscription= this.topicsProvider.selectedTopicUpdated.subscribe((data) => {
-      console.log("summary updated by instance:" + this.instanceCreationDate);
       this.selectedSummary = data.summary;
       this.selectedTopic = data.topic;
       this.summaryIsConstructedByMoreThanOneSources = this.selectedSummary.Sources.length > 1;

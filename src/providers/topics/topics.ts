@@ -52,11 +52,13 @@ export class TopicsProvider {
   }
 
   private getTopicsFromServiceProvider() {
+    console.log("topics provider,about to request topics for category" + this.selectedCategory);
     this.serviceClient
       .getTopics(this.selectedSourcesUrls,
         this.selectedCategory,
         this.selectedLang)
       .then((topics) => {
+        console.log("received "+ topics.length+ " topics for category"+ this.selectedCategory);
         this.topics = topics;
         this.formatDateAndTimeForTopics(this.topics);
         this.topicsUpdated.next(this.topics);
@@ -64,6 +66,7 @@ export class TopicsProvider {
   }
 
   private selectedCategoryUpdatedHandler(newCategory) {
+    this.topics=[];
     this.fetchingNewTopics.next(newCategory); //trigger event, fetching new category is starting!
     this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
     this.selectedCategory = newCategory;
@@ -73,7 +76,6 @@ export class TopicsProvider {
   }
 
   public getTopics(): Array<any> {
-    console.log("Get only hot topics:"+this.getOnlyHotTopics + " from instance: "+ this.dateOfCreation);
     if (this.getOnlyHotTopics)
       return this.filterHotTopics();
     else {
@@ -102,7 +104,7 @@ export class TopicsProvider {
   public setSelectedTopic(topic: any) {
     this.selectedTopic = null;
     this.selectedSummary = null;
-    this.fetchingSummary.next(topic); //fire event
+    this.fetchingSummary.next(topic);
     this.serviceClient
       .getSummary(topic.ID, this.selectedSourcesUrls, this.selectedLang)
       .then((summary) => {

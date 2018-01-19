@@ -36,19 +36,13 @@ export class AllTopicsPage {
 
   ionViewWillEnter() { // 	Runs when the page is about to enter and become the active page.
     //set the state of the topic provider. We are viewing all topics
-    console.log("all topics ionViewWillEnter");
     this.topicsProvider.setTopicFilter(false);
     this.initPage();
-  }
-
-  ionViewDidLoad() {
-    console.log("all topics page did load");
     this.subscribeToChanges("All news");
-
-
   }
+
   ionViewDidLeave() {
-    this.unsubscribeToChanges()
+      this.unsubscribeToChanges();
   }
 
   protected initPage() {
@@ -59,6 +53,7 @@ export class AllTopicsPage {
     this.ga.trackView('All news for ' + this.selectedCategory);
   }
   protected unsubscribeToChanges(){
+
     this.fetchingNewTopicsSubscription.unsubscribe();
     this.topicsUpdatedSubscription.unsubscribe();
     this.categoryUpdatedSubscription.unsubscribe();
@@ -66,12 +61,13 @@ export class AllTopicsPage {
   protected subscribeToChanges(nameOfFilter) {
 
     this.fetchingNewTopicsSubscription = this.topicsProvider.fetchingNewTopics.subscribe((categoryName) => {
+      console.log("fetching new topics");
       this.topics = [];
       //present loader
     });
 
     this.topicsUpdatedSubscription = this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
-      //hide loader
+      console.log("topics updated");
       if (newTopics.length > 0)
         this.topics = newTopics;
       else {
@@ -81,6 +77,7 @@ export class AllTopicsPage {
 
 
     this.categoryUpdatedSubscription= this.categoriesProvider.selectedCategoryUpdated.subscribe((selectedCategory) => {
+      console.log("category updated");
       this.selectedCategory = selectedCategory;
       this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
       this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
