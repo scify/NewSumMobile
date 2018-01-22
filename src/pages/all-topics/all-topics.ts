@@ -64,7 +64,8 @@ export class AllTopicsPage {
       }
       else{
         if (this.loadingIndicator)
-          this.loadingIndicator.dismissAll();
+          this.loadingIndicator.dismiss();
+
         if (newTopics && newTopics.length > 0)
           this.topics = newTopics;
         else {
