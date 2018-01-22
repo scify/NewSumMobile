@@ -21,7 +21,6 @@ export class AllTopicsPage {
   public selectedCategory: string;
   public selectedCategoryForUppercase: string;
   public selectedCategoryDefaultImage: string;
-  private fetchingNewTopicsSubscription: Subscription;
   private topicsUpdatedSubscription: Subscription;
   private categoryUpdatedSubscription: Subscription;
   private loadingIndicator: Loading = null;
@@ -33,15 +32,14 @@ export class AllTopicsPage {
               private viewCtrl: ViewController,
               private loadingCtrl: LoadingController) {
 
-    console.log("new all-topics.ts instance");
   }
 
 
   ionViewWillEnter() { // 	Runs when the page is about to enter and become the active page.
     //set the state of the topic provider. We are viewing all topics
     this.topicsProvider.setTopicFilter(false);
+    this.topics = this.topicsProvider.getTopics();
     this.subscribeToChanges("All news");
-
   }
 
   displayLoading() {
@@ -54,24 +52,19 @@ export class AllTopicsPage {
   }
 
   protected unsubscribeToChanges() {
-
-    this.fetchingNewTopicsSubscription.unsubscribe();
     this.topicsUpdatedSubscription.unsubscribe();
     this.categoryUpdatedSubscription.unsubscribe();
   }
 
   protected subscribeToChanges(nameOfFilter) {
-
-    this.fetchingNewTopicsSubscription = this.topicsProvider.fetchingNewTopics.subscribe((categoryName) => {
-      console.log("fetching new topics");
-      this.topics = [];
-      this.displayLoading();
-    });
-
     this.topicsUpdatedSubscription = this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
-      if (newTopics) {
+      if (newTopics==null) {
+        this.topics = [];
+        this.displayLoading();
+      }
+      else{
         if (this.loadingIndicator)
-          this.loadingIndicator.dismiss();
+          this.loadingIndicator.dismissAll();
         if (newTopics && newTopics.length > 0)
           this.topics = newTopics;
         else {
@@ -80,7 +73,6 @@ export class AllTopicsPage {
         }
       }
     }, error2 => console.log(error2));
-
     this.categoryUpdatedSubscription = this.categoriesProvider.selectedCategoryUpdated.subscribe((selectedCategory) => {
       this.selectedCategory = selectedCategory;
       this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);

@@ -9,17 +9,10 @@ import {BehaviorSubject} from "rxjs";
 // TODO: move to configuration file
 const NUMBER_OF_HOT_TOPICS_TO_DISPLAY: number = 10;
 
-/*
- Generated class for the TopicsProvider provider.
-
- See https://angular.io/guide/dependency-injection for more info on providers
- and Angular DI.
- */
 @Injectable()
 export class TopicsProvider {
-  public topicsUpdated: BehaviorSubject<any>;
-  public fetchingNewTopics: Subject<any>;
-  public selectedTopicUpdated: Subject<any>;
+  public topicsUpdated: Subject<any>;
+  public selectedTopicUpdated: BehaviorSubject<any>;
     private selectedCategory: string;
   private selectedSourcesUrls: Array<string>;
   private selectedLang: string;
@@ -34,8 +27,7 @@ export class TopicsProvider {
               private contentLanguagesProvider: ContentLanguagesProvider,
               private categoriesProvider: CategoriesProvider) {
 
-    this.fetchingNewTopics = new Subject<any>();
-    this.topicsUpdated = new BehaviorSubject<any>(null);
+    this.topicsUpdated = new Subject<any>();
     this.getOnlyHotTopics = true; //todo :load from local storage
 
     this.selectedTopicUpdated = new BehaviorSubject<any>(null);
@@ -50,23 +42,22 @@ export class TopicsProvider {
   }
 
   private getTopicsFromServiceProvider() {
-    console.log("topics provider,about to request topics for category" + this.selectedCategory);
     this.serviceClient
       .getTopics(this.selectedSourcesUrls,
         this.selectedCategory,
         this.selectedLang)
       .then((topics) => {
-        console.log("received "+ topics.length+ " topics for category"+ this.selectedCategory);
         this.topics = topics;
         this.formatDateAndTimeForTopics(this.topics);
-        this.topicsUpdated.next(this.topics);
+        //get topics by taking into account the filters
+        this.topicsUpdated.next(this.getTopics());
       });
   }
 
   private selectedCategoryUpdatedHandler(newCategory) {
     if (newCategory) {
       this.topics = [];
-      this.fetchingNewTopics.next(newCategory); //trigger event, fetching new category is starting!
+      this.topicsUpdated.next(null); //trigger event, fetching new category is starting!
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
       this.selectedCategory = newCategory;
       this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
@@ -125,6 +116,7 @@ export class TopicsProvider {
   public loadPreviousTopic(isSearch: boolean) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
     let index = existingTopics.indexOf(this.selectedTopic);
+
     if (index == 0) { //we have reached the start,
       this.categoriesProvider.loadPreviousCategory();
       return false;

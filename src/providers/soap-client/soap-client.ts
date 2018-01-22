@@ -12,14 +12,15 @@ export class SoapClientProvider {
   }
 
   public getResource(methodToInvoke, parameters): Array<any> {
-    return JSON.parse(this.soapClient.invoke(APP_CONFIG.apiEndpoint + APP_CONFIG.wsdlPath, methodToInvoke, parameters, false,null));
+    return JSON.parse(this.soapClient.invoke(APP_CONFIG.apiEndpoint + APP_CONFIG.wsdlPath, methodToInvoke, parameters, false, null));
   }
 
   public getResourceAsync(methodToInvoke, parameters): Promise<any> {
     return new Promise((resolve, reject) => {
-      const results = JSON.parse(this.soapClient.invoke(APP_CONFIG.apiEndpoint + APP_CONFIG.wsdlPath, methodToInvoke, parameters, false,null));
+      const results = JSON.parse(this.soapClient.invoke(APP_CONFIG.apiEndpoint + APP_CONFIG.wsdlPath, methodToInvoke, parameters, false, null));
 
-        window.setTimeout(()=>resolve(results), 2000);
+      resolve(results);
+      //window.setTimeout(()=>resolve(results), 2000);
 
     });
   }
