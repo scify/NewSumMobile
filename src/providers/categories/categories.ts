@@ -44,6 +44,23 @@ export class CategoriesProvider {
     }, error => console.error(error));
   }
 
+  private sourcesUpdatedHandler(newSources){
+    let newlySelectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
+    if (newSources.length > 0) {
+      this.allAvailableCategories = this.serviceClient.getCategories(this.sourcesProvider.getSelectedSourcesUrls(), newlySelectedLang);
+      // when language is set to a different value, update the favorite category as well
+      if (newlySelectedLang !== this.selectedLang) {
+        this.selectedCategories = this.getAllAvailableCategories();
+        this.setFavoriteCategory(this.selectedCategories[0]);
+      }
+      this.selectedCategoriesUpdated.next(this.getSelectedCategories());
+      this.selectedLang = newlySelectedLang;
+      this.selectedCategory = this.allAvailableCategories[0];
+      this.selectedCategoryUpdated.next(this.selectedCategory);
+    }
+
+  }
+
   public getAllAvailableCategories(): Array<string> {
     return this.allAvailableCategories.slice(0);
   }

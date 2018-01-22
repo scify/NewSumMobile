@@ -1,21 +1,26 @@
-import { Injectable } from '@angular/core';
-import { SOAPClient } from '../../lib/soapclient';
+import {Injectable} from '@angular/core';
+import {SOAPClient} from '../../lib/soapclient';
 import {APP_CONFIG} from "../../app/app-config"
 
 @Injectable()
 export class SoapClientProvider {
 
-  private soapClient:SOAPClient;
+  private soapClient: SOAPClient;
 
   constructor() {
     this.soapClient = new SOAPClient();
   }
 
-  public getResource(methodToInvoke, parameters): string {
+  public getResource(methodToInvoke, parameters): Array<any> {
+    return JSON.parse(this.soapClient.invoke(APP_CONFIG.apiEndpoint + APP_CONFIG.wsdlPath, methodToInvoke, parameters, false,null));
+  }
 
-    return this.soapClient.invoke(APP_CONFIG.apiEndpoint+ APP_CONFIG.wsdlPath, methodToInvoke, parameters, false, (data) => {
-      //console.log('Response: ', data);
-      return data;
+  public getResourceAsync(methodToInvoke, parameters): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const results = JSON.parse(this.soapClient.invoke(APP_CONFIG.apiEndpoint + APP_CONFIG.wsdlPath, methodToInvoke, parameters, false,null));
+
+      resolve(results);
+
     });
   }
 }

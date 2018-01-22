@@ -4,6 +4,7 @@ import {ContentLanguagesProvider} from "../content-languages/content-languages";
 import {SourcesProvider} from "../sources/sources";
 import {CategoriesProvider} from "../categories/categories";
 import {Subject} from "rxjs/Subject";
+import {BehaviorSubject} from "rxjs";
 
 // TODO: move to configuration file
 const NUMBER_OF_HOT_TOPICS_TO_DISPLAY: number = 10;
@@ -17,7 +18,9 @@ const NUMBER_OF_HOT_TOPICS_TO_DISPLAY: number = 10;
 @Injectable()
 export class TopicsProvider {
   public topicsUpdated: Subject<any>;
+  public fetchingNewTopics: Subject<any>;
   public selectedTopicUpdated: Subject<any>;
+  public fetchingSummary: Subject<any>;
   private selectedCategory: string;
   private selectedSourcesUrls: Array<string>;
   private selectedLang: string;
@@ -31,33 +34,45 @@ export class TopicsProvider {
               private sourcesProvider: SourcesProvider,
               private contentLanguagesProvider: ContentLanguagesProvider,
               private categoriesProvider: CategoriesProvider) {
+
+    this.fetchingNewTopics = new Subject<any>();
     this.topicsUpdated = new Subject<any>();
     this.getOnlyHotTopics = true; //todo :load from local storage
 
-    this.selectedTopicUpdated = new Subject<any>();
+    this.selectedTopicUpdated = new BehaviorSubject<any>(null);
+    this.fetchingSummary = new Subject<any>();
     this.selectedCategory = this.categoriesProvider.getSelectedCategory();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
     this.categoriesProvider.selectedCategoryUpdated.subscribe(this.selectedCategoryUpdatedHandler.bind(this), error => console.error(error));
 
     if (this.selectedCategory) {
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
-      this.topics = this.serviceClient.getTopics(
-                                        this.selectedSourcesUrls,
-                                        this.selectedCategory,
-                                        this.selectedLang);
-      this.formatDateAndTimeForTopics(this.topics);
-      this.topicsUpdated.next(this.topics);
+      this.getTopicsFromServiceProvider();
     }
   }
 
+  private getTopicsFromServiceProvider() {
+    console.log("topics provider,about to request topics for category" + this.selectedCategory);
+    this.serviceClient
+      .getTopics(this.selectedSourcesUrls,
+        this.selectedCategory,
+        this.selectedLang)
+      .then((topics) => {
+        console.log("received "+ topics.length+ " topics for category"+ this.selectedCategory);
+        this.topics = topics;
+        this.formatDateAndTimeForTopics(this.topics);
+        this.topicsUpdated.next(this.topics);
+      });
+  }
+
   private selectedCategoryUpdatedHandler(newCategory) {
+    this.topics=[];
+    this.fetchingNewTopics.next(newCategory); //trigger event, fetching new category is starting!
     this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
     this.selectedCategory = newCategory;
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
-    this.topics = this.serviceClient.getTopics(this.selectedSourcesUrls,
-      this.selectedCategory, this.selectedLang);
-    this.formatDateAndTimeForTopics(this.topics);
-    this.topicsUpdated.next(this.topics);
+    this.getTopicsFromServiceProvider();
+
   }
 
   public getTopics(): Array<any> {
@@ -84,15 +99,21 @@ export class TopicsProvider {
   }
 
   public setSelectedTopic(topic: any) {
-    this.selectedTopic = topic;
-    this.selectedTopicUpdated.next(this.selectedTopic);
+    this.selectedTopic = null;
+    this.fetchingSummary.next(topic);
+    this.serviceClient
+      .getSummary(topic.ID, this.selectedSourcesUrls, this.selectedLang)
+      .then((summary) => {
+        this.selectedTopic = topic;
+        this.selectedTopicUpdated.next({category:this.selectedCategory, topic:topic,summary:summary});
+      })
+
   }
 
   public loadNextTopic(isSearch: boolean) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
     let index = existingTopics.indexOf(this.selectedTopic);
-    if (index == existingTopics.length - 1)
-    { //we have reached the end
+    if (index == existingTopics.length - 1) { //we have reached the end
       this.categoriesProvider.loadNextCategory();
     }
     else {
@@ -105,7 +126,7 @@ export class TopicsProvider {
   public loadPreviousTopic(isSearch: boolean) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
     let index = existingTopics.indexOf(this.selectedTopic);
-    if (index == 0){ //we have reached the start,
+    if (index == 0) { //we have reached the start,
       this.categoriesProvider.loadPreviousCategory();
       return false;
     }

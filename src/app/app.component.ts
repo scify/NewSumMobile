@@ -5,12 +5,8 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 import {TabsPage} from '../pages/tabs/tabs';
 import {NotificationsProvider} from "../providers/notifications/notifications";
 import {ContentLanguagesProvider} from "../providers/content-languages/content-languages";
-import {SourcesProvider} from "../providers/sources/sources";
 import {CategoriesProvider} from "../providers/categories/categories";
-import {TopicsProvider} from "../providers/topics/topics";
-import {SummariesProvider} from "../providers/summaries/summaries";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
-
 import {ScreenOrientation} from '@ionic-native/screen-orientation';
 import {SearchResultsPage} from "../pages/search-results/search-results";
 

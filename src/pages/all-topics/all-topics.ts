@@ -8,6 +8,7 @@ import {SummaryPage} from "../summary/summary";
 import {SettingsPage} from "../settings/settings";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {TabsPage} from "../tabs/tabs";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -21,6 +22,9 @@ export class AllTopicsPage {
   public selectedCategory: string;
   public selectedCategoryForUppercase: string;
   public selectedCategoryDefaultImage: string;
+  private fetchingNewTopicsSubscription: Subscription;
+  private topicsUpdatedSubscription: Subscription;
+  private categoryUpdatedSubscription:Subscription;
 
   constructor(protected navCtrl: NavController,
               protected topicsProvider: TopicsProvider,
@@ -30,22 +34,50 @@ export class AllTopicsPage {
 
   }
 
-  ionViewWillEnter() {
+  ionViewWillEnter() { // 	Runs when the page is about to enter and become the active page.
     //set the state of the topic provider. We are viewing all topics
     this.topicsProvider.setTopicFilter(false);
+    this.initPage();
+    this.subscribeToChanges("All news");
   }
 
-  ionViewDidLoad() {
-    this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
+  ionViewDidLeave() {
+      this.unsubscribeToChanges();
+  }
+
+  protected initPage() {
+    this.topics = this.topicsProvider.getTopics();
+    this.selectedCategory = this.categoriesProvider.getSelectedCategory();
+    this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
+    this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
+    this.ga.trackView('All news for ' + this.selectedCategory);
+  }
+  protected unsubscribeToChanges(){
+
+    this.fetchingNewTopicsSubscription.unsubscribe();
+    this.topicsUpdatedSubscription.unsubscribe();
+    this.categoryUpdatedSubscription.unsubscribe();
+  }
+  protected subscribeToChanges(nameOfFilter) {
+
+    this.fetchingNewTopicsSubscription = this.topicsProvider.fetchingNewTopics.subscribe((categoryName) => {
+      console.log("fetching new topics");
+      this.topics = [];
+      //present loader
+    });
+
+    this.topicsUpdatedSubscription = this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
+      console.log("topics updated");
       if (newTopics.length > 0)
         this.topics = newTopics;
+      else {
+        //display no topics found message
+      }
     }, error2 => console.log(error2));
-    this.topics = this.topicsProvider.getTopics();
-    this.fetchSelectedCategoryAndSubscribeToChanges("All news");
-  }
 
-  protected fetchSelectedCategoryAndSubscribeToChanges(nameOfFilter) {
-    this.categoriesProvider.selectedCategoryUpdated.subscribe((selectedCategory) => {
+
+    this.categoryUpdatedSubscription= this.categoriesProvider.selectedCategoryUpdated.subscribe((selectedCategory) => {
+      console.log("category updated");
       this.selectedCategory = selectedCategory;
       this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
       this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
@@ -55,10 +87,7 @@ export class AllTopicsPage {
       this.ga.trackView(nameOfFilter + ' page for ' + this.selectedCategory);
     }, error => this.ga.trackException(error, false));//todo: add messages when an error occurs
 
-    this.selectedCategory = this.categoriesProvider.getSelectedCategory();
-    this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
-    this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
-    this.ga.trackView('All news for ' + this.selectedCategory);
+
   }
 
   public displaySettingsPage() {
@@ -66,7 +95,7 @@ export class AllTopicsPage {
   }
 
   loadCategory(animationDirection) {
-    this.navCtrl.push(TabsPage,null,
+    this.navCtrl.push(TabsPage, null,
       {animate: true, animation: 'ios-transition', direction: animationDirection}).then(() => {
       this.navCtrl.remove(this.viewCtrl.index);
     });
