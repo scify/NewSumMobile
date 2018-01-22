@@ -17,11 +17,10 @@ const NUMBER_OF_HOT_TOPICS_TO_DISPLAY: number = 10;
  */
 @Injectable()
 export class TopicsProvider {
-  public topicsUpdated: Subject<any>;
+  public topicsUpdated: BehaviorSubject<any>;
   public fetchingNewTopics: Subject<any>;
   public selectedTopicUpdated: Subject<any>;
-  public fetchingSummary: Subject<any>;
-  private selectedCategory: string;
+    private selectedCategory: string;
   private selectedSourcesUrls: Array<string>;
   private selectedLang: string;
   private topics: Array<any> = [];
@@ -40,7 +39,6 @@ export class TopicsProvider {
     this.getOnlyHotTopics = true; //todo :load from local storage
 
     this.selectedTopicUpdated = new BehaviorSubject<any>(null);
-    this.fetchingSummary = new Subject<any>();
     this.selectedCategory = this.categoriesProvider.getSelectedCategory();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
     this.categoriesProvider.selectedCategoryUpdated.subscribe(this.selectedCategoryUpdatedHandler.bind(this), error => console.error(error));
@@ -101,7 +99,7 @@ export class TopicsProvider {
 
   public setSelectedTopic(topic: any) {
     this.selectedTopic = null;
-    this.fetchingSummary.next(topic);
+    this.selectedTopicUpdated.next(null);
     this.serviceClient
       .getSummary(topic.ID, this.selectedSourcesUrls, this.selectedLang)
       .then((summary) => {

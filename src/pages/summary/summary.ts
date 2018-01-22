@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams, ViewController} from 'ionic-angular';
+import {Loading, LoadingController, NavController, NavParams, ViewController} from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {CategoriesProvider} from "../../providers/categories/categories";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
@@ -34,6 +34,7 @@ export class SummaryPage {
 
   public fetchingSummarySubscription :Subscription;
   public topicUpdatedSubscription :Subscription;
+  private loadingIndicator: Loading = null;
 
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
@@ -41,7 +42,8 @@ export class SummaryPage {
               private categoriesProvider: CategoriesProvider,
               private ga: GoogleAnalytics,
               private storage: Storage,
-              private viewCtrl: ViewController) {
+              private viewCtrl: ViewController,
+              private loadingCtrl: LoadingController) {
     this.instanceCreationDate = new Date();
   }
   ionViewDidLoad() {
@@ -51,22 +53,31 @@ export class SummaryPage {
   ionViewDidLeave() {
     this.unsubscribeToChanges()
   }
+  displayLoading() {
+    this.loadingIndicator = this.loadingCtrl.create();
+    this.loadingIndicator.present();
+  }
+
   subscribeToChanges() {
-   this.fetchingSummarySubscription= this.topicsProvider.fetchingSummary.subscribe(() => {
-      //todo: display loading;
-      this.selectedSummary = null;
-      this.selectedTopic = null;
-    });
    this.topicUpdatedSubscription= this.topicsProvider.selectedTopicUpdated.subscribe((data) => {
-     this.selectedCategory = data.category;
-     this.selectedSummary = data.summary;
-     this.selectedTopic = data.topic;
-     this.summaryIsConstructedByMoreThanOneSources = this.selectedSummary.Sources.length > 1;
-     this.ga.trackView("Summary: " + this.selectedTopic.Title);
+     if (data==null){
+       this.displayLoading();
+       this.selectedSummary = null;
+       this.selectedTopic = null;
+     }
+     else
+     {
+       if (this.loadingIndicator)
+         this.loadingIndicator.dismiss();
+       this.selectedCategory = data.category;
+       this.selectedSummary = data.summary;
+       this.selectedTopic = data.topic;
+       this.summaryIsConstructedByMoreThanOneSources = this.selectedSummary.Sources.length > 1;
+       this.ga.trackView("Summary: " + this.selectedTopic.Title);
+     }
    });
   }
   unsubscribeToChanges() {
-   this.fetchingSummarySubscription.unsubscribe();
    this.topicUpdatedSubscription.unsubscribe();
   }
 
@@ -92,21 +103,10 @@ export class SummaryPage {
     this.storage.set("displaySources", this.displaySourcesUponEachSentence);
   }
 
-  loadSummary(animationDirection) {
-    this.navCtrl.push(SummaryPage, {'forcedCategoryTitle': this.selectedCategory, 'isSearch': this.isSearch},
-      {animate: true, animation: 'ios-transition', direction: animationDirection}).then(() => {
-      this.navCtrl.remove(this.viewCtrl.index);
-    });
-  }
-
   swipeActivity(event) {
-    if (event.direction == 2) {
-      if (this.topicsProvider.loadNextTopic(this.isSearch))
-        this.loadSummary('forward');
-
-    } else if (event.direction == 4) {
-      if (this.topicsProvider.loadPreviousTopic(this.isSearch))
-        this.loadSummary('back');
-    }
+    if (event.direction == 2)
+      this.topicsProvider.loadNextTopic(this.isSearch);
+     else if (event.direction == 4)
+      this.topicsProvider.loadPreviousTopic(this.isSearch);
   }
 }
