@@ -4,6 +4,7 @@ import {ServiceClientProvider} from "../service-client/service-client";
 import {ContentLanguagesProvider} from "../content-languages/content-languages";
 import {Subject} from "rxjs/Subject";
 import {Storage} from "@ionic/storage";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 /*
  Generated class for the CategoriesProvider provider.
@@ -13,7 +14,7 @@ import {Storage} from "@ionic/storage";
  */
 @Injectable()
 export class CategoriesProvider {
-  public selectedCategoryUpdated: Subject<any>;
+  public selectedCategoryUpdated: BehaviorSubject<any>;
   public selectedCategoriesUpdated: Subject<any>;
   private favoriteCategory: string;
   private selectedCategory: string;
@@ -24,41 +25,29 @@ export class CategoriesProvider {
   constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
               private contentLanguagesProvider: ContentLanguagesProvider,
               private appStorage: Storage) {
-    this.selectedCategoryUpdated = new Subject<any>();
+    this.selectedCategoryUpdated = new BehaviorSubject<any>(null);
     this.selectedCategoriesUpdated = new Subject<any>();
     this.initializeDataFromStorage();
-    this.sourcesProvider.selectedSourcesUpdated.subscribe((newSources) => {
-      let newlySelectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
-      if (newSources.length > 0) {
-        this.allAvailableCategories = this.serviceClient.getCategories(this.sourcesProvider.getSelectedSourcesUrls(), newlySelectedLang);
-        // when language is set to a different value, update the favorite category as well
-        // if (newlySelectedLang !== this.selectedLang)
-        //   this.selectedCategories = this.getAllAvailableCategories();
-        // else
-        this.refreshSelectedCategories();
-        this.setSelectedCategories(this.selectedCategories);
-        this.selectedLang = newlySelectedLang;
-        this.selectedCategory = this.selectedCategories[0];
-        this.selectedCategoryUpdated.next(this.selectedCategory);
-      }
-    }, error => console.error(error));
+    this.sourcesProvider.selectedSourcesUpdated.subscribe(this.sourcesUpdatedHandler.bind(this), error => console.error(error));
   }
 
   private sourcesUpdatedHandler(newSources){
     let newlySelectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
     if (newSources.length > 0) {
       this.allAvailableCategories = this.serviceClient.getCategories(this.sourcesProvider.getSelectedSourcesUrls(), newlySelectedLang);
-      // when language is set to a different value, update the favorite category as well
+      // when language is set to a different value, update the selected categories accordingly
       if (newlySelectedLang !== this.selectedLang) {
-        this.selectedCategories = this.getAllAvailableCategories();
-        this.setFavoriteCategory(this.selectedCategories[0]);
+        // make sure to update selected categories only if selected lang has already been initialized
+        if (this.selectedLang)
+          this.selectedCategories = this.getAllAvailableCategories();
+      } else {
+        this.refreshSelectedCategories();
       }
-      this.selectedCategoriesUpdated.next(this.getSelectedCategories());
+      this.setSelectedCategories(this.selectedCategories);
       this.selectedLang = newlySelectedLang;
-      this.selectedCategory = this.allAvailableCategories[0];
+      this.selectedCategory = this.selectedCategories[0];
       this.selectedCategoryUpdated.next(this.selectedCategory);
     }
-
   }
 
   public getAllAvailableCategories(): Array<string> {

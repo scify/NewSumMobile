@@ -57,13 +57,13 @@ export class SummaryPage {
       this.selectedSummary = null;
       this.selectedTopic = null;
     });
-    this.topicUpdatedSubscription= this.topicsProvider.selectedTopicUpdated.subscribe((data) => {
-      this.selectedCategory = data.category;
-      this.selectedSummary = data.summary;
-      this.selectedTopic = data.topic;
-      this.summaryIsConstructedByMoreThanOneSources = this.selectedSummary.Sources.length > 1;
-      this.ga.trackView("Summary: " + this.selectedTopic.Title);
-    });
+   this.topicUpdatedSubscription= this.topicsProvider.selectedTopicUpdated.subscribe((data) => {
+     this.selectedCategory = data.category;
+     this.selectedSummary = data.summary;
+     this.selectedTopic = data.topic;
+     this.summaryIsConstructedByMoreThanOneSources = this.selectedSummary.Sources.length > 1;
+     this.ga.trackView("Summary: " + this.selectedTopic.Title);
+   });
   }
   unsubscribeToChanges() {
    this.fetchingSummarySubscription.unsubscribe();

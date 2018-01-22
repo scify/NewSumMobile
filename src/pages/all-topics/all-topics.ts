@@ -37,7 +37,6 @@ export class AllTopicsPage {
   ionViewWillEnter() { // 	Runs when the page is about to enter and become the active page.
     //set the state of the topic provider. We are viewing all topics
     this.topicsProvider.setTopicFilter(false);
-    this.initPage();
     this.subscribeToChanges("All news");
   }
 
@@ -45,13 +44,6 @@ export class AllTopicsPage {
       this.unsubscribeToChanges();
   }
 
-  protected initPage() {
-    this.topics = this.topicsProvider.getTopics();
-    this.selectedCategory = this.categoriesProvider.getSelectedCategory();
-    this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
-    this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
-    this.ga.trackView('All news for ' + this.selectedCategory);
-  }
   protected unsubscribeToChanges(){
 
     this.fetchingNewTopicsSubscription.unsubscribe();
@@ -68,10 +60,11 @@ export class AllTopicsPage {
 
     this.topicsUpdatedSubscription = this.topicsProvider.topicsUpdated.subscribe((newTopics) => {
       console.log("topics updated");
-      if (newTopics.length > 0)
+      if (newTopics && newTopics.length > 0)
         this.topics = newTopics;
       else {
         //display no topics found message
+        this.topics = [];
       }
     }, error2 => console.log(error2));
 

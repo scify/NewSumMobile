@@ -36,7 +36,7 @@ export class TopicsProvider {
               private categoriesProvider: CategoriesProvider) {
 
     this.fetchingNewTopics = new Subject<any>();
-    this.topicsUpdated = new Subject<any>();
+    this.topicsUpdated = new BehaviorSubject<any>(null);
     this.getOnlyHotTopics = true; //todo :load from local storage
 
     this.selectedTopicUpdated = new BehaviorSubject<any>(null);
@@ -66,13 +66,14 @@ export class TopicsProvider {
   }
 
   private selectedCategoryUpdatedHandler(newCategory) {
-    this.topics=[];
-    this.fetchingNewTopics.next(newCategory); //trigger event, fetching new category is starting!
-    this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
-    this.selectedCategory = newCategory;
-    this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
-    this.getTopicsFromServiceProvider();
-
+    if (newCategory) {
+      this.topics = [];
+      this.fetchingNewTopics.next(newCategory); //trigger event, fetching new category is starting!
+      this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
+      this.selectedCategory = newCategory;
+      this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
+      this.getTopicsFromServiceProvider();
+    }
   }
 
   public getTopics(): Array<any> {
