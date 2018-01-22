@@ -4,6 +4,7 @@ import {ContentLanguagesProvider} from "../content-languages/content-languages";
 import {SourcesProvider} from "../sources/sources";
 import {CategoriesProvider} from "../categories/categories";
 import {Subject} from "rxjs/Subject";
+import {BehaviorSubject} from "rxjs";
 
 // TODO: move to configuration file
 const NUMBER_OF_HOT_TOPICS_TO_DISPLAY: number = 10;
@@ -26,7 +27,6 @@ export class TopicsProvider {
   private topics: Array<any> = [];
   private topicsByKeyword: Array<any>;
   private selectedTopic: string;
-  private selectedSummary:any;
   public getOnlyHotTopics: boolean;
   public dateOfCreation: Date = new Date();
 
@@ -39,7 +39,7 @@ export class TopicsProvider {
     this.topicsUpdated = new Subject<any>();
     this.getOnlyHotTopics = true; //todo :load from local storage
 
-    this.selectedTopicUpdated = new Subject<any>();
+    this.selectedTopicUpdated = new BehaviorSubject<any>(null);
     this.fetchingSummary = new Subject<any>();
     this.selectedCategory = this.categoriesProvider.getSelectedCategory();
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
@@ -92,9 +92,6 @@ export class TopicsProvider {
   public getSelectedTopic(): any {
     return this.selectedTopic;
   }
-  public getSelectedSummary():any{
-    return this.selectedSummary;
-  }
 
   public setTopicFilter(getOnlyHotTopics: boolean) {
     //set to local storage for later use;
@@ -103,14 +100,12 @@ export class TopicsProvider {
 
   public setSelectedTopic(topic: any) {
     this.selectedTopic = null;
-    this.selectedSummary = null;
     this.fetchingSummary.next(topic);
     this.serviceClient
       .getSummary(topic.ID, this.selectedSourcesUrls, this.selectedLang)
       .then((summary) => {
         this.selectedTopic = topic;
-        this.selectedSummary = summary;
-        this.selectedTopicUpdated.next({topic:topic,summary:summary});
+        this.selectedTopicUpdated.next({category:this.selectedCategory, topic:topic,summary:summary});
       })
 
   }

@@ -58,6 +58,7 @@ export class SummaryPage {
       this.selectedTopic = null;
     });
     this.topicUpdatedSubscription= this.topicsProvider.selectedTopicUpdated.subscribe((data) => {
+      this.selectedCategory = data.category;
       this.selectedSummary = data.summary;
       this.selectedTopic = data.topic;
       this.summaryIsConstructedByMoreThanOneSources = this.selectedSummary.Sources.length > 1;
@@ -71,12 +72,6 @@ export class SummaryPage {
 
   initPage() {
 
-    this.selectedTopic = this.topicsProvider.getSelectedTopic();
-    this.selectedSummary = this.topicsProvider.getSelectedSummary();
-    if (this.selectedSummary) {
-      this.summaryIsConstructedByMoreThanOneSources = this.selectedSummary.Sources.length > 1;
-      this.ga.trackView("Summary: " + this.selectedTopic.Title);
-    }
     this.storage.ready().then(() => {
       this.storage.get("displaySources").then((val) => {
         this.displaySourcesUponEachSentence = val == 1;
