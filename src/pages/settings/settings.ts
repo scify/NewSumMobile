@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { ContentLanguagesProvider } from '../../providers/content-languages/content-languages';
 import {AboutPage} from "../about/about";
 import { CategoriesProvider } from '../../providers/categories/categories';
 import {InAppBrowser} from "@ionic-native/in-app-browser";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
+import {SourcesProvider} from "../../providers/sources/sources";
+import * as _ from 'lodash';
 
 /**
  * Generated class for the SettingsPage page.
@@ -22,8 +24,7 @@ export class SettingsPage {
   public selectedLangName: string;
   public favoriteCategory: string;
   public selectedCategoriesStringified: string;
-  private selectedCategories: Array<string>;
-  private allAvailableCategories: Array<string>;
+  public selectedSourcesStringified: string;
   private static availableLanguages: any = {
     'EL': 'Ελληνικά',
     'EN': 'Αγγλικά'
@@ -33,6 +34,7 @@ export class SettingsPage {
               private alertCtrl: AlertController,
               private contentLanguagesProvider: ContentLanguagesProvider,
               private categoryProvider: CategoriesProvider,
+              private sourcesProvider: SourcesProvider,
               private iab: InAppBrowser,
               protected ga: GoogleAnalytics) {
     this.updateDefaultValues();
@@ -125,9 +127,36 @@ export class SettingsPage {
     alert.addButton({
       text: 'ΕΠΙΛΟΓΗ',
       handler: (selectedCategories: Array<string>) => {
-        this.selectedCategories = selectedCategories;
-        this.selectedCategoriesStringified = this.selectedCategories.join();
+        this.selectedCategoriesStringified = selectedCategories.join();
         this.categoryProvider.setSelectedCategories(selectedCategories);
+        this.updateDefaultValues();
+      }
+    });
+
+    alert.present();
+  }
+
+  public selectSources() {
+    let alert = this.alertCtrl.create();
+    let selectedSources = this.sourcesProvider.getSelectedSources();
+    let sources = this.sourcesProvider.getAllAvailableSources();
+    alert.setTitle('Επιλογή Πηγών');
+
+    for (let i = 0; i < sources.length; i++) {
+      alert.addInput({
+        type: 'checkbox',
+        label: sources[i].sFeedLabel,
+        value: sources[i],
+        checked: (_.findIndex(selectedSources, (s) => _.isEqual(s, sources[i])) >= 0)
+      });
+    }
+
+    alert.addButton('ΑΚΥΡΩΣΗ');
+    alert.addButton({
+      text: 'ΕΠΙΛΟΓΗ',
+      handler: (selectedSources: Array<any>) => {
+        this.selectedSourcesStringified = selectedSources.join();
+        this.sourcesProvider.setSelectedSources(selectedSources);
         this.updateDefaultValues();
       }
     });
@@ -138,10 +167,13 @@ export class SettingsPage {
   private updateDefaultValues() {
     this.selectedLangName = SettingsPage.availableLanguages[
       this.contentLanguagesProvider.getSelectedContentLanguage()
-      ];
+    ];
     this.favoriteCategory = this.categoryProvider.getFavoriteCategory();
-    this.selectedCategories = this.categoryProvider.getSelectedCategories();
-    this.selectedCategoriesStringified = this.selectedCategories.join();
-    this.allAvailableCategories = this.categoryProvider.getAllAvailableCategories();
+    let selectedCategories = this.categoryProvider.getSelectedCategories();
+    this.selectedCategoriesStringified = selectedCategories.join();
+    let selectedSources = this.sourcesProvider.getSelectedSources();
+    let allAvailableSources = this.sourcesProvider.getAllAvailableSources();
+    this.selectedSourcesStringified = ((selectedSources.length === allAvailableSources.length) ?
+      'Όλες' : selectedSources.length) + ' επιλεγμένες';
   }
 }

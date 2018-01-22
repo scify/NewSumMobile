@@ -30,8 +30,9 @@
       Προτιμώμενες Κατηγορίες
       <p class="selected-value">{{selectedCategoriesStringified}}</p>
     </button>
-    <button ion-item>
+    <button ion-item (click)="selectSources()">
       Προτιμώμενες Πηγές
+      <p class="selected-value">{{selectedSourcesStringified}}</p>
     </button>
     <button ion-item>
       Φόρτωση Εικόνων

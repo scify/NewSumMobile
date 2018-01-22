@@ -88,7 +88,12 @@ export class SOAPClientParameters {
                   type = "DateTime";
                   break;
               }
-              s += "<" + type + ">" + this._serialize(o[p]) + "</" + type + ">"
+              if (type === "string") {
+                s += '["' + o.join('","') + '"]';
+                break;
+              } else {
+                s += "<" + type + ">" + this._serialize(o[p]) + "</" + type + ">"
+              }
             }
             else    // associative array
               s += "<" + p + ">" + this._serialize(o[p]) + "</" + p + ">"
