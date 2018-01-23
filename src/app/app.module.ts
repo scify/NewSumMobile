@@ -25,6 +25,9 @@ import { TopicsProvider } from '../providers/topics/topics';
 import {ScreenOrientation} from "@ionic-native/screen-orientation";
 import {ComponentsModule} from "../components/components.module";
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
+import { Network } from '@ionic-native/network';
+import { NetworkProvider } from '../providers/network/network';
+import { ImageLoadOptionProvider } from '../providers/image-load-option/image-load-option';
 
 @NgModule({
   declarations: [
@@ -67,7 +70,10 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
     CategoriesProvider,
     ServiceClientProvider,
     TopicsProvider,
-    ScreenOrientation
+    ScreenOrientation,
+    Network,
+    NetworkProvider,
+    ImageLoadOptionProvider
   ]
 })
 export class AppModule {}

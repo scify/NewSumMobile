@@ -18,7 +18,7 @@
 
   <div *ngIf="selectedSummary" (swipe)="swipeActivity($event)">
     <div id="img-container">
-      <img src="{{selectedTopic.imageUrls.length > 0 ? selectedTopic.imageUrls[0] : selectedCategoryDefaultImage}}"/>
+      <img src="{{selectedTopic.imageUrls.length > 0 && (isConnectedToWiFi || selectedImgLoadOption === 'all') ? selectedTopic.imageUrls[0] : selectedCategoryDefaultImage}}"/>
       <div id="title-background">
         <div id="title" [innerHtml]="selectedTopic.Title"></div>
       </div>

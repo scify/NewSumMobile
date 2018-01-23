@@ -34,8 +34,9 @@
       Προτιμώμενες Πηγές
       <p class="selected-value">{{selectedSourcesStringified}}</p>
     </button>
-    <button ion-item>
+    <button ion-item (click)="selectImagesOption()">
       Φόρτωση Εικόνων
+      <p class="selected-value">{{selectedImagesLoadOption}}</p>
     </button>
   </ion-list>
   <ion-list>

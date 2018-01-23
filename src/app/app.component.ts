@@ -9,6 +9,7 @@ import {CategoriesProvider} from "../providers/categories/categories";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {ScreenOrientation} from '@ionic-native/screen-orientation';
 import {SearchResultsPage} from "../pages/search-results/search-results";
+import {ImageLoadOptionProvider} from "../providers/image-load-option/image-load-option";
 
 @Component({
   templateUrl: 'app.html'
@@ -24,6 +25,7 @@ export class MyApp {
               public menuCtrl: MenuController,
               private contentLanguagesProvider: ContentLanguagesProvider,
               private categoriesProvider: CategoriesProvider,
+              private imgLoadProvider: ImageLoadOptionProvider,
               private screenOrientation: ScreenOrientation,
               private ga: GoogleAnalytics,
               public notification: NotificationsProvider) {

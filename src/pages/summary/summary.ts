@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams, ViewController} from 'ionic-angular';
+import {NavController, NavParams, Platform, ViewController} from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {CategoriesProvider} from "../../providers/categories/categories";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
@@ -7,6 +7,8 @@ import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {Storage} from "@ionic/storage";
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from "rxjs";
+import {ImageLoadOptionProvider} from "../../providers/image-load-option/image-load-option";
+import {NetworkProvider} from "../../providers/network/network";
 
 
 /**
@@ -29,16 +31,22 @@ export class SummaryPage {
   public isSearch: boolean;
   public displaySourcesUponEachSentence: boolean = true;
   public summaryIsConstructedByMoreThanOneSources: boolean;
+  public selectedImgLoadOption: string;
+  public isConnectedToWiFi: boolean = false;
 
   public instanceCreationDate: Date;
 
   public fetchingSummarySubscription :Subscription;
   public topicUpdatedSubscription :Subscription;
 
+  private networkConnectionChangeSubscription: Subscription;
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
               private topicsProvider: TopicsProvider,
               private categoriesProvider: CategoriesProvider,
+              private imgLoadProvider: ImageLoadOptionProvider,
+              private networkProvider: NetworkProvider,
+              private platform: Platform,
               private ga: GoogleAnalytics,
               private storage: Storage,
               private viewCtrl: ViewController) {
@@ -48,8 +56,13 @@ export class SummaryPage {
     this.initPage();
     this.subscribeToChanges();
   }
+  ionViewDidEnter() {
+    this.selectedImgLoadOption = this.imgLoadProvider.getSelectedImageLoadOption();
+    this.subscribeToNetworkConnectionChanges();
+  }
   ionViewDidLeave() {
-    this.unsubscribeToChanges()
+    this.unsubscribeToChanges();
+    this.unsubscribeFromNetworkConnectionChanges();
   }
   subscribeToChanges() {
    this.fetchingSummarySubscription= this.topicsProvider.fetchingSummary.subscribe(() => {
@@ -107,6 +120,20 @@ export class SummaryPage {
     } else if (event.direction == 4) {
       if (this.topicsProvider.loadPreviousTopic(this.isSearch))
         this.loadSummary('back');
+    }
+  }
+
+  private subscribeToNetworkConnectionChanges() {
+    if (this.platform.is('cordova')) {
+      this.networkConnectionChangeSubscription = this.networkProvider.networkConnectionChanged.subscribe((newConnectionType) => {
+        this.isConnectedToWiFi = newConnectionType === 'wifi';
+      });
+    }
+  }
+
+  private unsubscribeFromNetworkConnectionChanges() {
+    if (this.platform.is('cordova')) {
+      this.networkConnectionChangeSubscription.unsubscribe();
     }
   }
 }

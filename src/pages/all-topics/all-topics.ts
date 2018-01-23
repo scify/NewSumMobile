@@ -4,11 +4,11 @@ import {TopicsProvider} from "../../providers/topics/topics";
 import {CategoriesProvider} from "../../providers/categories/categories";
 import {TextManipulationService} from "../../lib/text-manipulation";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
-import {SummaryPage} from "../summary/summary";
 import {SettingsPage} from "../settings/settings";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {TabsPage} from "../tabs/tabs";
 import {Subscription} from "rxjs";
+import {NetworkProvider} from "../../providers/network/network";
 
 
 @Component({
@@ -24,7 +24,7 @@ export class AllTopicsPage {
   public selectedCategoryDefaultImage: string;
   private fetchingNewTopicsSubscription: Subscription;
   private topicsUpdatedSubscription: Subscription;
-  private categoryUpdatedSubscription:Subscription;
+  private categoryUpdatedSubscription: Subscription;
 
   constructor(protected navCtrl: NavController,
               protected topicsProvider: TopicsProvider,
@@ -41,11 +41,10 @@ export class AllTopicsPage {
   }
 
   ionViewDidLeave() {
-      this.unsubscribeToChanges();
+    this.unsubscribeToChanges();
   }
 
   protected unsubscribeToChanges(){
-
     this.fetchingNewTopicsSubscription.unsubscribe();
     this.topicsUpdatedSubscription.unsubscribe();
     this.categoryUpdatedSubscription.unsubscribe();
@@ -79,8 +78,6 @@ export class AllTopicsPage {
       this.content.scrollToTop();
       this.ga.trackView(nameOfFilter + ' page for ' + this.selectedCategory);
     }, error => this.ga.trackException(error, false));//todo: add messages when an error occurs
-
-
   }
 
   public displaySettingsPage() {

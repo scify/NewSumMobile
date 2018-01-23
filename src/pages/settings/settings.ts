@@ -7,6 +7,7 @@ import {InAppBrowser} from "@ionic-native/in-app-browser";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {SourcesProvider} from "../../providers/sources/sources";
 import * as _ from 'lodash';
+import {ImageLoadOptionProvider} from "../../providers/image-load-option/image-load-option";
 
 /**
  * Generated class for the SettingsPage page.
@@ -25,9 +26,14 @@ export class SettingsPage {
   public favoriteCategory: string;
   public selectedCategoriesStringified: string;
   public selectedSourcesStringified: string;
+  public selectedImagesLoadOption: string;
   private static availableLanguages: any = {
     'EL': 'Ελληνικά',
     'EN': 'Αγγλικά'
+  };
+  private static availableImageLoadingOptions: any = {
+    'all': 'Φόρτωση εικόνων πάντοτε',
+    'wifi': 'Φόρτωση εικόνων μόνο στο WiFi'
   };
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -35,6 +41,7 @@ export class SettingsPage {
               private contentLanguagesProvider: ContentLanguagesProvider,
               private categoryProvider: CategoriesProvider,
               private sourcesProvider: SourcesProvider,
+              private imgLoadProvider: ImageLoadOptionProvider,
               private iab: InAppBrowser,
               protected ga: GoogleAnalytics) {
     this.updateDefaultValues();
@@ -164,6 +171,34 @@ export class SettingsPage {
     alert.present();
   }
 
+  public selectImagesOption() {
+    let alert = this.alertCtrl.create();
+    let selectedOption: string = this.imgLoadProvider.getSelectedImageLoadOption();
+    alert.setTitle('Επιλογή Φόρτωσης Εικόνων');
+
+    for (let prop in SettingsPage.availableImageLoadingOptions) {
+      if (SettingsPage.availableImageLoadingOptions.hasOwnProperty(prop)) {
+        alert.addInput({
+          type: 'radio',
+          label: SettingsPage.availableImageLoadingOptions[prop],
+          value: prop,
+          checked: (prop === selectedOption)
+        });
+      }
+    }
+
+    alert.addButton('ΑΚΥΡΩΣΗ');
+    alert.addButton({
+      text: 'ΕΠΙΛΟΓΗ',
+      handler: (imgOption: string) => {
+        this.imgLoadProvider.setSelectedImageLoadOption(imgOption);
+        this.updateDefaultValues();
+      }
+    });
+
+    alert.present();
+  }
+
   private updateDefaultValues() {
     this.selectedLangName = SettingsPage.availableLanguages[
       this.contentLanguagesProvider.getSelectedContentLanguage()
@@ -175,5 +210,8 @@ export class SettingsPage {
     let allAvailableSources = this.sourcesProvider.getAllAvailableSources();
     this.selectedSourcesStringified = ((selectedSources.length === allAvailableSources.length) ?
       'Όλες' : selectedSources.length) + ' επιλεγμένες';
+    this.selectedImagesLoadOption = SettingsPage.availableImageLoadingOptions[
+      this.imgLoadProvider.getSelectedImageLoadOption()
+    ];
   }
 }
