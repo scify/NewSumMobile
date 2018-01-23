@@ -14,7 +14,6 @@ export class ImageLoadOptionProvider {
   constructor(private appStorage: Storage) {
     this.getSelectedImageLoadOptionFromStorage().then((imageLoadOption) => {
       this.selectedImageLoadOption = imageLoadOption || 'all';
-      console.error('inside provider', this.selectedImageLoadOption);
     });
   }
 
