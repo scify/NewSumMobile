@@ -26,6 +26,7 @@ import {ScreenOrientation} from "@ionic-native/screen-orientation";
 import {ComponentsModule} from "../components/components.module";
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { SettingsProvider } from '../providers/settings/settings';
+import { LoaderProvider } from '../providers/loader/loader';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { SettingsProvider } from '../providers/settings/settings';
     ServiceClientProvider,
     TopicsProvider,
     ScreenOrientation,
-    SettingsProvider
+    SettingsProvider,
+    LoaderProvider
   ]
 })
 export class AppModule {}
