@@ -6,4 +6,4 @@ export class ApplicationSettings {
                favoriteCategory:string) {}
 }
 
-]
+
