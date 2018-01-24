@@ -16,35 +16,35 @@
 <ion-content>
   <ion-list>
     <ion-list-header>
-      ΡΥΘΜΙΣΕΙΣ
+      {{"SETTINGS" | translate}}
     </ion-list-header>
     <button ion-item (click)="selectLanguage()">
-      Επιλεγμένη Γλώσσα
+      {{"Selected Language" | translate}}
       <p class="selected-value">{{selectedLangName}}</p>
     </button>
     <button ion-item (click)="selectFavoriteCategory()">
-      Αγαπημένη Κατηγορία
+      {{"Favorite Category" | translate}}
       <p class="selected-value">{{favoriteCategory}}</p>
     </button>
     <button ion-item (click)="selectCategories()">
-      Προτιμώμενες Κατηγορίες
+      {{"Preferred Categories" | translate}}
       <p class="selected-value">{{selectedCategoriesStringified}}</p>
     </button>
     <button ion-item (click)="selectSources()">
-      Προτιμώμενες Πηγές
+      {{"Preferred Sources" | translate}}
       <p class="selected-value">{{selectedSourcesStringified}}</p>
     </button>
     <button ion-item (click)="selectImagesOption()">
-      Φόρτωση Εικόνων
+      {{"Images Load" | translate}}
       <p class="selected-value">{{selectedImagesLoadOption}}</p>
     </button>
   </ion-list>
   <ion-list>
     <ion-list-header>
-      ΠΛΗΡΟΦΟΡΙΕΣ
+      {{"INFORMATION" | translate}}
     </ion-list-header>
     <button ion-item (click)="goToAbout()">
-      Σχετικά
+      {{"About us" | translate}}
     </button>
     <button ion-item (click)="goToPrivacyPolicy()">
       Privacy policy

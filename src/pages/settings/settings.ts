@@ -8,7 +8,7 @@ import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {SourcesProvider} from "../../providers/sources/sources";
 import * as _ from 'lodash';
 import {ImageLoadOptionProvider} from "../../providers/image-load-option/image-load-option";
-import {TranslationsProvider} from "../../providers/translations/translations";
+import {TranslateService} from "@ngx-translate/core";
 
 /**
  * Generated class for the SettingsPage page.
@@ -30,28 +30,33 @@ export class SettingsPage {
   public selectedImagesLoadOption: string;
   private static availableLanguages: any = {
     'EL': 'Ελληνικά',
-    'EN': 'Αγγλικά'
+    'EN': 'English'
   };
-  private static availableImageLoadingOptions: any = {
-    'all': 'Φόρτωση εικόνων πάντοτε',
-    'wifi': 'Φόρτωση εικόνων μόνο στο WiFi'
-  };
+  private availableImageLoadingOptions: any = {};
+  private selectCapsText: string;
+  private cancelCapsText: string;
+  private selectText: string;
+  private languageText: string;
+  private favoriteCategoryText: string;
+  private categoriesText: string;
+  private sourcesText: string;
+  private imagesLoadText: string;
+  private allText: string;
+  private selectedText: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private alertCtrl: AlertController,
-              private translationsProvider: TranslationsProvider,
+              private translate: TranslateService,
               private contentLanguagesProvider: ContentLanguagesProvider,
               private categoryProvider: CategoriesProvider,
               private sourcesProvider: SourcesProvider,
               private imgLoadProvider: ImageLoadOptionProvider,
               private iab: InAppBrowser,
               protected ga: GoogleAnalytics) {
+    this.fetchTranslations(this.translate.getDefaultLang());
     this.updateDefaultValues();
   }
 
-  ionViewDidLoad() {
-
-  }
   goToAbout(){
     this.navCtrl.push(AboutPage)
   }
@@ -64,7 +69,7 @@ export class SettingsPage {
   public selectLanguage() {
     let alert = this.alertCtrl.create();
     let selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
-    alert.setTitle('Επιλογή Γλώσσας');
+    alert.setTitle(this.selectText + ' ' + this.languageText);
 
     for (let prop in SettingsPage.availableLanguages) {
       if (SettingsPage.availableLanguages.hasOwnProperty(prop)) {
@@ -77,14 +82,14 @@ export class SettingsPage {
       }
     }
 
-    alert.addButton('ΑΚΥΡΩΣΗ');
+    alert.addButton(this.cancelCapsText);
     alert.addButton({
-      text: 'ΕΠΙΛΟΓΗ',
+      text: this.selectCapsText,
       handler: (lang: string) => {
         this.selectedLangName = SettingsPage.availableLanguages[lang];
         this.contentLanguagesProvider.setSelectedContentLanguage(lang);
-        this.translationsProvider.setLanguage(lang);
-        this.updateDefaultValues();
+        this.translate.setDefaultLang(lang.toLowerCase());
+        this.fetchTranslations(lang.toLowerCase());
       }
     });
 
@@ -95,7 +100,7 @@ export class SettingsPage {
     let alert = this.alertCtrl.create();
     let favoriteCategory = this.categoryProvider.getFavoriteCategory();
     let categories = this.categoryProvider.getSelectedCategories();
-    alert.setTitle('Επιλογή Αγαπημένης Κατηγορίας');
+    alert.setTitle(this.selectText + ' ' + this.favoriteCategoryText);
 
     for (let i = 0; i < categories.length; i++) {
       alert.addInput({
@@ -106,9 +111,9 @@ export class SettingsPage {
       });
     }
 
-    alert.addButton('ΑΚΥΡΩΣΗ');
+    alert.addButton(this.cancelCapsText);
     alert.addButton({
-      text: 'ΕΠΙΛΟΓΗ',
+      text: this.selectCapsText,
       handler: (category: string) => {
         this.favoriteCategory = category;
         this.categoryProvider.setFavoriteCategory(category);
@@ -122,7 +127,7 @@ export class SettingsPage {
     let alert = this.alertCtrl.create();
     let selectedCategories = this.categoryProvider.getSelectedCategories();
     let categories = this.categoryProvider.getAllAvailableCategories();
-    alert.setTitle('Επιλογή Κατηγοριών');
+    alert.setTitle(this.selectText + ' ' + this.categoriesText);
 
     for (let i = 0; i < categories.length; i++) {
       alert.addInput({
@@ -133,9 +138,9 @@ export class SettingsPage {
       });
     }
 
-    alert.addButton('ΑΚΥΡΩΣΗ');
+    alert.addButton(this.cancelCapsText);
     alert.addButton({
-      text: 'ΕΠΙΛΟΓΗ',
+      text: this.selectCapsText,
       handler: (selectedCategories: Array<string>) => {
         this.selectedCategoriesStringified = selectedCategories.join();
         this.categoryProvider.setSelectedCategories(selectedCategories);
@@ -150,7 +155,7 @@ export class SettingsPage {
     let alert = this.alertCtrl.create();
     let selectedSources = this.sourcesProvider.getSelectedSources();
     let sources = this.sourcesProvider.getAllAvailableSources();
-    alert.setTitle('Επιλογή Πηγών');
+    alert.setTitle(this.selectText + ' ' + this.sourcesText);
 
     for (let i = 0; i < sources.length; i++) {
       alert.addInput({
@@ -161,9 +166,9 @@ export class SettingsPage {
       });
     }
 
-    alert.addButton('ΑΚΥΡΩΣΗ');
+    alert.addButton(this.cancelCapsText);
     alert.addButton({
-      text: 'ΕΠΙΛΟΓΗ',
+      text: this.selectCapsText,
       handler: (selectedSources: Array<any>) => {
         this.selectedSourcesStringified = selectedSources.join();
         this.sourcesProvider.setSelectedSources(selectedSources);
@@ -177,22 +182,22 @@ export class SettingsPage {
   public selectImagesOption() {
     let alert = this.alertCtrl.create();
     let selectedOption: string = this.imgLoadProvider.getSelectedImageLoadOption();
-    alert.setTitle('Επιλογή Φόρτωσης Εικόνων');
+    alert.setTitle(this.selectText + ' ' + this.imagesLoadText);
 
-    for (let prop in SettingsPage.availableImageLoadingOptions) {
-      if (SettingsPage.availableImageLoadingOptions.hasOwnProperty(prop)) {
+    for (let prop in this.availableImageLoadingOptions) {
+      if (this.availableImageLoadingOptions.hasOwnProperty(prop)) {
         alert.addInput({
           type: 'radio',
-          label: SettingsPage.availableImageLoadingOptions[prop],
+          label: this.availableImageLoadingOptions[prop],
           value: prop,
           checked: (prop === selectedOption)
         });
       }
     }
 
-    alert.addButton('ΑΚΥΡΩΣΗ');
+    alert.addButton(this.cancelCapsText);
     alert.addButton({
-      text: 'ΕΠΙΛΟΓΗ',
+      text: this.selectCapsText,
       handler: (imgOption: string) => {
         this.imgLoadProvider.setSelectedImageLoadOption(imgOption);
         this.updateDefaultValues();
@@ -200,6 +205,24 @@ export class SettingsPage {
     });
 
     alert.present();
+  }
+
+  private fetchTranslations(lang: string) {
+    this.translate.reloadLang(lang).subscribe((translation) => {
+      this.availableImageLoadingOptions.all = translation["Always load images"];
+      this.availableImageLoadingOptions.wifi = translation["Load images only with WiFi"];
+      this.selectCapsText = translation["SELECT"];
+      this.cancelCapsText = translation["CANCEL"];
+      this.selectText = translation["Select"];
+      this.languageText = translation["Language"];
+      this.favoriteCategoryText = translation["Favorite Category2"];
+      this.categoriesText = translation["Categories"];
+      this.sourcesText = translation["Sources"];
+      this.imagesLoadText = translation["Images Load2"];
+      this.allText = translation["All"];
+      this.selectedText = translation["selected"];
+      this.updateDefaultValues();
+    });
   }
 
   private updateDefaultValues() {
@@ -212,8 +235,8 @@ export class SettingsPage {
     let selectedSources = this.sourcesProvider.getSelectedSources();
     let allAvailableSources = this.sourcesProvider.getAllAvailableSources();
     this.selectedSourcesStringified = ((selectedSources.length === allAvailableSources.length) ?
-      'Όλες' : selectedSources.length) + ' επιλεγμένες';
-    this.selectedImagesLoadOption = SettingsPage.availableImageLoadingOptions[
+      this.allText : selectedSources.length) + ' ' + this.selectedText;
+    this.selectedImagesLoadOption = this.availableImageLoadingOptions[
       this.imgLoadProvider.getSelectedImageLoadOption()
     ];
   }

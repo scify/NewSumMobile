@@ -30,7 +30,6 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { Network } from '@ionic-native/network';
 import { NetworkProvider } from '../providers/network/network';
 import { ImageLoadOptionProvider } from '../providers/image-load-option/image-load-option';
-import { TranslationsProvider } from '../providers/translations/translations';
 
 export function createTranslationLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -87,8 +86,7 @@ export function createTranslationLoader(http: HttpClient) {
     ScreenOrientation,
     Network,
     NetworkProvider,
-    ImageLoadOptionProvider,
-    TranslationsProvider
+    ImageLoadOptionProvider
   ]
 })
 export class AppModule {}

@@ -31,8 +31,8 @@ export class SearchResultsPage {
     // BEWARE: this is an asynchronous call to fetch the translations but the translations
     // should be fetched far before displaying those translations
     this.selectedCategoryForUppercase = translate.instant('result');
-    this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage('Search');
     this.forcedCategoryTitle = translate.instant('search');
+    this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage('Search');
     this.results = this.topicsProvider.getTopicsByKeyword(this.keyword);
   }
 }
