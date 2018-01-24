@@ -1,13 +1,14 @@
 import {Storage} from "@ionic/storage";
 import {Injectable} from '@angular/core';
 import {ApplicationSettings} from "../../models/applicationSettings";
-import {ServiceClientProvider} from "../service-client/service-client";
+import {ApiServiceProvider} from "../api-service/apiService";
+
 
 @Injectable()
-export class SettingsProvider {
+export class ApplicationSettingsProvider {
 
   constructor(private appStorage: Storage,
-              private serviceClient: ServiceClientProvider) {
+              private serviceClient: ApiServiceProvider) {
   }
 
 
@@ -54,7 +55,9 @@ export class SettingsProvider {
             sourcesFromStorage,
             categoriesFromStorage,
             favoriteCategoryFromStorage)
-            .then((language, sources, categories, favoriteCategory) => resolve(new ApplicationSettings(language, sources, categories, favoriteCategory)))
+            .then(([language, sources, categories, favoriteCategory]) => {
+              resolve(new ApplicationSettings(language, sources, categories, favoriteCategory));
+            });
         });
     });
   }
@@ -115,6 +118,14 @@ export class SettingsProvider {
         })
       }
     });
-    return Promise.all([languagePromise, categoriesPromise, sourcesPromise, favoriteCategoryPromise]);
+
+    return Promise.all([languagePromise, sourcesPromise, categoriesPromise, favoriteCategoryPromise]);
+  }
+
+  public getAllAvailableCategories(sources, language){
+    return this.serviceClient.getCategories(sources, language);
+  }
+  public getAllAvailableSources(language:string){
+    return this.serviceClient.getFeedSources(language);
   }
 }

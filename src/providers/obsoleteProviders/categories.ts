@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
-import {SourcesProvider} from "../sources/sources";
-import {ServiceClientProvider} from "../service-client/service-client";
-import {ContentLanguagesProvider} from "../content-languages/content-languages";
+import {SourcesProvider} from "./sources";
 import {Subject} from "rxjs/Subject";
 import {Storage} from "@ionic/storage";
 import {CategoryUpdatedInfo} from "../../models/categoryUpdatedInfo";
 import {SelectTopicEnum} from "../../models/selectTopicEnum";
+import {ApiServiceProvider} from "../api-service/apiService";
 
 @Injectable()
 export class CategoriesProvider {
@@ -17,16 +16,16 @@ export class CategoriesProvider {
   private selectedLang: string;
   private allAvailableCategories: Array<string> = [];
 
-  constructor(private serviceClient: ServiceClientProvider, private sourcesProvider: SourcesProvider,
-              private contentLanguagesProvider: ContentLanguagesProvider,
+  constructor(private serviceClient: ApiServiceProvider,
+              private sourcesProvider: SourcesProvider,
               private appStorage: Storage) {
     this.selectedCategoryUpdated = new Subject<any>();
     this.selectedCategoriesUpdated = new Subject<any>();
     //this.sourcesProvider.selectedSourcesUpdated.subscribe(this.sourcesUpdatedHandler.bind(this), error => console.error(error));
   }
 
-
-/*  private sourcesUpdatedHandler(newSources) {
+/*
+  private sourcesUpdatedHandler(newSources) {
     console.log("sources updated handler");
     //todo:
     // sources changed. Refresh
@@ -50,7 +49,7 @@ export class CategoriesProvider {
       this.selectedCategory = this.selectedCategories[0];
       this.selectedCategoryUpdated.next(new CategoryUpdatedInfo(this.selectedCategory, null));
     }
-  }*/
+  }
 
   public getAllAvailableCategories(): Promise<Array<string>> {
     return new Promise((resolve, reject) => {
@@ -156,7 +155,7 @@ export class CategoriesProvider {
   }
 
 
-  /* private
+   private
    initializeSelectedAndFavoriteCategories() {
    let promise1 = this.getSelectedCategoriesFromStorage().then((selectedCategories) => {
    if (selectedCategories) {
@@ -176,8 +175,8 @@ export class CategoriesProvider {
 
    return promise1;
    }
-   */
-  /*private refreshSelectedCategories() {
+
+  private refreshSelectedCategories() {
     let allAvailableCategories = this.getAllAvailableCategories();
     let currentlySelectedCategories = this.getSelectedCategories();
     this.selectedCategories = currentlySelectedCategories.filter(c => allAvailableCategories.indexOf(c) >= 0);

@@ -3,7 +3,7 @@ import {SOAPClient} from '../../lib/soapclient';
 import {APP_CONFIG} from "../../app/app-config"
 
 @Injectable()
-export class SoapClientProvider {
+export class SoapApiCaller{
 
   private soapClient: SOAPClient;
 

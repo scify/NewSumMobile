@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import {ContentLanguagesProvider} from "../content-languages/content-languages";
 import {Subject} from "rxjs/Subject";
-import {ServiceClientProvider} from "../service-client/service-client";
 import {Storage} from "@ionic/storage";
+import {ApiServiceProvider} from "../api-service/apiService";
 
 /*
   Generated class for the SourcesProvider provider.
@@ -17,8 +16,7 @@ export class SourcesProvider {
   private sources: Array<any> = [];
   private selectedSources: Array<any> = [];
 
-  constructor(private serviceClient: ServiceClientProvider,
-              private contentLanguagesProvider: ContentLanguagesProvider,
+  /*constructor(private serviceClient: ApiServiceProvider,
               private appStorage: Storage) {
     this.selectedSourcesUpdated = new Subject<any>();
     this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
@@ -40,7 +38,7 @@ export class SourcesProvider {
       });
     }
   }
-
+*/
   public getAllAvailableSources(): Array<any> {
     return this.sources.slice(0);
   }
@@ -54,7 +52,7 @@ export class SourcesProvider {
       ['ALL'] : this.selectedSources.map(s => s.sFeedLink);
   }
 
-  public setSelectedSources(selectedSources: Array<any>) {
+  /*public setSelectedSources(selectedSources: Array<any>) {
     this.selectedSources = selectedSources;
     this.selectedSourcesUpdated.next(this.getSelectedSources());
     this.appStorage.set('selected-sources', this.getSelectedSourcesUrls().join())
@@ -62,7 +60,7 @@ export class SourcesProvider {
 
   private getSelectedSourcesFromStorage(): Promise<any> {
     return this.appStorage.get('selected-sources');
-  }
+  }*/
 
   private formatSelectedSources(selectedSourcesUrls: Array<string>) {
     let allSourcesUrls = this.sources.map(source => source.sFeedLink);

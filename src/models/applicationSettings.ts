@@ -1,9 +1,9 @@
 export class ApplicationSettings {
 
-  constructor (language:string,
-               sources:Array<string>,
-               categories:Array<string>,
-               favoriteCategory:string) {}
+  constructor (public language:string,
+               public sources:Array<string>,
+               public categories:Array<string>,
+               public favoriteCategory:string) {}
 }
 
 
