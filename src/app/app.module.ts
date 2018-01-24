@@ -2,6 +2,8 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {IonicApp, IonicModule, IonicErrorHandler, Alert} from 'ionic-angular';
 import { MyApp } from './app.component';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AboutPage } from '../pages/about/about';
 import { AllTopicsPage } from '../pages/all-topics/all-topics';
@@ -15,7 +17,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { NotificationsProvider } from '../providers/notifications/notifications';
 import { SoapClientProvider } from '../providers/soap-client/soap-client';
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { ContentLanguagesProvider } from '../providers/content-languages/content-languages';
 import { IonicStorageModule } from '@ionic/storage';
 import { SourcesProvider } from '../providers/sources/sources';
@@ -28,6 +30,11 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { Network } from '@ionic-native/network';
 import { NetworkProvider } from '../providers/network/network';
 import { ImageLoadOptionProvider } from '../providers/image-load-option/image-load-option';
+import { TranslationsProvider } from '../providers/translations/translations';
+
+export function createTranslationLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -45,7 +52,14 @@ import { ImageLoadOptionProvider } from '../providers/image-load-option/image-lo
     IonicModule.forRoot(MyApp, {tabsPlacement: 'top'}),
     IonicStorageModule.forRoot(),
     HttpClientModule,
-    ComponentsModule
+    ComponentsModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslationLoader),
+        deps: [HttpClient]
+      }
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -73,7 +87,8 @@ import { ImageLoadOptionProvider } from '../providers/image-load-option/image-lo
     ScreenOrientation,
     Network,
     NetworkProvider,
-    ImageLoadOptionProvider
+    ImageLoadOptionProvider,
+    TranslationsProvider
   ]
 })
 export class AppModule {}

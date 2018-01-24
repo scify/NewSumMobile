@@ -10,6 +10,7 @@ import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {ScreenOrientation} from '@ionic-native/screen-orientation';
 import {SearchResultsPage} from "../pages/search-results/search-results";
 import {ImageLoadOptionProvider} from "../providers/image-load-option/image-load-option";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   templateUrl: 'app.html'
@@ -26,6 +27,7 @@ export class MyApp {
               private contentLanguagesProvider: ContentLanguagesProvider,
               private categoriesProvider: CategoriesProvider,
               private imgLoadProvider: ImageLoadOptionProvider,
+              public translate: TranslateService,
               private screenOrientation: ScreenOrientation,
               private ga: GoogleAnalytics,
               public notification: NotificationsProvider) {
@@ -42,10 +44,12 @@ export class MyApp {
     this.screenOrientation.lock('portrait').then(() => console.log('Screen orientation locked successfully'),
       error => console.error('An error occurred while trying to lock screen orientation', error)
     );
+    // initialize application language depending on content language
     this.contentLanguagesProvider.getSelectedContentLanguageFromStorage().then((selectedLang) => {
-      if (!!selectedLang)
-        this.rootPage = TabsPage; // TODO: set different view if lang is not set
-      // splashScreen.hide();
+      if (selectedLang)
+        this.translate.setDefaultLang(selectedLang.toLowerCase());
+      else
+        this.translate.setDefaultLang('el'); // TODO: set from mobile language
     });
     this.availableCategories = this.categoriesProvider.getSelectedCategories();
     this.categoriesProvider.selectedCategoriesUpdated.subscribe((newCategories) => {

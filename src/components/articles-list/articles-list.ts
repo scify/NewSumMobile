@@ -6,6 +6,7 @@ import {NetworkProvider} from "../../providers/network/network";
 import {Subscription} from "rxjs/Subscription";
 import { Platform } from 'ionic-angular';
 import {ImageLoadOptionProvider} from "../../providers/image-load-option/image-load-option";
+import {TranslateService} from "@ngx-translate/core";
 
 /**
  * Generated class for the ArticlesListComponent component.
@@ -33,6 +34,7 @@ export class ArticlesListComponent {
               protected topicsProvider: TopicsProvider,
               protected imgLoadProvider: ImageLoadOptionProvider,
               protected networkProvider: NetworkProvider,
+              protected translate: TranslateService,
               protected platform: Platform) {}
 
   public selectTopicAndDisplaySummary(topic: any) {

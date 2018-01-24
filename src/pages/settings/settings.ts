@@ -8,6 +8,7 @@ import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {SourcesProvider} from "../../providers/sources/sources";
 import * as _ from 'lodash';
 import {ImageLoadOptionProvider} from "../../providers/image-load-option/image-load-option";
+import {TranslationsProvider} from "../../providers/translations/translations";
 
 /**
  * Generated class for the SettingsPage page.
@@ -38,6 +39,7 @@ export class SettingsPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private alertCtrl: AlertController,
+              private translationsProvider: TranslationsProvider,
               private contentLanguagesProvider: ContentLanguagesProvider,
               private categoryProvider: CategoriesProvider,
               private sourcesProvider: SourcesProvider,
@@ -81,6 +83,7 @@ export class SettingsPage {
       handler: (lang: string) => {
         this.selectedLangName = SettingsPage.availableLanguages[lang];
         this.contentLanguagesProvider.setSelectedContentLanguage(lang);
+        this.translationsProvider.setLanguage(lang);
         this.updateDefaultValues();
       }
     });

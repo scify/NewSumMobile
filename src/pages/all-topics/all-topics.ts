@@ -41,8 +41,10 @@ export class AllTopicsPage {
   }
 
   displayLoading() {
-    this.loadingIndicator = this.loadingCtrl.create();
-    this.loadingIndicator.present();
+    if (!this.loadingIndicator) {
+      this.loadingIndicator = this.loadingCtrl.create();
+      this.loadingIndicator.present();
+    }
   }
 
   ionViewDidLeave() {
