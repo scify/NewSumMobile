@@ -33,6 +33,7 @@ export class SourcesProvider {
     if (this.selectedLang) {
       this.sources = this.serviceClient.getFeedSources(this.selectedLang);
       this.getSelectedSourcesFromStorage().then((selectedSourcesUrls) => {
+
         this.formatSelectedSources(selectedSourcesUrls ? selectedSourcesUrls.split(',') : []);
         this.selectedSources = (this.selectedSources.length > 0) ? this.selectedSources : this.getAllAvailableSources();
         this.selectedSourcesUpdated.next(this.getSelectedSources());

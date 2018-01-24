@@ -74,14 +74,16 @@ export class AllTopicsPage {
         }
       }
     }, error2 => console.log(error2));
-    this.categoryUpdatedSubscription = this.categoriesProvider.selectedCategoryUpdated.subscribe((selectedCategory) => {
-      this.selectedCategory = selectedCategory;
-      this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
-      this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
-      // when the category is changed, scroll to top,
-      // otherwise the scroll will remain on the place it was before the category change
-      this.content.scrollToTop();
-      this.ga.trackView(nameOfFilter + ' page for ' + this.selectedCategory);
+    this.categoryUpdatedSubscription = this.categoriesProvider.selectedCategoryUpdated.subscribe(categInfo => {
+     if (categInfo){
+       this.selectedCategory = categInfo.category;
+       this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
+       this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
+       // when the category is changed, scroll to top,
+       // otherwise the scroll will remain on the place it was before the category change
+       this.content.scrollToTop();
+       this.ga.trackView(nameOfFilter + ' page for ' + this.selectedCategory);
+     }
     }, error => this.ga.trackException(error, false));//todo: add messages when an error occurs
   }
 

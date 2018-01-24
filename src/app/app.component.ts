@@ -40,15 +40,14 @@ export class MyApp {
     this.screenOrientation.lock('portrait').then(() => console.log('Screen orientation locked successfully'),
       error => console.error('An error occurred while trying to lock screen orientation', error)
     );
+    //todo: display loader.
+    //todo:
     this.contentLanguagesProvider.getSelectedContentLanguageFromStorage().then((selectedLang) => {
       if (!!selectedLang)
         this.rootPage = TabsPage; // TODO: set different view if lang is not set
       // splashScreen.hide();
     });
-    this.availableCategories = this.categoriesProvider.getSelectedCategories();
-    this.categoriesProvider.selectedCategoriesUpdated.subscribe((newCategories) => {
-      this.availableCategories = newCategories;
-    });
+
     this.initGoogleAnalytics();
     this.notification.startCheckingForNotifications();
   }

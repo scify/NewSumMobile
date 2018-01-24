@@ -5,6 +5,8 @@ import {SourcesProvider} from "../sources/sources";
 import {CategoriesProvider} from "../categories/categories";
 import {Subject} from "rxjs/Subject";
 import {BehaviorSubject} from "rxjs";
+import {SelectTopicEnum} from "../../models/selectTopicEnum";
+import {CategoryUpdatedInfo} from "../../models/categoryUpdatedInfo";
 
 // TODO: move to configuration file
 const NUMBER_OF_HOT_TOPICS_TO_DISPLAY: number = 10;
@@ -13,7 +15,7 @@ const NUMBER_OF_HOT_TOPICS_TO_DISPLAY: number = 10;
 export class TopicsProvider {
   public topicsUpdated: Subject<any>;
   public selectedTopicUpdated: BehaviorSubject<any>;
-    private selectedCategory: string;
+  private selectedCategory: string;
   private selectedSourcesUrls: Array<string>;
   private selectedLang: string;
   private topics: Array<any> = [];
@@ -32,16 +34,20 @@ export class TopicsProvider {
 
     this.selectedTopicUpdated = new BehaviorSubject<any>(null);
     this.selectedCategory = this.categoriesProvider.getSelectedCategory();
+    console.log("topics provider initialized with category:"+this.selectedCategory);
     this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
     this.categoriesProvider.selectedCategoryUpdated.subscribe(this.selectedCategoryUpdatedHandler.bind(this), error => console.error(error));
 
     if (this.selectedCategory) {
+      console.log("constructor of topics.ts, calling topics fetching");
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
-      this.getTopicsFromServiceProvider();
+      this.getTopicsFromServiceProvider(null);
     }
   }
 
-  private getTopicsFromServiceProvider() {
+  private getTopicsFromServiceProvider(topicToSelect?: SelectTopicEnum) {
+    console.log("get topics from service provider, category" + this.selectedCategory);
+
     this.serviceClient
       .getTopics(this.selectedSourcesUrls,
         this.selectedCategory,
@@ -50,18 +56,24 @@ export class TopicsProvider {
         this.topics = topics;
         this.formatDateAndTimeForTopics(this.topics);
         //get topics by taking into account the filters
-        this.topicsUpdated.next(this.getTopics());
+        let topicsToDisplay = this.getTopics();
+        this.topicsUpdated.next(topicsToDisplay);
+        if (topicToSelect && topicsToDisplay.length > 0)
+          this.selectedTopicUpdated.next(topicToSelect == SelectTopicEnum.FIRST ?
+            topicsToDisplay[0] :
+            topicsToDisplay[topicsToDisplay.length - 1]);
       });
   }
 
-  private selectedCategoryUpdatedHandler(newCategory) {
-    if (newCategory) {
+  private selectedCategoryUpdatedHandler(categInfo: CategoryUpdatedInfo) {
+    if (categInfo) {
+      console.log("selected category update handler" + categInfo.category);
       this.topics = [];
       this.topicsUpdated.next(null); //trigger event, fetching new category is starting!
       this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
-      this.selectedCategory = newCategory;
+      this.selectedCategory = categInfo.category;
       this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
-      this.getTopicsFromServiceProvider();
+      this.getTopicsFromServiceProvider(categInfo.topicToSelect);
     }
   }
 
@@ -95,7 +107,7 @@ export class TopicsProvider {
       .getSummary(topic.ID, this.selectedSourcesUrls, this.selectedLang)
       .then((summary) => {
         this.selectedTopic = topic;
-        this.selectedTopicUpdated.next({category:this.selectedCategory, topic:topic,summary:summary});
+        this.selectedTopicUpdated.next({category: this.selectedCategory, topic: topic, summary: summary});
       })
 
   }
@@ -103,29 +115,25 @@ export class TopicsProvider {
   public loadNextTopic(isSearch: boolean) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
     let index = existingTopics.indexOf(this.selectedTopic);
-    if (index == existingTopics.length - 1) { //we have reached the end
-      this.categoriesProvider.loadNextCategory();
+    if (index == existingTopics.length - 1) //we have reached the end,select next category
+    {
+      if (!isSearch) //for search results there is no next/previous category to navigate
+        this.categoriesProvider.loadNextCategory(SelectTopicEnum.FIRST);
     }
-    else {
-      let topic = existingTopics[index + 1];
-      this.setSelectedTopic(topic);
-      return true;
-    }
+    else
+      this.setSelectedTopic(existingTopics[index + 1]);
   }
 
   public loadPreviousTopic(isSearch: boolean) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
     let index = existingTopics.indexOf(this.selectedTopic);
-
-    if (index == 0) { //we have reached the start,
-      this.categoriesProvider.loadPreviousCategory();
-      return false;
+    if (index == 0) //we have reached the start,
+    {
+      if (!isSearch)
+        this.categoriesProvider.loadPreviousCategory(SelectTopicEnum.LAST);
     }
-    else {
-      let topic = existingTopics[index - 1];
-      this.setSelectedTopic(topic);
-      return true;
-    }
+    else
+      this.setSelectedTopic(existingTopics[index - 1]);
   }
 
   private filterHotTopics(): Array<any> {
