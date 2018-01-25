@@ -20,7 +20,7 @@ import {TranslateService} from "@ngx-translate/core";
 })
 export class ArticlesListComponent {
 
-  @Input('articles') articles: Array<any>;
+  @Input('articles') articles: Array<any> = [];
   @Input('selectedCategoryDefaultImage') selectedCategoryDefaultImage: string;
   @Input('selectedCategoryForUppercase') selectedCategoryForUppercase: string;
   @Input('isSearch') isSearch: boolean = false;

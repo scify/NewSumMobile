@@ -65,13 +65,7 @@ export class AllTopicsPage {
       else{
         if (this.loadingIndicator)
           this.loadingIndicator.dismiss();
-
-        if (newTopics && newTopics.length > 0)
-          this.topics = newTopics;
-        else {
-          //display no topics found message
-          this.topics = [];
-        }
+        this.topics = newTopics;
       }
     }, error2 => console.log(error2));
     this.categoryUpdatedSubscription = this.categoriesProvider.selectedCategoryUpdated.subscribe((selectedCategory) => {
