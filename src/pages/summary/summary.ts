@@ -1,21 +1,14 @@
 import {Component} from '@angular/core';
-import {Loading, LoadingController, NavController, NavParams, Platform, ViewController} from 'ionic-angular';
+import {NavController, NavParams, Platform, ViewController} from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
-import {CategoriesProvider} from "../../providers/categories/categories";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {Storage} from "@ionic/storage";
 import {Subscription} from "rxjs";
 import {ImageLoadOptionProvider} from "../../providers/image-load-option/image-load-option";
 import {NetworkProvider} from "../../providers/network/network";
+import {LoaderProvider} from "../../providers/loader/loader";
 
-
-/**
- * Generated class for the SummaryPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @Component({
   selector: 'page-summary',
@@ -33,26 +26,20 @@ export class SummaryPage {
   public selectedImgLoadOption: string;
   public isConnectedToWiFi: boolean = false;
 
-  public instanceCreationDate: Date;
+  public topicUpdatedSubscription: Subscription;
 
-  public fetchingSummarySubscription :Subscription;
-  public topicUpdatedSubscription :Subscription;
-  private loadingIndicator: Loading = null;
 
-  private networkConnectionChangeSubscription: Subscription;
-
-  constructor(private navCtrl: NavController, private navParams: NavParams,
+private networkConnectionChangeSubscription: Subscription;  constructor(private  navParams: NavParams,
               private topicsProvider: TopicsProvider,
-              private categoriesProvider: CategoriesProvider,
+              private ga: GoogleAnalytics,
               private imgLoadProvider: ImageLoadOptionProvider,
               private networkProvider: NetworkProvider,
               private platform: Platform,
-              private ga: GoogleAnalytics,
               private storage: Storage,
               private viewCtrl: ViewController,
-              private loadingCtrl: LoadingController) {
-    this.instanceCreationDate = new Date();
+              private loader: LoaderProvider) {
   }
+
   ionViewDidLoad() {
     this.initPage();
     this.subscribeToChanges();
@@ -65,32 +52,27 @@ export class SummaryPage {
     this.unsubscribeToChanges();
     this.unsubscribeFromNetworkConnectionChanges();
   }
-  displayLoading() {
-    this.loadingIndicator = this.loadingCtrl.create();
-    this.loadingIndicator.present();
-  }
+
 
   subscribeToChanges() {
-   this.topicUpdatedSubscription= this.topicsProvider.selectedTopicUpdated.subscribe((data) => {
-     if (data==null){
-       this.displayLoading();
-       this.selectedSummary = null;
-       this.selectedTopic = null;
-     }
-     else
-     {
-       if (this.loadingIndicator)
-         this.loadingIndicator.dismiss();
-       this.selectedCategory = data.category;
-       this.selectedSummary = data.summary;
-       this.selectedTopic = data.topic;
-       this.summaryIsConstructedByMoreThanOneSources = this.selectedSummary.Sources.length > 1;
-       this.ga.trackView("Summary: " + this.selectedTopic.Title);
-     }
-   });
+    this.topicUpdatedSubscription = this.topicsProvider.selectedTopicUpdated.subscribe((data) => {
+      this.loader.hideLoader()
+      if (data == null) {
+        this.selectedSummary = null;
+        this.selectedTopic = null;
+      }
+      else {
+        this.selectedCategory = data.category;
+        this.selectedSummary = data.summary;
+        this.selectedTopic = data.topic;
+        this.summaryIsConstructedByMoreThanOneSources = this.selectedSummary.Sources.length > 1;
+        this.ga.trackView("Summary: " + this.selectedTopic.Title);
+      }
+    });
   }
+
   unsubscribeToChanges() {
-   this.topicUpdatedSubscription.unsubscribe();
+    this.topicUpdatedSubscription.unsubscribe();
   }
 
   initPage() {
@@ -103,7 +85,7 @@ export class SummaryPage {
 
     this.isSearch = this.navParams.get('isSearch');
     if (!this.isSearch) {
-      this.selectedCategory = this.categoriesProvider.getSelectedCategory();
+      this.selectedCategory = this.topicsProvider.getCategory();
       this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
     } else {
       this.selectedCategory = this.navParams.get('forcedCategoryTitle');
@@ -116,10 +98,11 @@ export class SummaryPage {
   }
 
   swipeActivity(event) {
+    this.loader.showLoader();
     if (event.direction == 2)
-      this.topicsProvider.loadNextTopic(this.isSearch);
-     else if (event.direction == 4)
-      this.topicsProvider.loadPreviousTopic(this.isSearch);
+      this.topicsProvider.loadNextTopic(this.selectedCategory,this.selectedTopic, this.isSearch);
+    else if (event.direction == 4)
+      this.topicsProvider.loadPreviousTopic(this.selectedCategory, this.selectedTopic, this.isSearch);
   }
 
   private subscribeToNetworkConnectionChanges() {

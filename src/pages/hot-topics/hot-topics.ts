@@ -1,9 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
-import {Content, NavController} from 'ionic-angular';
+import {Content} from 'ionic-angular';
 import {AllTopicsPage} from "../all-topics/all-topics";
-import {TopicsProvider} from "../../providers/topics/topics";
-import {CategoriesProvider} from "../../providers/categories/categories";
-import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 /**
  * Generated class for the HotTopicsPage page.
@@ -22,9 +19,8 @@ export class HotTopicsPage extends AllTopicsPage {
   ionViewWillEnter(){ // 	Runs when the page is about to enter and become the active page.
     //set the state of the topic provider. We are viewing only hot topics
     this.topicsProvider.setTopicFilter(true);
-    this.topics = this.topicsProvider.getTopics();
+    this.initPageData();
     this.subscribeToChanges("Popular news");
-
   }
 
   ionViewDidLeave() {

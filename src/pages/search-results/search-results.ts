@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import { TopicsProvider } from '../../providers/topics/topics';
+import {Component} from '@angular/core';
+import {NavController, NavParams} from 'ionic-angular';
+import {TopicsProvider} from '../../providers/topics/topics';
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
 import {TranslateService} from "@ngx-translate/core";
@@ -18,7 +18,7 @@ import {TranslateService} from "@ngx-translate/core";
 })
 export class SearchResultsPage {
   public keyword: string;
-  public results: Array<any>;
+  public results: Array<any> = [];
   public selectedCategoryDefaultImage: string;
   public selectedCategoryForUppercase: string;
   public forcedCategoryTitle: string;
@@ -33,6 +33,11 @@ export class SearchResultsPage {
     this.selectedCategoryForUppercase = translate.instant('result');
     this.forcedCategoryTitle = translate.instant('search');
     this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage('Search');
-    this.results = this.topicsProvider.getTopicsByKeyword(this.keyword);
+    //display loading
+    this.topicsProvider.getTopicsByKeyword(this.keyword).then((topics:Array<any>) => {
+        this.results = topics;
+        //hide loading
+      }
+    );
   }
 }

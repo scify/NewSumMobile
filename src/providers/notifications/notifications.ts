@@ -1,9 +1,10 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AlertController} from "ionic-angular";
-import {ContentLanguagesProvider} from "../content-languages/content-languages";
 import {APP_CONFIG} from "../../app/app-config";
 import {Storage} from "@ionic/storage";
+import {ApplicationSettingsProvider} from "../applicationSettings/applicationSettings";
+import {ApplicationSettings} from "../../models/applicationSettings";
 
 
 @Injectable()
@@ -11,12 +12,12 @@ export class NotificationsProvider {
 
   constructor(private http: HttpClient,
               private appStorage: Storage,
-              private contentLanguagesProvider: ContentLanguagesProvider,
-              private alert: AlertController) {
+              private alert: AlertController,
+              private applicationSettingsProvider: ApplicationSettingsProvider) {
   }
 
   startCheckingForNotifications() {
-    window.setInterval(this.displayAnyNewNotifications.bind(this), 5*60*1000); //check every 5 minutes
+    window.setInterval(this.displayAnyNewNotifications.bind(this), 5 * 60 * 1000); //check every 5 minutes
   }
 
 
@@ -47,17 +48,18 @@ export class NotificationsProvider {
   }
 
   displayAnyNewNotifications(): void {
-    let language = this.contentLanguagesProvider.getSelectedContentLanguage();
-    if (language) {
-      let url = APP_CONFIG.notificationsURL + (language == "EL" ? "GR.html" : "EN.html");
-      this.http
-        .head(url, {observe: 'response', "responseType": "text"})
-        .subscribe(headResponse => {
-          let announcementDate = Date.parse(headResponse.headers.get("Last-modified"));
-          //if it was modified the past 1 month, it is elligible to be displayed
-          if (this.announcementIsLessThan30DaysOld(announcementDate))
-            this.checkIfItsAlreadyDisplayedAndShow(language, announcementDate, url);
-        });
-    }
+    this.applicationSettingsProvider.getApplicationSettings()
+      .then((applicationSettings: ApplicationSettings) => {
+          let url = APP_CONFIG.notificationsURL + (applicationSettings.language == "EL" ? "GR.html" : "EN.html");
+          this.http
+            .head(url, {observe: 'response', "responseType": "text"})
+            .subscribe(headResponse => {
+              let announcementDate = Date.parse(headResponse.headers.get("Last-modified"));
+              //if it was modified the past 1 month, it is elligible to be displayed
+              if (this.announcementIsLessThan30DaysOld(announcementDate))
+                this.checkIfItsAlreadyDisplayedAndShow(applicationSettings.language, announcementDate, url);
+            });
+        }
+      );
   }
 }

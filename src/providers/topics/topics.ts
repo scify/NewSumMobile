@@ -1,68 +1,57 @@
 import {Injectable} from '@angular/core';
-import {ServiceClientProvider} from "../service-client/service-client";
-import {ContentLanguagesProvider} from "../content-languages/content-languages";
-import {SourcesProvider} from "../sources/sources";
-import {CategoriesProvider} from "../categories/categories";
 import {Subject} from "rxjs/Subject";
 import {BehaviorSubject} from "rxjs";
+import {ApplicationSettingsProvider} from "../applicationSettings/applicationSettings";
+import {TopicsUpdatedInfo} from "../../models/TopicsUpdatedInfo";
+import {ApiServiceProvider} from "../api-service/apiService";
 
 // TODO: move to configuration file
 const NUMBER_OF_HOT_TOPICS_TO_DISPLAY: number = 10;
 
 @Injectable()
 export class TopicsProvider {
+
+  private topics: Array<any> = [];
+  private category: string;
+  private topicsByKeyword: Array<any>;
+  private getOnlyHotTopics: boolean;
+
   public topicsUpdated: Subject<any>;
   public selectedTopicUpdated: BehaviorSubject<any>;
-    private selectedCategory: string;
-  private selectedSourcesUrls: Array<string>;
-  private selectedLang: string;
-  private topics: Array<any> = [];
-  private topicsByKeyword: Array<any>;
-  private selectedTopic: string;
-  public getOnlyHotTopics: boolean;
-  public dateOfCreation: Date = new Date();
 
-  constructor(private serviceClient: ServiceClientProvider,
-              private sourcesProvider: SourcesProvider,
-              private contentLanguagesProvider: ContentLanguagesProvider,
-              private categoriesProvider: CategoriesProvider) {
-
+  constructor(private serviceClient: ApiServiceProvider,
+              private applicationSettings: ApplicationSettingsProvider) {
     this.topicsUpdated = new Subject<any>();
     this.getOnlyHotTopics = true; //todo :load from local storage
-
     this.selectedTopicUpdated = new BehaviorSubject<any>(null);
-    this.selectedCategory = this.categoriesProvider.getSelectedCategory();
-    this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
-    this.categoriesProvider.selectedCategoryUpdated.subscribe(this.selectedCategoryUpdatedHandler.bind(this), error => console.error(error));
-
-    if (this.selectedCategory) {
-      this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
-      this.getTopicsFromServiceProvider();
-    }
   }
 
-  private getTopicsFromServiceProvider() {
-    this.serviceClient
-      .getTopics(this.selectedSourcesUrls,
-        this.selectedCategory,
-        this.selectedLang)
-      .then((topics) => {
-        this.topics = topics;
-        this.formatDateAndTimeForTopics(this.topics);
-        //get topics by taking into account the filters
-        this.topicsUpdated.next(this.getTopics());
-      });
-  }
-
-  private selectedCategoryUpdatedHandler(newCategory) {
-    if (newCategory) {
-      this.topics = [];
-      this.topicsUpdated.next(null); //trigger event, fetching new category is starting!
-      this.selectedLang = this.contentLanguagesProvider.getSelectedContentLanguage();
-      this.selectedCategory = newCategory;
-      this.selectedSourcesUrls = this.sourcesProvider.getSelectedSourcesUrls();
-      this.getTopicsFromServiceProvider();
-    }
+  public refreshTopics(category: string): Promise<any> {
+    this.topics = [];
+    let refreshPromise = new Promise((resolve) => {
+      this.applicationSettings.getApplicationSettings()
+        .then((applicationSettings) => {
+          this.serviceClient
+            .getTopics(applicationSettings.sources,
+              category,
+              applicationSettings.language)
+            .then((topics) => {
+              this.topics = topics;
+              this.category = category;
+              this.formatDateAndTimeForTopics(this.topics);
+              //get topics by taking into account the filters
+              let topicsToDisplay = this.getTopics();
+              let topicsUpdatedInfo = new TopicsUpdatedInfo(category, topicsToDisplay);
+              this.topicsUpdated.next(topicsUpdatedInfo);
+              resolve(topicsUpdatedInfo);
+              /*if (topicToSelect && topicsToDisplay.length > 0)
+               this.selectedTopicUpdated.next(topicToSelect == SelectTopicEnum.FIRST ?
+               topicsToDisplay[0] :
+               topicsToDisplay[topicsToDisplay.length - 1]);*/
+            });
+        });
+    });
+    return refreshPromise;
   }
 
   public getTopics(): Array<any> {
@@ -73,14 +62,19 @@ export class TopicsProvider {
     }
   }
 
-  public getTopicsByKeyword(keyword: string): Array<any> {
-    this.topicsByKeyword = this.serviceClient.getTopicsByKeyword(keyword, this.selectedSourcesUrls, this.selectedLang);
-    this.formatDateAndTimeForTopics(this.topicsByKeyword);
-    return this.topicsByKeyword;
+  public getCategory(): string {
+    return this.category;
   }
 
-  public getSelectedTopic(): any {
-    return this.selectedTopic;
+  public getTopicsByKeyword(keyword: string) {
+    return new Promise((resolve) => {
+      this.applicationSettings.getApplicationSettings()
+        .then((applicationSettings) => {
+          this.topicsByKeyword = this.serviceClient.getTopicsByKeyword(keyword, applicationSettings.sources, applicationSettings.language);
+          this.formatDateAndTimeForTopics(this.topicsByKeyword);
+          resolve(this.topicsByKeyword);
+        });
+    });
   }
 
   public setTopicFilter(getOnlyHotTopics: boolean) {
@@ -88,44 +82,43 @@ export class TopicsProvider {
     this.getOnlyHotTopics = getOnlyHotTopics;
   }
 
-  public setSelectedTopic(topic: any) {
-    this.selectedTopic = null;
-    this.selectedTopicUpdated.next(null);
-    this.serviceClient
-      .getSummary(topic.ID, this.selectedSourcesUrls, this.selectedLang)
-      .then((summary) => {
-        this.selectedTopic = topic;
-        this.selectedTopicUpdated.next({category:this.selectedCategory, topic:topic,summary:summary});
-      })
+  public setSelectedTopic(category: any, topic: any) {
+
+    this.applicationSettings.getApplicationSettings()
+      .then((applicationSettings) => {
+        this.selectedTopicUpdated.next(null);
+        this.serviceClient
+          .getSummary(topic.ID, applicationSettings.sources, applicationSettings.language)
+          .then((summary) => {
+            this.selectedTopicUpdated.next({category: category, topic: topic, summary: summary});
+          })
+      });
+
 
   }
 
-  public loadNextTopic(isSearch: boolean) {
+  public loadNextTopic(category: any, currentTopic: any, isSearch: boolean) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
-    let index = existingTopics.indexOf(this.selectedTopic);
-    if (index == existingTopics.length - 1) { //we have reached the end
-      this.categoriesProvider.loadNextCategory();
+    let index = existingTopics.indexOf(currentTopic);
+    if (index == existingTopics.length - 1) //we have reached the end,select next category
+    {
+      //  if (!isSearch) //for search results there is no next/previous category to navigate
+      //this.categoriesProvider.loadNextCategory(SelectTopicEnum.FIRST);
     }
-    else {
-      let topic = existingTopics[index + 1];
-      this.setSelectedTopic(topic);
-      return true;
-    }
+    else
+      this.setSelectedTopic(category, existingTopics[index + 1]);
   }
 
-  public loadPreviousTopic(isSearch: boolean) {
+  public loadPreviousTopic(category: any, currentTopic: any, isSearch: boolean) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
-    let index = existingTopics.indexOf(this.selectedTopic);
-
-    if (index == 0) { //we have reached the start,
-      this.categoriesProvider.loadPreviousCategory();
-      return false;
+    let index = existingTopics.indexOf(currentTopic);
+    if (index == 0) //we have reached the start,
+    {
+      // if (!isSearch)
+      //this.categoriesProvider.loadPreviousCategory(SelectTopicEnum.LAST);
     }
-    else {
-      let topic = existingTopics[index - 1];
-      this.setSelectedTopic(topic);
-      return true;
-    }
+    else
+      this.setSelectedTopic(category, existingTopics[index - 1]);
   }
 
   private filterHotTopics(): Array<any> {

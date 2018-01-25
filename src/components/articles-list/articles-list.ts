@@ -1,7 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {SummaryPage} from "../../pages/summary/summary";
-import {NavController, NavParams} from "ionic-angular";
+import {NavController} from "ionic-angular";
 import {TopicsProvider} from "../../providers/topics/topics";
+import {LoaderProvider} from "../../providers/loader/loader";
 import {NetworkProvider} from "../../providers/network/network";
 import {Subscription} from "rxjs/Subscription";
 import { Platform } from 'ionic-angular';
@@ -20,7 +21,8 @@ import {TranslateService} from "@ngx-translate/core";
 })
 export class ArticlesListComponent {
 
-  @Input('articles') articles: Array<any> = [];
+  @Input('articles') articles: Array<any>;
+  @Input('category') category: any;
   @Input('selectedCategoryDefaultImage') selectedCategoryDefaultImage: string;
   @Input('selectedCategoryForUppercase') selectedCategoryForUppercase: string;
   @Input('isSearch') isSearch: boolean = false;
@@ -35,11 +37,14 @@ export class ArticlesListComponent {
               protected imgLoadProvider: ImageLoadOptionProvider,
               protected networkProvider: NetworkProvider,
               protected translate: TranslateService,
-              protected platform: Platform) {}
+              protected platform: Platform,
+              protected loader:LoaderProvider) {}
 
   public selectTopicAndDisplaySummary(topic: any) {
-    this.topicsProvider.setSelectedTopic(topic);
+    this.loader.showLoader();
     this.navCtrl.push(SummaryPage, {isSearch: this.isSearch, forcedCategoryTitle: this.forcedCategoryTitle});
+    this.topicsProvider.setSelectedTopic(this.category,topic);
+
   }
 
   ngOnInit() {
@@ -65,3 +70,4 @@ export class ArticlesListComponent {
     }
   }
 }
+

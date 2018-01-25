@@ -10,4 +10,7 @@ import { HotTopicsPage } from '../hot-topics/hot-topics';
 export class TabsPage {
   tab1Root = HotTopicsPage;
   tab2Root = AllTopicsPage;
+
 }
+
+

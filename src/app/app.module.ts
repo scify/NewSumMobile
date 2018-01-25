@@ -16,13 +16,8 @@ import { SettingsPage } from "../pages/settings/settings";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { NotificationsProvider } from '../providers/notifications/notifications';
-import { SoapClientProvider } from '../providers/soap-client/soap-client';
 import {HttpClient, HttpClientModule} from "@angular/common/http";
-import { ContentLanguagesProvider } from '../providers/content-languages/content-languages';
 import { IonicStorageModule } from '@ionic/storage';
-import { SourcesProvider } from '../providers/sources/sources';
-import { CategoriesProvider } from '../providers/categories/categories';
-import { ServiceClientProvider } from '../providers/service-client/service-client';
 import { TopicsProvider } from '../providers/topics/topics';
 import {ScreenOrientation} from "@ionic-native/screen-orientation";
 import {ComponentsModule} from "../components/components.module";
@@ -30,6 +25,10 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { Network } from '@ionic-native/network';
 import { NetworkProvider } from '../providers/network/network';
 import { ImageLoadOptionProvider } from '../providers/image-load-option/image-load-option';
+import { ApplicationSettingsProvider } from '../providers/applicationSettings/applicationSettings';
+import { LoaderProvider } from '../providers/loader/loader';
+import {ApiServiceProvider} from "../providers/api-service/apiService";
+import {SoapApiCaller} from "../providers/api-service/soap-api-caller";
 
 export function createTranslationLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -77,13 +76,12 @@ export function createTranslationLoader(http: HttpClient) {
     GoogleAnalytics,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     NotificationsProvider,
-    SoapClientProvider,
-    ContentLanguagesProvider,
-    SourcesProvider,
-    CategoriesProvider,
-    ServiceClientProvider,
+    ApiServiceProvider,
+    SoapApiCaller,
     TopicsProvider,
     ScreenOrientation,
+    ApplicationSettingsProvider,
+    LoaderProvider,
     Network,
     NetworkProvider,
     ImageLoadOptionProvider
