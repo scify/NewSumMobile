@@ -92,6 +92,7 @@ export class SettingsPage {
   }
 
   private handleLanguageChange(lang) {
+    this.loader.showLoader();
     this.selectedLangName = SettingsPage.availableLanguages[lang];
     this.settingsProvider
       .changeApplicationLanguage(lang)
@@ -184,7 +185,7 @@ export class SettingsPage {
         handler: (selectedSources: Array<any>) => {
           this.selectedSourcesStringified = selectedSources.join();
           this.settingsProvider.changeSelectedSources(selectedSources)
-            .then(()=>this.updateDefaultValues());
+            .then(() => this.updateDefaultValues());
         }
       });
       alert.present();
@@ -236,37 +237,21 @@ export class SettingsPage {
     this.updateDefaultValues();
   }
 
-
-  /*    this.translate.reloadLang(lang).subscribe((translation) => {
-   this.availableImageLoadingOptions.all = translation["Always load images"];
-   this.availableImageLoadingOptions.wifi = translation["Load images only with WiFi"];
-   this.selectCapsText = translation["SELECT"];
-   this.cancelCapsText = translation["CANCEL"];
-   this.selectText = translation["Select"];
-   this.languageText = translation["Language"];
-   this.favoriteCategoryText = translation["Favorite Category2"];
-   this.categoriesText = translation["Categories"];
-   this.sourcesText = translation["Sources"];
-   this.imagesLoadText = translation["Images Load2"];
-   this.allText = translation["All"];
-   this.selectedText = translation["selected"];
-   this.loader.hideLoader();
-   this.updateDefaultValues();
-   });*/
-
   private updateDefaultValues() {
     this.settingsProvider.getApplicationSettings().then((applicationSettings: ApplicationSettings) => {
-        this.selectedLangName = SettingsPage.availableLanguages[applicationSettings.language];
-        this.favoriteCategory = applicationSettings.favoriteCategory;
-        let selectedCategories = applicationSettings.categories;
-        this.selectedCategoriesStringified = selectedCategories.join();
-        let selectedSources = applicationSettings.sources;
-        let allAvailableSources = this.settingsProvider.getAllAvailableSources(applicationSettings.language);
-        this.selectedSourcesStringified = ((selectedSources.length === allAvailableSources.length) ?
-            this.allText : selectedSources.length) + ' ' + this.selectedText;
-        this.selectedImagesLoadOption = this.availableImageLoadingOptions[
-          this.imgLoadProvider.getSelectedImageLoadOption()
-          ];
-      });
+      this.selectedLangName = SettingsPage.availableLanguages[applicationSettings.language];
+      this.favoriteCategory = applicationSettings.favoriteCategory;
+      let selectedCategories = applicationSettings.categories;
+      this.selectedCategoriesStringified = selectedCategories.join();
+      let selectedSources = applicationSettings.sources;
+      let allAvailableSources = this.settingsProvider.getAllAvailableSources(applicationSettings.language);
+      this.selectedSourcesStringified = ((selectedSources.length === allAvailableSources.length) ?
+          this.allText : selectedSources.length) + ' ' + this.selectedText;
+      this.selectedImagesLoadOption = this.availableImageLoadingOptions[
+        this.imgLoadProvider.getSelectedImageLoadOption()
+        ];
+
+      this.loader.hideLoader();
+    });
   }
 }

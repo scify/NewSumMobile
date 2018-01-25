@@ -16,6 +16,10 @@ articles-list {
   .img-holder {
     position:relative;
     height:150px;
+    @media (min-width:600px)  {
+      height:200px;
+    }
+
     background-size:cover;
     background-repeat: no-repeat;
     background-position:center center;
