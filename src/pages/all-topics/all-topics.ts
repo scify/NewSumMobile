@@ -77,7 +77,6 @@ export class AllTopicsPage {
   }
 
   public displaySettingsPage() {
-    this.loader.showLoader();
     this.navCtrl.push(SettingsPage);
   }
 }

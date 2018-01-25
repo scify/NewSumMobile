@@ -83,16 +83,22 @@ export class SettingsPage {
       alert.addButton({
         text: this.selectCapsText,
         handler: (lang: string) => {
-          this.selectedLangName = SettingsPage.availableLanguages[lang];
-          this.settingsProvider.setSelectedLanguage(lang)
-            .then(() => this.translate.setDefaultLang(lang.toLowerCase()));
-          this.fetchTranslationsAndUpdateDefaultValues(lang.toLowerCase());
+          if (lang != selectedLang)
+            this.handleLanguageChange(lang);
         }
       });
-
       alert.present();
     });
+  }
 
+  private handleLanguageChange(lang) {
+    this.selectedLangName = SettingsPage.availableLanguages[lang];
+    this.settingsProvider
+      .changeApplicationLanguage(lang)
+      .then(() => {
+        this.translate.setDefaultLang(lang.toLowerCase()); //update translation service
+        this.fetchTranslationsAndUpdateDefaultValues(lang.toLowerCase());// update translations at this page;
+      });
   }
 
   public selectFavoriteCategory() {
@@ -146,7 +152,7 @@ export class SettingsPage {
         text: this.selectCapsText,
         handler: (selectedCategories: Array<string>) => {
           this.selectedCategoriesStringified = selectedCategories.join();
-          this.settingsProvider.setSelectedCategories(selectedCategories)
+          this.settingsProvider.changeSelectedCategories(selectedCategories)
             .then(() => this.updateDefaultValues());
         }
       });
@@ -171,22 +177,17 @@ export class SettingsPage {
           checked: (_.findIndex(selectedSources, (s) => _.isEqual(s, sources[i])) >= 0)
         });
       }
-
       alert.addButton(this.cancelCapsText);
       alert.addButton({
         text: this.selectCapsText,
         handler: (selectedSources: Array<any>) => {
           this.selectedSourcesStringified = selectedSources.join();
-          this.settingsProvider
-            .setSelectedSources(selectedSources)
-            .then(() => this.updateDefaultValues());
-
+          this.settingsProvider.changeSelectedSources(selectedSources)
+            .then(()=>this.updateDefaultValues());
         }
       });
-
       alert.present();
     });
-
   }
 
   public selectImagesOption() {
@@ -217,28 +218,43 @@ export class SettingsPage {
     alert.present();
   }
 
+
   private fetchTranslationsAndUpdateDefaultValues(lang: string) {
-    this.translate.reloadLang(lang).subscribe((translation) => {
-      this.availableImageLoadingOptions.all = translation["Always load images"];
-      this.availableImageLoadingOptions.wifi = translation["Load images only with WiFi"];
-      this.selectCapsText = translation["SELECT"];
-      this.cancelCapsText = translation["CANCEL"];
-      this.selectText = translation["Select"];
-      this.languageText = translation["Language"];
-      this.favoriteCategoryText = translation["Favorite Category2"];
-      this.categoriesText = translation["Categories"];
-      this.sourcesText = translation["Sources"];
-      this.imagesLoadText = translation["Images Load2"];
-      this.allText = translation["All"];
-      this.selectedText = translation["selected"];
-      this.loader.hideLoader();
-      this.updateDefaultValues();
-    });
+    this.availableImageLoadingOptions.all = this.translate.instant("Always load images");
+    this.availableImageLoadingOptions.wifi = this.translate.instant("Load images only with WiFi");
+    this.selectCapsText = this.translate.instant("SELECT");
+    this.cancelCapsText = this.translate.instant("CANCEL");
+    this.selectText = this.translate.instant("Select");
+    this.languageText = this.translate.instant("Language");
+    this.favoriteCategoryText = this.translate.instant("Favorite Category2");
+    this.categoriesText = this.translate.instant("Categories");
+    this.sourcesText = this.translate.instant("Sources");
+    this.imagesLoadText = this.translate.instant("Images Load2");
+    this.allText = this.translate.instant("All");
+    this.selectedText = this.translate.instant("selected");
+    this.updateDefaultValues();
   }
 
+
+  /*    this.translate.reloadLang(lang).subscribe((translation) => {
+   this.availableImageLoadingOptions.all = translation["Always load images"];
+   this.availableImageLoadingOptions.wifi = translation["Load images only with WiFi"];
+   this.selectCapsText = translation["SELECT"];
+   this.cancelCapsText = translation["CANCEL"];
+   this.selectText = translation["Select"];
+   this.languageText = translation["Language"];
+   this.favoriteCategoryText = translation["Favorite Category2"];
+   this.categoriesText = translation["Categories"];
+   this.sourcesText = translation["Sources"];
+   this.imagesLoadText = translation["Images Load2"];
+   this.allText = translation["All"];
+   this.selectedText = translation["selected"];
+   this.loader.hideLoader();
+   this.updateDefaultValues();
+   });*/
+
   private updateDefaultValues() {
-    this.settingsProvider.getApplicationSettings()
-      .then((applicationSettings: ApplicationSettings) => {
+    this.settingsProvider.getApplicationSettings().then((applicationSettings: ApplicationSettings) => {
         this.selectedLangName = SettingsPage.availableLanguages[applicationSettings.language];
         this.favoriteCategory = applicationSettings.favoriteCategory;
         let selectedCategories = applicationSettings.categories;
