@@ -57,7 +57,7 @@ export class AllTopicsPage {
       } else {
         this.loader.hideLoader();
 
-        if (topicsUpdatedInfo.topics && topicsUpdatedInfo.topics.length > 0) {
+        if (topicsUpdatedInfo.topics && topicsUpdatedInfo.topicsCount > 0) {
           this.topics = topicsUpdatedInfo.topics;
           this.selectedCategory = topicsUpdatedInfo.category;
           this.selectedCategoryForUppercase = TextManipulationService.getUppercaseFriendlyText(this.selectedCategory);
@@ -66,9 +66,7 @@ export class AllTopicsPage {
           // otherwise the scroll will remain on the place it was before the category change
           this.content.scrollToTop();
           this.ga.trackView(nameOfFilter + ' page for ' + this.selectedCategory);
-        }
-        else {
-          //display no topics found message
+        } else {
           this.topics = [];
         }
       }

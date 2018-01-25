@@ -41,7 +41,7 @@ export class TopicsProvider {
               this.formatDateAndTimeForTopics(this.topics);
               //get topics by taking into account the filters
               let topicsToDisplay = this.getTopics();
-              let topicsUpdatedInfo = new TopicsUpdatedInfo(category, topicsToDisplay);
+              let topicsUpdatedInfo = new TopicsUpdatedInfo(category, topicsToDisplay, this.topics.length, this.filterHotTopics().length);
               this.topicsUpdated.next(topicsUpdatedInfo);
               resolve(topicsUpdatedInfo);
               /*if (topicToSelect && topicsToDisplay.length > 0)
