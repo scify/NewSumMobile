@@ -53,7 +53,9 @@ export class MyApp {
       this.translate.use(applicationSettings.language.toLowerCase());
 
       this.availableCategories = applicationSettings.categories;
-      this.topicsProvider.refreshTopics(applicationSettings.favoriteCategory);
+      this.topicsProvider.refreshTopics(applicationSettings.favoriteCategory).then(() => {
+        this.splashScreen.hide();
+      });
       this.initGoogleAnalytics();
       this.notification.startCheckingForNotifications();
     });

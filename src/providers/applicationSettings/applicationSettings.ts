@@ -88,7 +88,7 @@ export class ApplicationSettingsProvider {
         languagePromise.then((language: string) => {
           //fetch from service all sources
           console.log(`applicationSettings: ${language}`);
-          let defaultSources: Array<string> = this.serviceClient.getFeedSources(language);
+          let defaultSources: Array<any> = this.serviceClient.getFeedSources(language);
           //save to storage and we are done! now we have default sources
           this.setSelectedSources(defaultSources)
             .then(() => resolveSourcesPromise(defaultSources));
@@ -101,7 +101,9 @@ export class ApplicationSettingsProvider {
         resolveCategPromise(categoriesFromStorage);
       else {
         //when we have the language and the sources
-        Promise.all([languagePromise, sourcesPromise]).then(([language, sources]) => {
+        Promise.all([languagePromise, sourcesPromise]).then((values) => {
+          let language: string = values[0].toString();
+          let sources: Array<any> = values[1] as Array<any>;
           //fetch from service, get all categories
           let defaultCategories = this.serviceClient.getCategories(sources, language);
           //save to local storage and we are done! now we have default categories
