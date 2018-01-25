@@ -5,7 +5,7 @@
         <ion-toolbar>            
             <ion-searchbar
                 [(ngModel)]="searchInput"
-                placeholder="Αναζήτηση"
+                placeholder="{{ 'search' | translate }}"
                 (keyup)="searchForTopic($event, searchInput)">
             </ion-searchbar>
             <!-- <ion-buttons right>

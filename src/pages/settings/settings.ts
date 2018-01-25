@@ -5,7 +5,10 @@ import {InAppBrowser} from "@ionic-native/in-app-browser";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {ApplicationSettingsProvider} from "../../providers/applicationSettings/applicationSettings";
 import {ApplicationSettings} from "../../models/applicationSettings";
-import _ from "lodash";
+import * as _ from "lodash";
+import {ImageLoadOptionProvider} from "../../providers/image-load-option/image-load-option";
+import {TranslateService} from "@ngx-translate/core";
+import {LoaderProvider} from "../../providers/loader/loader";
 
 
 @Component({
@@ -18,17 +21,35 @@ export class SettingsPage {
   public favoriteCategory: string;
   public selectedCategoriesStringified: string;
   public selectedSourcesStringified: string;
+  public selectedImagesLoadOption: string;
   private static availableLanguages: any = {
     'EL': 'Ελληνικά',
-    'EN': 'Αγγλικά'
+    'EN': 'English'
   };
+  private availableImageLoadingOptions: any = {};
+  private selectCapsText: string;
+  private cancelCapsText: string;
+  private selectText: string;
+  private languageText: string;
+  private favoriteCategoryText: string;
+  private categoriesText: string;
+  private sourcesText: string;
+  private imagesLoadText: string;
+  private allText: string;
+  private selectedText: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private alertCtrl: AlertController,
+              private translate: TranslateService,
+              private imgLoadProvider: ImageLoadOptionProvider,
+              private loader: LoaderProvider,
               private iab: InAppBrowser,
               protected ga: GoogleAnalytics,
               protected settingsProvider: ApplicationSettingsProvider) {
-    this.updateDefaultValues();
+
+
+    this.fetchTranslationsAndUpdateDefaultValues(this.translate.getDefaultLang());
+
   }
 
   goToAbout() {
@@ -45,7 +66,7 @@ export class SettingsPage {
     this.settingsProvider.getApplicationSettings().then((applicationSettings: ApplicationSettings) => {
       let alert = this.alertCtrl.create();
       let selectedLang = applicationSettings.language;
-      alert.setTitle('Επιλογή Γλώσσας');
+      alert.setTitle(this.selectText + ' ' + this.languageText);
 
       for (let prop in SettingsPage.availableLanguages) {
         if (SettingsPage.availableLanguages.hasOwnProperty(prop)) {
@@ -58,13 +79,14 @@ export class SettingsPage {
         }
       }
 
-      alert.addButton('ΑΚΥΡΩΣΗ');
+      alert.addButton(this.cancelCapsText);
       alert.addButton({
-        text: 'ΕΠΙΛΟΓΗ',
+        text: this.selectCapsText,
         handler: (lang: string) => {
           this.selectedLangName = SettingsPage.availableLanguages[lang];
           this.settingsProvider.setSelectedLanguage(lang)
-            .then(() => this.updateDefaultValues());
+            .then(() => this.translate.setDefaultLang(lang.toLowerCase()));
+          this.fetchTranslationsAndUpdateDefaultValues(lang.toLowerCase());
         }
       });
 
@@ -78,7 +100,7 @@ export class SettingsPage {
       let alert = this.alertCtrl.create();
       let favoriteCategory = applicationSettings.favoriteCategory;
       let categories = applicationSettings.categories;
-      alert.setTitle('Επιλογή Αγαπημένης Κατηγορίας');
+      alert.setTitle(this.selectText + ' ' + this.favoriteCategoryText);
 
       for (let i = 0; i < categories.length; i++) {
         alert.addInput({
@@ -89,9 +111,9 @@ export class SettingsPage {
         });
       }
 
-      alert.addButton('ΑΚΥΡΩΣΗ');
+      alert.addButton(this.cancelCapsText);
       alert.addButton({
-        text: 'ΕΠΙΛΟΓΗ',
+        text: this.selectCapsText,
         handler: (category: string) => {
           this.favoriteCategory = category;
           this.settingsProvider.setFavoriteCategory(category);
@@ -108,7 +130,7 @@ export class SettingsPage {
       let alert = this.alertCtrl.create();
       let selectedCategories = applicationSettings.categories;
       let categories = this.settingsProvider.getAllAvailableCategories(applicationSettings.sources, applicationSettings.language);
-      alert.setTitle('Επιλογή Κατηγοριών');
+      alert.setTitle(this.selectText + ' ' + this.categoriesText);
 
       for (let i = 0; i < categories.length; i++) {
         alert.addInput({
@@ -119,9 +141,9 @@ export class SettingsPage {
         });
       }
 
-      alert.addButton('ΑΚΥΡΩΣΗ');
+      alert.addButton(this.cancelCapsText);
       alert.addButton({
-        text: 'ΕΠΙΛΟΓΗ',
+        text: this.selectCapsText,
         handler: (selectedCategories: Array<string>) => {
           this.selectedCategoriesStringified = selectedCategories.join();
           this.settingsProvider.setSelectedCategories(selectedCategories)
@@ -139,7 +161,7 @@ export class SettingsPage {
       let alert = this.alertCtrl.create();
       let selectedSources = applicationSettings.sources;
       let sources = this.settingsProvider.getAllAvailableSources(applicationSettings.language);
-      alert.setTitle('Επιλογή Πηγών');
+      alert.setTitle(this.selectText + ' ' + this.sourcesText);
 
       for (let i = 0; i < sources.length; i++) {
         alert.addInput({
@@ -150,14 +172,14 @@ export class SettingsPage {
         });
       }
 
-      alert.addButton('ΑΚΥΡΩΣΗ');
+      alert.addButton(this.cancelCapsText);
       alert.addButton({
-        text: 'ΕΠΙΛΟΓΗ',
+        text: this.selectCapsText,
         handler: (selectedSources: Array<any>) => {
           this.selectedSourcesStringified = selectedSources.join();
           this.settingsProvider
-              .setSelectedSources(selectedSources)
-              .then(() => this.updateDefaultValues());
+            .setSelectedSources(selectedSources)
+            .then(() => this.updateDefaultValues());
 
         }
       });
@@ -167,17 +189,67 @@ export class SettingsPage {
 
   }
 
-  private updateDefaultValues() {
-    this.settingsProvider.getApplicationSettings().then((applicationSettings: ApplicationSettings) => {
-      this.selectedLangName = SettingsPage.availableLanguages[applicationSettings.language];
-      this.favoriteCategory = applicationSettings.favoriteCategory;
-      let selectedCategories = applicationSettings.categories;
-      this.selectedCategoriesStringified = selectedCategories.join();
-      let selectedSources = applicationSettings.sources;
-      let allAvailableSources = this.settingsProvider.getAllAvailableSources(applicationSettings.language);
-      this.selectedSourcesStringified = ((selectedSources.length === allAvailableSources.length) ?
-          'Όλες' : selectedSources.length) + ' επιλεγμένες';
+  public selectImagesOption() {
+    let alert = this.alertCtrl.create();
+    let selectedOption: string = this.imgLoadProvider.getSelectedImageLoadOption();
+    alert.setTitle(this.selectText + ' ' + this.imagesLoadText);
+
+    for (let prop in this.availableImageLoadingOptions) {
+      if (this.availableImageLoadingOptions.hasOwnProperty(prop)) {
+        alert.addInput({
+          type: 'radio',
+          label: this.availableImageLoadingOptions[prop],
+          value: prop,
+          checked: (prop === selectedOption)
+        });
+      }
+    }
+
+    alert.addButton(this.cancelCapsText);
+    alert.addButton({
+      text: this.selectCapsText,
+      handler: (imgOption: string) => {
+        this.imgLoadProvider.setSelectedImageLoadOption(imgOption);
+        this.updateDefaultValues();
+      }
     });
 
+    alert.present();
+  }
+
+  private fetchTranslationsAndUpdateDefaultValues(lang: string) {
+    this.translate.reloadLang(lang).subscribe((translation) => {
+      this.availableImageLoadingOptions.all = translation["Always load images"];
+      this.availableImageLoadingOptions.wifi = translation["Load images only with WiFi"];
+      this.selectCapsText = translation["SELECT"];
+      this.cancelCapsText = translation["CANCEL"];
+      this.selectText = translation["Select"];
+      this.languageText = translation["Language"];
+      this.favoriteCategoryText = translation["Favorite Category2"];
+      this.categoriesText = translation["Categories"];
+      this.sourcesText = translation["Sources"];
+      this.imagesLoadText = translation["Images Load2"];
+      this.allText = translation["All"];
+      this.selectedText = translation["selected"];
+      this.loader.hideLoader();
+      this.updateDefaultValues();
+    });
+  }
+
+  private updateDefaultValues() {
+    this.settingsProvider.getApplicationSettings()
+      .then((applicationSettings: ApplicationSettings) => {
+        this.selectedLangName = SettingsPage.availableLanguages[applicationSettings.language];
+        this.favoriteCategory = applicationSettings.favoriteCategory;
+        let selectedCategories = applicationSettings.categories;
+        this.selectedCategoriesStringified = selectedCategories.join();
+        let selectedSources = applicationSettings.sources;
+        let allAvailableSources = this.settingsProvider.getAllAvailableSources(applicationSettings.language);
+        this.selectedSourcesStringified = ((selectedSources.length === allAvailableSources.length) ?
+            this.allText : selectedSources.length) + ' ' + this.selectedText;
+        this.selectedImagesLoadOption = this.availableImageLoadingOptions[
+          this.imgLoadProvider.getSelectedImageLoadOption()
+          ];
+      });
   }
 }

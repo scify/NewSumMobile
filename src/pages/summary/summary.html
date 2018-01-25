@@ -18,13 +18,13 @@
 
   <div *ngIf="selectedSummary" (swipe)="swipeActivity($event)">
     <div id="img-container">
-      <img src="{{selectedTopic.imageUrls.length > 0 ? selectedTopic.imageUrls[0] : selectedCategoryDefaultImage}}"/>
+      <img src="{{selectedTopic.imageUrls.length > 0 && (isConnectedToWiFi || selectedImgLoadOption === 'all') ? selectedTopic.imageUrls[0] : selectedCategoryDefaultImage}}"/>
       <div id="title-background">
         <div id="title" [innerHtml]="selectedTopic.Title"></div>
       </div>
     </div>
     <ion-item id="display-sources-toggle">
-      <ion-label> Εμφάνιση αναφορών</ion-label>
+      <ion-label>{{ "Display references" | translate }}</ion-label>
       <ion-toggle [(ngModel)]="displaySourcesUponEachSentence"
                   (ionChange)="toggleDisplaySources()"></ion-toggle>
     </ion-item>
@@ -46,12 +46,12 @@
       </ion-row>
       <ion-row id="date-info">
         <ion-col id="timestamp">
-          Τελευταία ενημέρωση: {{selectedTopic.DateFormatted + ', ' + selectedTopic.TimeFormatted}}
+          {{ "Last update" | translate }}: {{selectedTopic.DateFormatted + ', ' + selectedTopic.TimeFormatted}}
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
-          ΟΛΕΣ ΟΙ ΠΗΓΕΣ:<br>
+          {{ "ALL SOURCES" | translate }}:<br>
           <ul id="sources-list">
             <li class="source" *ngFor="let source of selectedSummary.Sources">
               <anchor href="{{(source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + source.sourceURL}}"

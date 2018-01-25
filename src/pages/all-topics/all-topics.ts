@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Content, Loading, NavController, ViewController} from 'ionic-angular';
+import {Content, Loading, NavController, LoadingController, ViewController} from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {TextManipulationService} from "../../lib/text-manipulation";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
@@ -77,6 +77,7 @@ export class AllTopicsPage {
   }
 
   public displaySettingsPage() {
+    this.loader.showLoader();
     this.navCtrl.push(SettingsPage);
   }
 }

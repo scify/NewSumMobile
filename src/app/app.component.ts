@@ -7,6 +7,8 @@ import {NotificationsProvider} from "../providers/notifications/notifications";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {ScreenOrientation} from '@ionic-native/screen-orientation';
 import {SearchResultsPage} from "../pages/search-results/search-results";
+import {ImageLoadOptionProvider} from "../providers/image-load-option/image-load-option";
+import {TranslateService} from "@ngx-translate/core";
 import {ApplicationSettings} from "../models/applicationSettings";
 import {LoaderProvider} from "../providers/loader/loader";
 import {TopicsProvider} from "../providers/topics/topics";
@@ -24,26 +26,31 @@ export class MyApp {
               private screenOrientation: ScreenOrientation,
               private statusBar: StatusBar,
               private splashScreen: SplashScreen,
-              public menuCtrl: MenuController,
+              private menuCtrl: MenuController,
               private settingsProvider: ApplicationSettingsProvider,
               private topicsProvider: TopicsProvider,
               private loader: LoaderProvider,
               private ga: GoogleAnalytics,
-              public notification: NotificationsProvider) {
+              private imgLoadProvider: ImageLoadOptionProvider,
+              private translate: TranslateService,
+              private notification: NotificationsProvider) {
 
     platform.ready().then(this.platformReadyHandler.bind(this));
   }
 
   private platformReadyHandler() {
     this.statusBar.styleDefault();
-    // lock portrait orientation, it prevents the summary page from breaking on orientation change
+    // lock portrait orientation
     this.screenOrientation.lock('portrait').then(() => console.log('Screen orientation locked successfully'),
       error => console.error('An error occurred while trying to lock screen orientation', error)
     );
 
-    this.rootPage = TabsPage;
     this.loader.showLoader();
+    this.rootPage = TabsPage;
     this.settingsProvider.getApplicationSettings().then((applicationSettings: ApplicationSettings) => {
+      this.translate.setDefaultLang(applicationSettings.language.toLowerCase());
+      this.translate.use(applicationSettings.language.toLowerCase());
+
       this.availableCategories = applicationSettings.categories;
       this.topicsProvider.refreshTopics(applicationSettings.favoriteCategory);
       this.initGoogleAnalytics();

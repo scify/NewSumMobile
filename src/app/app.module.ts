@@ -2,6 +2,8 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {IonicApp, IonicModule, IonicErrorHandler, Alert} from 'ionic-angular';
 import { MyApp } from './app.component';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AboutPage } from '../pages/about/about';
 import { AllTopicsPage } from '../pages/all-topics/all-topics';
@@ -14,16 +16,23 @@ import { SettingsPage } from "../pages/settings/settings";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { NotificationsProvider } from '../providers/notifications/notifications';
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { IonicStorageModule } from '@ionic/storage';
 import { TopicsProvider } from '../providers/topics/topics';
 import {ScreenOrientation} from "@ionic-native/screen-orientation";
 import {ComponentsModule} from "../components/components.module";
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
+import { Network } from '@ionic-native/network';
+import { NetworkProvider } from '../providers/network/network';
+import { ImageLoadOptionProvider } from '../providers/image-load-option/image-load-option';
 import { ApplicationSettingsProvider } from '../providers/applicationSettings/applicationSettings';
 import { LoaderProvider } from '../providers/loader/loader';
 import {ApiServiceProvider} from "../providers/api-service/apiService";
 import {SoapApiCaller} from "../providers/api-service/soap-api-caller";
+
+export function createTranslationLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -41,7 +50,14 @@ import {SoapApiCaller} from "../providers/api-service/soap-api-caller";
     IonicModule.forRoot(MyApp, {tabsPlacement: 'top'}),
     IonicStorageModule.forRoot(),
     HttpClientModule,
-    ComponentsModule
+    ComponentsModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslationLoader),
+        deps: [HttpClient]
+      }
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -65,7 +81,10 @@ import {SoapApiCaller} from "../providers/api-service/soap-api-caller";
     TopicsProvider,
     ScreenOrientation,
     ApplicationSettingsProvider,
-    LoaderProvider
+    LoaderProvider,
+    Network,
+    NetworkProvider,
+    ImageLoadOptionProvider
   ]
 })
 export class AppModule {}
