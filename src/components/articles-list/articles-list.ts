@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {SummaryPage} from "../../pages/summary/summary";
-import {NavController, NavParams} from "ionic-angular";
+import {NavController} from "ionic-angular";
 import {TopicsProvider} from "../../providers/topics/topics";
 import {LoaderProvider} from "../../providers/loader/loader";
 import {NetworkProvider} from "../../providers/network/network";

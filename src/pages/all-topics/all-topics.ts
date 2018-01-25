@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Content, Loading, NavController, LoadingController, ViewController} from 'ionic-angular';
+import {Content, NavController} from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {TextManipulationService} from "../../lib/text-manipulation";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
@@ -54,8 +54,7 @@ export class AllTopicsPage {
       if (topicsUpdatedInfo == null) {
         this.topics = [];
         this.loader.showLoader();
-      }
-      else {
+      } else {
         this.loader.hideLoader();
 
         if (topicsUpdatedInfo.topics && topicsUpdatedInfo.topics.length > 0) {
