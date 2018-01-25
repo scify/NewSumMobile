@@ -1,6 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {IonicApp, IonicModule, IonicErrorHandler, Alert} from 'ionic-angular';
+import {IonicApp, IonicModule} from 'ionic-angular';
 import { MyApp } from './app.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -29,6 +29,7 @@ import { ApplicationSettingsProvider } from '../providers/applicationSettings/ap
 import { LoaderProvider } from '../providers/loader/loader';
 import {ApiServiceProvider} from "../providers/api-service/apiService";
 import {SoapApiCaller} from "../providers/api-service/soap-api-caller";
+import {CustomErrorHandler} from "../providers/error/customErrorHandler";
 
 export function createTranslationLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -74,7 +75,6 @@ export function createTranslationLoader(http: HttpClient) {
     StatusBar,
     SplashScreen,
     GoogleAnalytics,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
     NotificationsProvider,
     ApiServiceProvider,
     SoapApiCaller,
@@ -84,7 +84,8 @@ export function createTranslationLoader(http: HttpClient) {
     LoaderProvider,
     Network,
     NetworkProvider,
-    ImageLoadOptionProvider
+    ImageLoadOptionProvider,
+    {provide: ErrorHandler, useClass: CustomErrorHandler},
   ]
 })
 export class AppModule {}

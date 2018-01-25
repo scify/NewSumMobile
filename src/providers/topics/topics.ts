@@ -129,7 +129,7 @@ export class TopicsProvider {
       this.refreshTopics(category)
         .then((topicsUpdatedInfo: TopicsUpdatedInfo) => {
           if (topicsUpdatedInfo.topics && topicsUpdatedInfo.topics.length > 0) {
-            let topicToSelect = topicToSelectAfterRetrieval ==SelectTopicEnum.FIRST?
+            let topicToSelect = topicToSelectAfterRetrieval == SelectTopicEnum.FIRST ?
               topicsUpdatedInfo.topics[0] : topicsUpdatedInfo.topics[topicsUpdatedInfo.topics.length - 1];
             this.setSelectedTopic(topicsUpdatedInfo.category, topicToSelect);
           }
@@ -181,8 +181,7 @@ export class TopicsProvider {
     return topicsCopy.slice(0, NUMBER_OF_HOT_TOPICS_TO_DISPLAY);
   }
 
-  private
-  formatDateAndTimeForTopics(topics: Array<any>) {
+  private formatDateAndTimeForTopics(topics: Array<any>) {
     topics.map(t => {
       let newestDate: any = t.NewestDate;
       t.DateFormatted = (newestDate.dayOfMonth < 10 ? '0' : '') + newestDate.dayOfMonth + '-' +
