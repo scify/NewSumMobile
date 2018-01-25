@@ -36,6 +36,7 @@ export class MyApp {
               private notification: NotificationsProvider) {
 
     platform.ready().then(this.platformReadyHandler.bind(this));
+    this.settingsProvider.applicationSettingsChanged.subscribe(this.handleApplicationSettingsChange.bind(this));
   }
 
   private platformReadyHandler() {
@@ -56,6 +57,12 @@ export class MyApp {
       this.initGoogleAnalytics();
       this.notification.startCheckingForNotifications();
     });
+  }
+
+  private handleApplicationSettingsChange(newApplicationSettings:ApplicationSettings){
+    this.availableCategories = newApplicationSettings.categories;
+    console.log("refreshing category: "+ newApplicationSettings.favoriteCategory);
+    this.topicsProvider.refreshTopics(newApplicationSettings.favoriteCategory);
   }
 
   private initGoogleAnalytics() {

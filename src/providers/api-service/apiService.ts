@@ -21,7 +21,10 @@ export class ApiServiceProvider {
   }
 
   public getFeedSources(selectedLang: string): Array<any> {
-    return this.soapApiCaller.getResource('getFeedSources', {sLang: selectedLang});
+    let sources = this.soapApiCaller.getResource('getFeedSources', {sLang: selectedLang});
+    console.log("Get feed sources" );
+    console.log(sources);
+    return sources;
   }
 
   public getCategories(selectedSources: Array<string>, selectedLang: string): Array<string> {

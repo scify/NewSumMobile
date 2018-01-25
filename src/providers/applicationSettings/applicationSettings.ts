@@ -2,13 +2,17 @@ import {Storage} from "@ionic/storage";
 import {Injectable} from '@angular/core';
 import {ApplicationSettings} from "../../models/applicationSettings";
 import {ApiServiceProvider} from "../api-service/apiService";
+import {Subject} from "rxjs";
 
 
 @Injectable()
 export class ApplicationSettingsProvider {
 
+  public applicationSettingsChanged: Subject<any>;
+
   constructor(private appStorage: Storage,
               private serviceClient: ApiServiceProvider) {
+    this.applicationSettingsChanged = new Subject();
   }
 
 
@@ -28,15 +32,15 @@ export class ApplicationSettingsProvider {
     return this.appStorage.get("favorite-category");
   }
 
-  public setSelectedLanguage(language: string): Promise<any> {
+  private setSelectedLanguage(language: string): Promise<any> {
     return this.appStorage.set("selected-language", language);
   }
 
-  public setSelectedSources(selectedSources): Promise<any> {
+  private setSelectedSources(selectedSources): Promise<any> {
     return this.appStorage.set("selected-source", selectedSources);
   }
 
-  public setSelectedCategories(selectedCategories): Promise<any> {
+  private setSelectedCategories(selectedCategories): Promise<any> {
     return this.appStorage.set("selected-categories", selectedCategories);
   }
 
@@ -83,7 +87,8 @@ export class ApplicationSettingsProvider {
         //when we have the language
         languagePromise.then((language) => {
           //fetch from service all sources
-          let defaultSources:Array<string> = this.serviceClient.getFeedSources(language);
+          console.log(`applicationSettings: ${language}`);
+          let defaultSources: Array<string> = this.serviceClient.getFeedSources(language);
           //save to storage and we are done! now we have default sources
           this.setSelectedSources(defaultSources)
             .then(() => resolveSourcesPromise(defaultSources));
@@ -122,10 +127,70 @@ export class ApplicationSettingsProvider {
     return Promise.all([languagePromise, sourcesPromise, categoriesPromise, favoriteCategoryPromise]);
   }
 
-  public getAllAvailableCategories(sources, language){
+  public getAllAvailableCategories(sources, language) {
     return this.serviceClient.getCategories(sources, language);
   }
-  public getAllAvailableSources(language:string){
+
+  public getAllAvailableSources(language: string) {
     return this.serviceClient.getFeedSources(language);
   }
+
+  public changeApplicationLanguage(newLanguage: string): Promise<ApplicationSettings> {
+    let setLanguagePromise = this.setSelectedLanguage(newLanguage);
+    let sources = this.serviceClient.getFeedSources(newLanguage);
+    let setSourcesPromise = this.setSelectedSources(sources);
+    let categories = this.serviceClient.getCategories(sources, newLanguage);
+    let setCategoriesPromise = this.setSelectedCategories(categories);
+    let favoriteCategory = categories[0];
+    let setFavoritePromise = this.setFavoriteCategory(favoriteCategory);
+
+    //when all writes to local storage complete, fire events
+    return new Promise((resolve) => {
+      Promise.all([setLanguagePromise, setSourcesPromise, setCategoriesPromise, setFavoritePromise])
+        .then(() => {
+          let applicationSettings = new ApplicationSettings(newLanguage, sources, categories, favoriteCategory);
+          resolve(applicationSettings);
+          this.applicationSettingsChanged.next(applicationSettings);
+        });
+    })
+  }
+
+  public changeSelectedSources(newSources): Promise<ApplicationSettings> {
+    let getLanguagePromise = this.getSelectedLanguage();
+
+    return new Promise((resolve) => {
+      getLanguagePromise.then((language) => {
+        let categories = this.serviceClient.getCategories(newSources, language);
+        let setCategoriesPromise = this.setSelectedCategories(categories);
+        let favoriteCategory = categories[0];
+        let setFavoritePromise = this.setFavoriteCategory(favoriteCategory);
+
+        //when all writes to local storage complete, fire events
+        Promise.all([setCategoriesPromise, setFavoritePromise])
+          .then(() => {
+            let applicationSettings = new ApplicationSettings(language, newSources, categories, favoriteCategory);
+            resolve(applicationSettings);
+            this.applicationSettingsChanged.next(applicationSettings);
+          });
+      });
+    });
+  }
+
+  public changeSelectedCategories(newCategories) {
+    return new Promise((resolve) => {
+      let setCategoriesPromise = this.setSelectedCategories(newCategories);
+      let favoriteCategory =newCategories[0];
+      let setFavoriteCatPromise = this.setFavoriteCategory(favoriteCategory );
+      let getLanguagePromise = this.getSelectedLanguage();
+      let getSourcesPromise = this.getSelectedSources();
+
+      Promise.all([getLanguagePromise,getSourcesPromise,setCategoriesPromise,setFavoriteCatPromise])
+          .then(([language,sources])=>{
+            let applicationSettings = new ApplicationSettings(language, sources, newCategories, favoriteCategory);
+            resolve(applicationSettings);
+            this.applicationSettingsChanged.next(applicationSettings);
+          })
+    });
+  }
+
 }
