@@ -48,7 +48,7 @@ export class SettingsPage {
               protected settingsProvider: ApplicationSettingsProvider) {
 
 
-    this.fetchTranslationsAndUpdateDefaultValues(this.translate.getDefaultLang());
+    this.fetchTranslationsAndUpdateDefaultValues(this.translate.currentLang);
 
   }
 
@@ -96,8 +96,9 @@ export class SettingsPage {
     this.settingsProvider
       .changeApplicationLanguage(lang)
       .then(() => {
-        this.translate.setDefaultLang(lang.toLowerCase()); //update translation service
-        this.fetchTranslationsAndUpdateDefaultValues(lang.toLowerCase());// update translations at this page;
+        this.translate.use(lang.toLowerCase()).subscribe(() => {
+          this.fetchTranslationsAndUpdateDefaultValues(lang.toLowerCase());// update translations at this page;
+        }); //update translation service
       });
   }
 

@@ -85,7 +85,7 @@ export class ApplicationSettingsProvider {
         resolveSourcesPromise(sourcesFromStorage);
       else {
         //when we have the language
-        languagePromise.then((language) => {
+        languagePromise.then((language: string) => {
           //fetch from service all sources
           console.log(`applicationSettings: ${language}`);
           let defaultSources: Array<string> = this.serviceClient.getFeedSources(language);
