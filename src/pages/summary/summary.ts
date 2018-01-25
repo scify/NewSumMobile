@@ -29,7 +29,9 @@ export class SummaryPage {
   public topicUpdatedSubscription: Subscription;
 
 
-private networkConnectionChangeSubscription: Subscription;  constructor(private  navParams: NavParams,
+  private networkConnectionChangeSubscription: Subscription;
+
+  constructor(private  navParams: NavParams,
               private topicsProvider: TopicsProvider,
               private ga: GoogleAnalytics,
               private imgLoadProvider: ImageLoadOptionProvider,
@@ -44,10 +46,12 @@ private networkConnectionChangeSubscription: Subscription;  constructor(private 
     this.initPage();
     this.subscribeToChanges();
   }
+
   ionViewDidEnter() {
     this.selectedImgLoadOption = this.imgLoadProvider.getSelectedImageLoadOption();
     this.subscribeToNetworkConnectionChanges();
   }
+
   ionViewDidLeave() {
     this.unsubscribeToChanges();
     this.unsubscribeFromNetworkConnectionChanges();
@@ -65,6 +69,7 @@ private networkConnectionChangeSubscription: Subscription;  constructor(private 
         this.selectedCategory = data.category;
         this.selectedSummary = data.summary;
         this.selectedTopic = data.topic;
+        this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(data.category);
         this.summaryIsConstructedByMoreThanOneSources = this.selectedSummary.Sources.length > 1;
         this.ga.trackView("Summary: " + this.selectedTopic.Title);
       }
@@ -84,14 +89,15 @@ private networkConnectionChangeSubscription: Subscription;  constructor(private 
     });
 
     this.isSearch = this.navParams.get('isSearch');
-    if (!this.isSearch) {
-      this.selectedCategory = this.topicsProvider.getCategory();
-      this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
-    } else {
+    if (this.isSearch) {
       this.selectedCategory = this.navParams.get('forcedCategoryTitle');
       this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage('Search');
+    } else {
+      this.selectedCategory = this.topicsProvider.getCategory();
+      this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
     }
   }
+
 
   public toggleDisplaySources() {
     this.storage.set("displaySources", this.displaySourcesUponEachSentence);
@@ -100,7 +106,7 @@ private networkConnectionChangeSubscription: Subscription;  constructor(private 
   swipeActivity(event) {
     this.loader.showLoader();
     if (event.direction == 2)
-      this.topicsProvider.loadNextTopic(this.selectedCategory,this.selectedTopic, this.isSearch);
+      this.topicsProvider.loadNextTopic(this.selectedCategory, this.selectedTopic, this.isSearch);
     else if (event.direction == 4)
       this.topicsProvider.loadPreviousTopic(this.selectedCategory, this.selectedTopic, this.isSearch);
   }

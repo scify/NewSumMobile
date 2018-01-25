@@ -4,6 +4,7 @@ import {BehaviorSubject} from "rxjs";
 import {ApplicationSettingsProvider} from "../applicationSettings/applicationSettings";
 import {TopicsUpdatedInfo} from "../../models/TopicsUpdatedInfo";
 import {ApiServiceProvider} from "../api-service/apiService";
+import {SelectTopicEnum} from "../../models/selectTopicEnum";
 
 // TODO: move to configuration file
 const NUMBER_OF_HOT_TOPICS_TO_DISPLAY: number = 10;
@@ -44,10 +45,6 @@ export class TopicsProvider {
               let topicsUpdatedInfo = new TopicsUpdatedInfo(category, topicsToDisplay, this.topics.length, this.filterHotTopics().length);
               this.topicsUpdated.next(topicsUpdatedInfo);
               resolve(topicsUpdatedInfo);
-              /*if (topicToSelect && topicsToDisplay.length > 0)
-               this.selectedTopicUpdated.next(topicToSelect == SelectTopicEnum.FIRST ?
-               topicsToDisplay[0] :
-               topicsToDisplay[topicsToDisplay.length - 1]);*/
             });
         });
     });
@@ -93,37 +90,84 @@ export class TopicsProvider {
             this.selectedTopicUpdated.next({category: category, topic: topic, summary: summary});
           })
       });
-
-
   }
 
-  public loadNextTopic(category: any, currentTopic: any, isSearch: boolean) {
+  private getPreviousCategory(currentCateg): Promise<any> {
+    return new Promise((resolve) => {
+      this.applicationSettings.getApplicationSettings()
+        .then((applicationSettings) => {
+          let index = applicationSettings.categories.indexOf(currentCateg); //find the index if the current category
+          if (index == 0)
+            resolve(applicationSettings.categories[applicationSettings.categories.length - 1]);
+          else if (index < applicationSettings.categories.length)
+            resolve(applicationSettings.categories[index - 1]); //get the previous one
+          else
+            resolve(null); //categ was not found in the array...now thats strange!
+        });
+    })
+  }
+
+  private getNextCategory(currentCateg): Promise<any> {
+    return new Promise((resolve) => {
+        this.applicationSettings.getApplicationSettings()
+          .then((applicationSettings) => {
+            let index = applicationSettings.categories.indexOf(currentCateg); //find the index if the current category
+            if (index == applicationSettings.categories.length - 1) //current category is the last one.
+              resolve(applicationSettings.categories[0]); //fetch the first one
+            else if (index >= 0)
+              resolve(applicationSettings.categories[index + 1]); //fetch next category
+            else
+              resolve(null);
+          });
+      }
+    )
+  }
+
+  private getTopicsAndSelect(category, topicToSelect: SelectTopicEnum) {
+    if (category) {
+      let topicToSelectAfterRetrieval = topicToSelect;
+      this.refreshTopics(category)
+        .then((topicsUpdatedInfo: TopicsUpdatedInfo) => {
+          if (topicsUpdatedInfo.topics && topicsUpdatedInfo.topics.length > 0) {
+            let topicToSelect = topicToSelectAfterRetrieval ==SelectTopicEnum.FIRST?
+              topicsUpdatedInfo.topics[0] : topicsUpdatedInfo.topics[topicsUpdatedInfo.topics.length - 1];
+            this.setSelectedTopic(topicsUpdatedInfo.category, topicToSelect);
+          }
+        });
+    }
+  }
+
+  public  loadNextTopic(category: any, currentTopic: any, isSearch: boolean) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
     let index = existingTopics.indexOf(currentTopic);
     if (index == existingTopics.length - 1) //we have reached the end,select next category
     {
-      //  if (!isSearch) //for search results there is no next/previous category to navigate
-      //this.categoriesProvider.loadNextCategory(SelectTopicEnum.FIRST);
+      if (!isSearch) //for search results there is no next/previous category to navigate
+        this.getNextCategory(category)
+          .then((nextCategory) => this.getTopicsAndSelect(nextCategory, SelectTopicEnum.FIRST));
     }
     else
       this.setSelectedTopic(category, existingTopics[index + 1]);
   }
 
-  public loadPreviousTopic(category: any, currentTopic: any, isSearch: boolean) {
+  public
+  loadPreviousTopic(category: any, currentTopic: any, isSearch: boolean) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
     let index = existingTopics.indexOf(currentTopic);
     if (index == 0) //we have reached the start,
     {
-      // if (!isSearch)
-      //this.categoriesProvider.loadPreviousCategory(SelectTopicEnum.LAST);
+      if (!isSearch)
+        this.getPreviousCategory(category)
+          .then((previousCateg) => this.getTopicsAndSelect(previousCateg, SelectTopicEnum.LAST));
     }
     else
       this.setSelectedTopic(category, existingTopics[index - 1]);
   }
 
-  private filterHotTopics(): Array<any> {
+  private
+  filterHotTopics(): Array<any> {
     let topicsCopy = this.topics.slice(0);
-    // get the first *NUMBER_OF_HOT_TOPICS_TO_DISPLAY* topics with the most sources as hot topics
+// get the first *NUMBER_OF_HOT_TOPICS_TO_DISPLAY* topics with the most sources as hot topics
     topicsCopy = topicsCopy
       .filter((topic) => topic.FromArticles > 1)
       .sort((a: any, b: any): any => {
@@ -137,7 +181,8 @@ export class TopicsProvider {
     return topicsCopy.slice(0, NUMBER_OF_HOT_TOPICS_TO_DISPLAY);
   }
 
-  private formatDateAndTimeForTopics(topics: Array<any>) {
+  private
+  formatDateAndTimeForTopics(topics: Array<any>) {
     topics.map(t => {
       let newestDate: any = t.NewestDate;
       t.DateFormatted = (newestDate.dayOfMonth < 10 ? '0' : '') + newestDate.dayOfMonth + '-' +

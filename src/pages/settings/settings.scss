@@ -6,4 +6,15 @@ page-settings {
 		font-size: small;
 		color: gray;
 	}
+
+}
+.list-header-md{
+  margin-bottom:0;
+
+  ion-label{
+    margin-bottom:0;
+  }
+}
+.alert-message{
+  overflow-y:auto;
 }
