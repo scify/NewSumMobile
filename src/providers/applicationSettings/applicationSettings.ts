@@ -83,7 +83,7 @@ export class ApplicationSettingsProvider {
         //when we have the language
         languagePromise.then((language) => {
           //fetch from service all sources
-          let defaultSources = this.serviceClient.getFeedSources(language);
+          let defaultSources:Array<string> = this.serviceClient.getFeedSources(language);
           //save to storage and we are done! now we have default sources
           this.setSelectedSources(defaultSources)
             .then(() => resolveSourcesPromise(defaultSources));

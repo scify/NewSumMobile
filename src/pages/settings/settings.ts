@@ -63,8 +63,8 @@ export class SettingsPage {
         text: 'ΕΠΙΛΟΓΗ',
         handler: (lang: string) => {
           this.selectedLangName = SettingsPage.availableLanguages[lang];
-          this.settingsProvider.setSelectedLanguage(lang);
-          this.updateDefaultValues();
+          this.settingsProvider.setSelectedLanguage(lang)
+            .then(() => this.updateDefaultValues());
         }
       });
 
@@ -107,25 +107,25 @@ export class SettingsPage {
     this.settingsProvider.getApplicationSettings().then((applicationSettings: ApplicationSettings) => {
       let alert = this.alertCtrl.create();
       let selectedCategories = applicationSettings.categories;
-      let categories = this.settingsProvider.getAllAvailableCategories(applicationSettings.sources,applicationSettings.language);
+      let categories = this.settingsProvider.getAllAvailableCategories(applicationSettings.sources, applicationSettings.language);
       alert.setTitle('Επιλογή Κατηγοριών');
 
-       for (let i = 0; i < categories.length; i++) {
-       alert.addInput({
-       type: 'checkbox',
-       label: categories[i],
-       value: categories[i],
-       checked: (selectedCategories.indexOf(categories[i]) >= 0)
-       });
-       }
+      for (let i = 0; i < categories.length; i++) {
+        alert.addInput({
+          type: 'checkbox',
+          label: categories[i],
+          value: categories[i],
+          checked: (selectedCategories.indexOf(categories[i]) >= 0)
+        });
+      }
 
       alert.addButton('ΑΚΥΡΩΣΗ');
       alert.addButton({
         text: 'ΕΠΙΛΟΓΗ',
         handler: (selectedCategories: Array<string>) => {
           this.selectedCategoriesStringified = selectedCategories.join();
-          this.settingsProvider.setSelectedCategories(selectedCategories);
-          this.updateDefaultValues();
+          this.settingsProvider.setSelectedCategories(selectedCategories)
+            .then(() => this.updateDefaultValues());
         }
       });
 
@@ -155,8 +155,10 @@ export class SettingsPage {
         text: 'ΕΠΙΛΟΓΗ',
         handler: (selectedSources: Array<any>) => {
           this.selectedSourcesStringified = selectedSources.join();
-          this.settingsProvider.setSelectedSources(selectedSources);
-          this.updateDefaultValues();
+          this.settingsProvider
+              .setSelectedSources(selectedSources)
+              .then(() => this.updateDefaultValues());
+
         }
       });
 
