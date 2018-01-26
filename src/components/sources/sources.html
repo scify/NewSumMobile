@@ -1,0 +1,4 @@
+<span *ngFor="let source of allSources; let i = index;">
+    <anchor href="{{(source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + source.sourceURL}}"
+        class="source" text="{{source.sourceLabel}}"></anchor>{{allSources.length > 1 && i !== allSources.length - 1 ? ' ,' : ''}}
+</span>

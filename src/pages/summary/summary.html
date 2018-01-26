@@ -34,10 +34,8 @@
         <ion-col>
           <div class="summary-snippet" *ngFor="let sentence of selectedSummary.Sentences">
             <p>
-            <span class="sentence-source">
-               <anchor
-                 href="{{(sentence.Source.sourceLabel === 'ΕΝΙΚΟΣ' ? 'http://www.enikos.gr' : '') + sentence.Source.sourceURL}}"
-                 class="source" text="{{sentence.Source.sourceLabel}}"></anchor>
+            <span class="sentence-sources">
+              <sources [sentence]="sentence"></sources>
             </span>
               <span [innerHtml]="sentence.Snippet"></span>
             </p>

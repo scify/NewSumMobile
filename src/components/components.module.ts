@@ -5,13 +5,16 @@ import { CommonModule } from '@angular/common';
 import { ArticlesListComponent } from './articles-list/articles-list';
 import {NetworkProvider} from "../providers/network/network";
 import {TranslateModule} from "@ngx-translate/core";
+import { SourcesComponent } from './sources/sources';
 
 @NgModule({
 	declarations: [AnchorComponent,
-    ArticlesListComponent],
+    ArticlesListComponent,
+    SourcesComponent],
 	imports: [CommonModule, IonicModule, TranslateModule],
 	exports: [AnchorComponent,
-    ArticlesListComponent],
+    ArticlesListComponent,
+    SourcesComponent],
 	providers: [NetworkProvider]
 })
 

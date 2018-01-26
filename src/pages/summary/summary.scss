@@ -71,11 +71,6 @@ page-summary {
     }
   }
 
-  .source a{
-    text-decoration: none;
-    color:lightgray;
-  }
-
   #sources-list{
     list-style-type: none;
     padding-left:1px;
@@ -87,11 +82,11 @@ page-summary {
     }
   }
 
-  .sentence-source {
+  .sentence-sources {
     display:none;
   }
   .many-sources.displaySourcesUponSentence {
-     .sentence-source {
+     .sentence-sources {
       display:block;
       color:lightgrey;
       font-size:11px;
