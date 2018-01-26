@@ -28,7 +28,7 @@ $ npm -v
 
 It is very easy to install multiple versions of nodejs and npm, by using [Node Version Manager (nvm)](https://github.com/creationix/nvm).
 
-##Install project dependencies:
+## Install project dependencies:
 
 ```bash
 $ npm install -g ionic cordova
@@ -36,7 +36,7 @@ $ npm install
 $ ionic serve
 ```
 
-##Execution
+## Execution
 
 ```bash
 $ ionic cordova platform add android
