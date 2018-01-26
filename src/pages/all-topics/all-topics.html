@@ -15,6 +15,14 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher (ionRefresh)="refreshArticles($event)" refresherHeight="100px">
+    <ion-refresher-content pullingIcon="arrow-dropdown"
+                           pullingText="{{'Pull to refresh' | translate}}"
+                           refreshingSpinner="crescent"
+                           refreshingText="{{'Refreshing articles' | translate}}...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <div *ngIf="isRefreshing" class="refresh-content-cover"></div>
   <div>
     <articles-list
       [category]="selectedCategory"

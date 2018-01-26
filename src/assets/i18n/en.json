@@ -28,5 +28,7 @@
   "Images Load2": "Images Load",
   "All": "All",
   "selected": "selected",
-  "No topics found": "No topics found"
+  "No topics found": "No topics found",
+  "Pull to refresh": "Pull to refresh",
+  "Refreshing articles": "Refreshing articles"
 }

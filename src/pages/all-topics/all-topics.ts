@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Content, NavController} from 'ionic-angular';
+import {Content, NavController, Refresher} from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {TextManipulationService} from "../../lib/text-manipulation";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
@@ -15,17 +15,25 @@ import {LoaderProvider} from "../../providers/loader/loader";
 })
 export class AllTopicsPage {
   @ViewChild(Content) content: Content;
+  @ViewChild(Refresher) refresher: Refresher;
 
   public topics: Array<any>;
   public selectedCategory: string;
   public selectedCategoryForUppercase: string;
   public selectedCategoryDefaultImage: string;
+  public isRefreshing: boolean = false;
   private topicsUpdatedSubscription: Subscription;
 
   constructor(protected navCtrl: NavController,
               protected ga: GoogleAnalytics,
               protected loader: LoaderProvider,
               protected topicsProvider: TopicsProvider) {
+  }
+
+  ionViewDidLoad() {
+    // set refresher values
+    this.refresher.pullMin = 80;
+    this.refresher.pullMax = 80 + 60;
   }
 
   ionViewWillEnter() { // 	Runs when the page is about to enter and become the active page.
@@ -75,6 +83,14 @@ export class AllTopicsPage {
 
   public displaySettingsPage() {
     this.navCtrl.push(SettingsPage);
+  }
+
+  public refreshArticles(refresher) {
+    this.isRefreshing = true;
+    this.topicsProvider.refreshTopics(this.selectedCategory).then(() => {
+      this.isRefreshing = false;
+      refresher.complete();
+    });
   }
 }
 
