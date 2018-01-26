@@ -1,7 +1,9 @@
 sources {
-  .source a{
-    text-decoration: none;
-    color: lightgray;
-    display: inline-block;
+  .source {
+    a, div {
+      text-decoration: none;
+      color: lightgray;
+      display: inline-block;
+    }
   }
 }
