@@ -15,6 +15,9 @@ export class ApplicationSettingsProvider {
     this.applicationSettingsChanged = new Subject();
   }
 
+  public getDefaultSelectedTabIndex(): Promise<number> {
+    return this.appStorage.get("selected-tab-index");
+  }
 
   private getSelectedLanguage(): Promise<string> {
     return this.appStorage.get("selected-language");
@@ -46,6 +49,10 @@ export class ApplicationSettingsProvider {
 
   public setFavoriteCategory(favoriteCategory): Promise<any> {
     return this.appStorage.set("favorite-category", favoriteCategory);
+  }
+
+  public setDefaultSelectedTabIndex(selectedTabIndex: number): Promise<any> {
+    return this.appStorage.set("selected-tab-index", selectedTabIndex);
   }
 
   public getApplicationSettings(): Promise<ApplicationSettings> {
