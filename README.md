@@ -5,7 +5,7 @@
 This repository contains the code of the mobile application (build with [Ionic framework](https://ionicframework.com/)).
 News are fetched by consuming a free SOAP service defined by SciFY. 
 
-#Screeshots
+## Screeshots
 <p align="center">
 <img src="https://github.com/scify/NewSumMobile/blob/master/docs/screenshots/topics-page.png?raw=true" width="200">
 <img src="https://github.com/scify/NewSumMobile/blob/master/docs/screenshots/topic-page.png?raw=true" width="200">
