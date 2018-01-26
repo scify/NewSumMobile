@@ -30,6 +30,7 @@ import { LoaderProvider } from '../providers/loader/loader';
 import {ApiServiceProvider} from "../providers/api-service/apiService";
 import {SoapApiCaller} from "../providers/api-service/soap-api-caller";
 import {CustomErrorHandler} from "../providers/error/customErrorHandler";
+import { CodePush } from '@ionic-native/code-push'
 
 export function createTranslationLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -72,6 +73,7 @@ export function createTranslationLoader(http: HttpClient) {
     SettingsPage
   ],
   providers: [
+    CodePush,
     StatusBar,
     SplashScreen,
     GoogleAnalytics,

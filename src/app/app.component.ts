@@ -13,6 +13,7 @@ import {ApplicationSettings} from "../models/applicationSettings";
 import {LoaderProvider} from "../providers/loader/loader";
 import {TopicsProvider} from "../providers/topics/topics";
 import {ApplicationSettingsProvider} from "../providers/applicationSettings/applicationSettings";
+import {CodePush} from "@ionic-native/code-push";
 
 @Component({
   templateUrl: 'app.html'
@@ -22,7 +23,7 @@ export class MyApp {
   rootPage: any = TabsPage;
   availableCategories: Array<string>;
 
-  constructor(platform: Platform,
+  constructor(private platform: Platform,
               private screenOrientation: ScreenOrientation,
               private statusBar: StatusBar,
               private splashScreen: SplashScreen,
@@ -33,7 +34,8 @@ export class MyApp {
               private ga: GoogleAnalytics,
               private imgLoadProvider: ImageLoadOptionProvider,
               private translate: TranslateService,
-              private notification: NotificationsProvider) {
+              private notification: NotificationsProvider,
+              private codePush: CodePush) {
 
     platform.ready().then(this.platformReadyHandler.bind(this));
     this.settingsProvider.applicationSettingsChanged.subscribe(this.handleApplicationSettingsChange.bind(this));
@@ -48,6 +50,7 @@ export class MyApp {
 
     this.loader.showLoader();
     this.rootPage = TabsPage;
+
     this.settingsProvider.getApplicationSettings().then((applicationSettings: ApplicationSettings) => {
       this.translate.setDefaultLang(applicationSettings.language.toLowerCase());
       this.translate.use(applicationSettings.language.toLowerCase());
@@ -58,12 +61,27 @@ export class MyApp {
       });
       this.initGoogleAnalytics();
       this.notification.startCheckingForNotifications();
+      //this.checkForNewUpdates();
     });
+
   }
 
-  private handleApplicationSettingsChange(newApplicationSettings:ApplicationSettings){
+  private checkForNewUpdates() {
+    if (this.platform.is('cordova')){
+      this.codePush.sync().subscribe((syncStatus) => {
+        console.log(syncStatus);
+      } );
+
+      const downloadProgress = (progress) => {
+        console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`);
+      }
+      this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
+    }
+  }
+
+  private handleApplicationSettingsChange(newApplicationSettings: ApplicationSettings) {
     this.availableCategories = newApplicationSettings.categories;
-    console.log("refreshing category: "+ newApplicationSettings.favoriteCategory);
+    console.log("refreshing category: " + newApplicationSettings.favoriteCategory);
     this.topicsProvider.refreshTopics(newApplicationSettings.favoriteCategory);
   }
 
