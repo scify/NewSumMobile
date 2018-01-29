@@ -81,9 +81,11 @@ export class ApplicationSettingsProvider {
       if (languageFromStorage) //language already exists
         resolveLanguagePromise(languageFromStorage);
       else {
-        //save to storage
-        //todo:fetch from service, get devices information and select proper value from service
-        this.setSelectedLanguage("EL").then(() => resolveLanguagePromise("EL"));
+        // get device preferred language
+        // (e.g. preferred language might be something like 'en-US' and we only need 'en',
+        // so we check if the language is 'el', otherwise it will be 'en')
+        let deviceLang = (navigator.language.substr(0, 2) === 'el') ? 'EL' : 'EN';
+        this.setSelectedLanguage(deviceLang).then(() => resolveLanguagePromise(deviceLang));
       }
     });
 
