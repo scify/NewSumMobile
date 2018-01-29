@@ -61,7 +61,7 @@ export class MyApp {
       });
       this.initGoogleAnalytics();
       this.notification.startCheckingForNotifications();
-      //this.checkForNewUpdates();
+      this.checkForNewUpdates();
     });
 
   }
