@@ -27,6 +27,17 @@ $ npm -v
 ```
 
 It is very easy to install multiple versions of nodejs and npm, by using [Node Version Manager (nvm)](https://github.com/creationix/nvm).
+Install node v8.9.1
+```$xslt
+$ nvm install v8.9.1
+```
+Set node v8.9.1 as the default version
+```$xslt
+$ nvm alias default v8.9.1
+
+``````
+
+
 
 ## Install project dependencies:
 
