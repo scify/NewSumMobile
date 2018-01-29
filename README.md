@@ -26,7 +26,8 @@ $ npm -v
 5.6.0
 ```
 
-It is very easy to install multiple versions of nodejs and npm, by using [Node Version Manager (nvm)](https://github.com/creationix/nvm).
+It is very easy to install multiple versions of nodejs and npm, by using [Node Version Manager (nvm)](https://github.com/creationix/nvm):
+
 Install node v8.9.1
 ```$xslt
 $ nvm install v8.9.1
