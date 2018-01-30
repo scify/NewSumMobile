@@ -57,12 +57,14 @@ export class ApplicationSettingsProvider {
 
   public getApplicationSettings(): Promise<ApplicationSettings> {
     return new Promise((resolve) => {
-      Promise.all([this.getSelectedLanguage(),
+      Promise.all([
+        this.getSelectedLanguage(),
         this.getSelectedSources(),
         this.getSelectedCategories(),
         this.getFavoriteCategory()])
         .then(([languageFromStorage, sourcesFromStorage, categoriesFromStorage, favoriteCategoryFromStorage]) => {
-          this.checkIfAllApplicationSettingsAreSetOrSetDefaultValues(languageFromStorage,
+          this.checkIfAllApplicationSettingsAreSetOrSetDefaultValues(
+            languageFromStorage,
             sourcesFromStorage,
             categoriesFromStorage,
             favoriteCategoryFromStorage)
@@ -84,7 +86,7 @@ export class ApplicationSettingsProvider {
         // get device preferred language
         // (e.g. preferred language might be something like 'en-US' and we only need 'en',
         // so we check if the language is 'el', otherwise it will be 'en')
-        let deviceLang = (navigator.language.substr(0, 2) === 'el') ? 'EL' : 'EN';
+        let deviceLang = (navigator.language.substr(0, 2).toLowerCase() === 'el') ? 'EL' : 'EN';
         this.setSelectedLanguage(deviceLang).then(() => resolveLanguagePromise(deviceLang));
       }
     });
