@@ -31,6 +31,7 @@ import {ApiServiceProvider} from "../providers/api-service/apiService";
 import {SoapApiCaller} from "../providers/api-service/soap-api-caller";
 import {CustomErrorHandler} from "../providers/error/customErrorHandler";
 import { CodePush } from '@ionic-native/code-push'
+import {AppVersion} from "@ionic-native/app-version";
 
 export function createTranslationLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -88,6 +89,7 @@ export function createTranslationLoader(http: HttpClient) {
     NetworkProvider,
     ImageLoadOptionProvider,
     {provide: ErrorHandler, useClass: CustomErrorHandler},
+    AppVersion
   ]
 })
 export class AppModule {}

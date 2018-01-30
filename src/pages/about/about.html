@@ -1,18 +1,34 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      About
+      {{"SETTINGS" | translate}}
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <img src="../../assets/imgs/NewSum_logo.png">
-  <p>
-    NewSum is an open source application that automatically summarizes information from many sources and combines them
-    in a single text. With the use of artificial intelligence, it searches for the latest news in selected news sources, classifies text
-    which refer the same piece of information, and presents an overview of it's main points.
-  </p>
-  <br> It is developed by <anchor text="SciFY" href="http://www.scify.org"></anchor>.
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12>
+        <ion-img  src="assets/imgs/NewSum_logo.png"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-12>
+        Version {{ versionNumber}}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-12 [innerHtml]="'ABOUT_INFO' | translate" >
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-12>
+        <anchor text="{{ 'ABOUT_MORE' | translate}}" href="http://www.scify.gr/site/en/text-analytics"></anchor><br>
+        <anchor text="{{ 'ABOUT_CODE' | translate}}" href="https://github.com/scify/NewSumMobile"></anchor>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 
 </ion-content>
