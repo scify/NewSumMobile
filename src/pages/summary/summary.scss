@@ -8,7 +8,6 @@ page-summary {
 
   #display-sources-toggle
   {
-    display:none;
     ion-label {
       text-align:right;
       font-size:11px;
@@ -17,21 +16,14 @@ page-summary {
       margin:0;
       border:none;
     }
-
+    .grid {
+      padding-top:0;
+    }
     .item-inner
     {
       border:none;
     }
   }
-  .many-sources   {
-    #display-sources-toggle {
-      display:block;
-    }
-    .grid {
-      padding-top:0;
-    }
-  }
-
   #img-container {
     position: relative;
     img {
@@ -84,12 +76,13 @@ page-summary {
 
   .sentence-sources {
     display:none;
+    color:lightgrey;
+    font-size:11px;
   }
-  .many-sources.displaySourcesUponSentence {
+  .displaySourcesUponSentence {
      .sentence-sources {
       display:block;
-      color:lightgrey;
-      font-size:11px;
+
     }
 
   }

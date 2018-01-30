@@ -14,7 +14,7 @@
 
 
 <ion-content
-  [ngClass]="{'many-sources':summaryIsConstructedByMoreThanOneSources,'displaySourcesUponSentence':displaySourcesUponEachSentence}">
+  [ngClass]="{'displaySourcesUponSentence':displaySourcesUponEachSentence}">
 
   <div *ngIf="selectedSummary" (swipe)="swipeActivity($event)">
     <div id="img-container">
