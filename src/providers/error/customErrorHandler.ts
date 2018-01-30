@@ -23,6 +23,7 @@ export class CustomErrorHandler implements ErrorHandler {
   }
 
   presentError(err = undefined) {
+    console.error(err);
     if (this.network.type === 'none') {
       let alert = this.alertCtrl.create({
         title: 'Connection lost!',
@@ -38,7 +39,7 @@ export class CustomErrorHandler implements ErrorHandler {
         ]
       });
       alert.present();
-    } else if (err && err.name === 'NetworkError') {
+    } else if (err && err.rejection.name === 'NetworkError') {
       let alert = this.alertCtrl.create({
         title: 'Couldn\'t connect to server!',
         message: 'Please try again by clicking the button below.',
