@@ -56,6 +56,8 @@ export class ArticlesListComponent {
   }
 
   ngOnInit() {
+    // initialize variable because we may not have an update from observable
+    this.isConnectedToWiFi = this.networkProvider.network.type === 'wifi';
     if (this.platform.is('cordova')) {
       this.networkConnectionChangeSubscription = this.networkProvider.networkConnectionChanged.subscribe((newConnectionType) => {
         this.isConnectedToWiFi = newConnectionType === 'wifi';

@@ -13,7 +13,7 @@ import {Platform} from "ionic-angular";
 export class NetworkProvider {
   public networkConnectionChanged: Subject<any>;
 
-  constructor(private network: Network, private platform: Platform) {
+  constructor(public network: Network, private platform: Platform) {
     this.networkConnectionChanged = new Subject<any>();
     if (this.platform.is('cordova')) {
       this.network.onchange().subscribe(() => {

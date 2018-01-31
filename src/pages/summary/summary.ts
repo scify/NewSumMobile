@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {IonicPage,  NavParams, Platform, ViewController} from 'ionic-angular';
+import {AlertController, IonicPage, NavParams, Platform, ViewController} from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
@@ -38,7 +38,8 @@ export class SummaryPage {
               private networkProvider: NetworkProvider,
               private platform: Platform,
               private storage: Storage,
-              private loader: LoaderProvider) {
+              private loader: LoaderProvider,
+              private alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
@@ -47,6 +48,8 @@ export class SummaryPage {
 
   ionViewDidEnter() {
     this.selectedImgLoadOption = this.imgLoadProvider.getSelectedImageLoadOption();
+    // initialize variable because we may not have an update from observable
+    this.isConnectedToWiFi = this.networkProvider.network.type === 'wifi';
     this.subscribeToNetworkConnectionChanges();
     this.initPage();
   }
@@ -113,6 +116,7 @@ export class SummaryPage {
   private subscribeToNetworkConnectionChanges() {
     if (this.platform.is('cordova')) {
       this.networkConnectionChangeSubscription = this.networkProvider.networkConnectionChanged.subscribe((newConnectionType) => {
+        this.alertMe('connection', newConnectionType);
         this.isConnectedToWiFi = newConnectionType === 'wifi';
       });
     }
@@ -122,5 +126,19 @@ export class SummaryPage {
     if (this.platform.is('cordova')) {
       this.networkConnectionChangeSubscription.unsubscribe();
     }
+  }
+
+  alertMe(olo, yolo) {
+    let alert = this.alertCtrl.create({
+      title: 'Info!',
+      message: olo + ': ' + yolo,
+      buttons: [
+        {
+          text: 'Restart',
+          handler: () => {}
+        }
+      ]
+    });
+    alert.present();
   }
 }
