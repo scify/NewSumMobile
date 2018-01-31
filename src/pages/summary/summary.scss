@@ -5,7 +5,9 @@ page-summary {
 /*  #sources-grid{
     padding-top:0;
   }*/
-
+  .grid {
+    padding-top:0;
+  }
   #display-sources-toggle
   {
     ion-label {
@@ -16,9 +18,7 @@ page-summary {
       margin:0;
       border:none;
     }
-    .grid {
-      padding-top:0;
-    }
+
     .item-inner
     {
       border:none;

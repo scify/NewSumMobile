@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams, Platform, ViewController} from 'ionic-angular';
+import {IonicPage,  NavParams, Platform, ViewController} from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
@@ -9,7 +9,7 @@ import {ImageLoadOptionProvider} from "../../providers/image-load-option/image-l
 import {NetworkProvider} from "../../providers/network/network";
 import {LoaderProvider} from "../../providers/loader/loader";
 
-
+@IonicPage()
 @Component({
   selector: 'page-summary',
   templateUrl: 'summary.html',
@@ -38,7 +38,6 @@ export class SummaryPage {
               private networkProvider: NetworkProvider,
               private platform: Platform,
               private storage: Storage,
-              private viewCtrl: ViewController,
               private loader: LoaderProvider) {
   }
 

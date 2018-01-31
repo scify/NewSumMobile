@@ -1,17 +1,11 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {TopicsProvider} from '../../providers/topics/topics';
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
 import {TranslateService} from "@ngx-translate/core";
 
-/**
- * Generated class for the SearchResultsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
+@IonicPage()
 @Component({
   selector: 'page-search-results',
   templateUrl: 'search-results.html',

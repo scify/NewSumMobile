@@ -44,35 +44,29 @@ export class MyApp {
 
   private platformReadyHandler() {
     this.statusBar.styleDefault();
-    // lock portrait orientation
-    this.screenOrientation.lock('portrait').then(() => console.log('Screen orientation locked successfully'),
-      error => console.error('An error occurred while trying to lock screen orientation', error)
-    );
-
-    this.loader.showLoader();
     this.rootPage = TabsPage;
-
+    this.loader.showLoader();
+    this.splashScreen.hide();
     this.settingsProvider.getApplicationSettings().then((applicationSettings: ApplicationSettings) => {
       this.selectedTheme = applicationSettings.activeTheme.toLowerCase() + '-theme';
       this.translate.setDefaultLang(applicationSettings.language.toLowerCase());
       this.translate.use(applicationSettings.language.toLowerCase());
-
       this.availableCategories = applicationSettings.categories;
-      this.topicsProvider.refreshTopics(applicationSettings.favoriteCategory).then(() => {
-        this.splashScreen.hide();
-      });
+      this.topicsProvider.refreshTopics(applicationSettings.favoriteCategory);
       this.initGoogleAnalytics();
       this.notification.startCheckingForNotifications();
       this.checkForNewUpdates();
     });
-
+    this.screenOrientation.lock('portrait').then(() => console.log('Screen orientation locked successfully'),
+      error => console.error('An error occurred while trying to lock screen orientation', error)
+    );
   }
 
   private checkForNewUpdates() {
-    if (this.platform.is('cordova')){
+    if (this.platform.is('cordova')) {
       this.codePush.sync().subscribe((syncStatus) => {
         console.log(syncStatus);
-      } );
+      });
 
       const downloadProgress = (progress) => {
         console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`);
@@ -103,7 +97,7 @@ export class MyApp {
 
   public searchForTopic(e: any, searchInput: string) {
     if (e.keyCode === 13 && searchInput) {
-      this.navCtrl.push(SearchResultsPage, {keyword: searchInput});
+      this.navCtrl.push('SearchResultsPage', {keyword: searchInput});
       this.menuCtrl.close();
     }
   }
