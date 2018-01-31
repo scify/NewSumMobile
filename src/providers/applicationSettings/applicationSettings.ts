@@ -35,6 +35,10 @@ export class ApplicationSettingsProvider {
     return this.appStorage.get("favorite-category");
   }
 
+  private getActiveTheme(): Promise<string> {
+    return this.appStorage.get("active-theme");
+  }
+
   private setSelectedLanguage(language: string): Promise<any> {
     return this.appStorage.set("selected-language", language);
   }
@@ -55,30 +59,49 @@ export class ApplicationSettingsProvider {
     return this.appStorage.set("selected-tab-index", selectedTabIndex);
   }
 
+  private setActiveTheme(theme: string): Promise<any> {
+    return this.appStorage.set("active-theme", theme);
+  }
+
   public getApplicationSettings(): Promise<ApplicationSettings> {
     return new Promise((resolve) => {
       Promise.all([
+        this.getActiveTheme(),
         this.getSelectedLanguage(),
         this.getSelectedSources(),
         this.getSelectedCategories(),
         this.getFavoriteCategory()])
-        .then(([languageFromStorage, sourcesFromStorage, categoriesFromStorage, favoriteCategoryFromStorage]) => {
+        .then(([activeThemeFromStorage, languageFromStorage, sourcesFromStorage, categoriesFromStorage, favoriteCategoryFromStorage]) => {
           this.checkIfAllApplicationSettingsAreSetOrSetDefaultValues(
+            activeThemeFromStorage,
             languageFromStorage,
             sourcesFromStorage,
             categoriesFromStorage,
             favoriteCategoryFromStorage)
-            .then(([language, sources, categories, favoriteCategory]) => {
-              resolve(new ApplicationSettings(language, sources, categories, favoriteCategory));
+            .then(([activeTheme, language, sources, categories, favoriteCategory]) => {
+              resolve(new ApplicationSettings(activeTheme, language, sources, categories, favoriteCategory));
             });
         });
     });
   }
 
-  private checkIfAllApplicationSettingsAreSetOrSetDefaultValues(languageFromStorage,
+  private checkIfAllApplicationSettingsAreSetOrSetDefaultValues(activeThemeFromStorage,
+                                                                languageFromStorage,
                                                                 sourcesFromStorage,
                                                                 categoriesFromStorage,
                                                                 favoriteCategoryFromStorage): Promise<any> {
+    let activeThemePromise = new Promise((resolveThemePromise) => {
+      if (activeThemeFromStorage) {
+        resolveThemePromise(activeThemeFromStorage);
+      } else {
+        // set light as default theme, if none is selected
+        let newTheme: string = 'Light';
+        this.setActiveTheme(newTheme).then(() => {
+          resolveThemePromise(newTheme);
+        })
+      }
+    });
+
     let languagePromise = new Promise((resolveLanguagePromise) => {
       if (languageFromStorage) //language already exists
         resolveLanguagePromise(languageFromStorage);
@@ -137,7 +160,7 @@ export class ApplicationSettingsProvider {
       }
     });
 
-    return Promise.all([languagePromise, sourcesPromise, categoriesPromise, favoriteCategoryPromise]);
+    return Promise.all([activeThemePromise, languagePromise, sourcesPromise, categoriesPromise, favoriteCategoryPromise]);
   }
 
   public getAllAvailableCategories(sources, language) {
@@ -156,12 +179,13 @@ export class ApplicationSettingsProvider {
     let setCategoriesPromise = this.setSelectedCategories(categories);
     let favoriteCategory = categories[0];
     let setFavoritePromise = this.setFavoriteCategory(favoriteCategory);
+    let getThemePromise = this.getActiveTheme();
 
     //when all writes to local storage complete, fire events
     return new Promise((resolve) => {
-      Promise.all([setLanguagePromise, setSourcesPromise, setCategoriesPromise, setFavoritePromise])
-        .then(() => {
-          let applicationSettings = new ApplicationSettings(newLanguage, sources, categories, favoriteCategory);
+      Promise.all([getThemePromise, setLanguagePromise, setSourcesPromise, setCategoriesPromise, setFavoritePromise])
+        .then(([theme]) => {
+          let applicationSettings = new ApplicationSettings(theme, newLanguage, sources, categories, favoriteCategory);
           resolve(applicationSettings);
           this.applicationSettingsChanged.next(applicationSettings);
         });
@@ -173,15 +197,17 @@ export class ApplicationSettingsProvider {
 
     return new Promise((resolve) => {
       getLanguagePromise.then((language) => {
+        let setSourcesPromise = this.setSelectedSources(newSources);
         let categories = this.serviceClient.getCategories(newSources, language);
         let setCategoriesPromise = this.setSelectedCategories(categories);
         let favoriteCategory = categories[0];
         let setFavoritePromise = this.setFavoriteCategory(favoriteCategory);
+        let getThemePromise = this.getActiveTheme();
 
         //when all writes to local storage complete, fire events
-        Promise.all([setCategoriesPromise, setFavoritePromise])
-          .then(() => {
-            let applicationSettings = new ApplicationSettings(language, newSources, categories, favoriteCategory);
+        Promise.all([getThemePromise, setSourcesPromise, setCategoriesPromise, setFavoritePromise])
+          .then(([theme]) => {
+            let applicationSettings = new ApplicationSettings(theme, language, newSources, categories, favoriteCategory);
             resolve(applicationSettings);
             this.applicationSettingsChanged.next(applicationSettings);
           });
@@ -196,14 +222,31 @@ export class ApplicationSettingsProvider {
       let setFavoriteCatPromise = this.setFavoriteCategory(favoriteCategory );
       let getLanguagePromise = this.getSelectedLanguage();
       let getSourcesPromise = this.getSelectedSources();
+      let getThemePromise = this.getActiveTheme();
 
-      Promise.all([getLanguagePromise,getSourcesPromise,setCategoriesPromise,setFavoriteCatPromise])
-          .then(([language,sources])=>{
-            let applicationSettings = new ApplicationSettings(language, sources, newCategories, favoriteCategory);
+      Promise.all([getThemePromise, getLanguagePromise,getSourcesPromise,setCategoriesPromise,setFavoriteCatPromise])
+          .then(([theme, language,sources])=>{
+            let applicationSettings = new ApplicationSettings(theme, language, sources, newCategories, favoriteCategory);
             resolve(applicationSettings);
             this.applicationSettingsChanged.next(applicationSettings);
           })
     });
   }
 
+  public changeActiveTheme(newTheme: string) {
+    let setThemePromise = this.setActiveTheme(newTheme);
+    let getLanguagePromise = this.getSelectedLanguage();
+    let getSourcesPromise = this.getSelectedSources();
+    let getCategoriesPromise = this.getSelectedCategories();
+    let getFavoritePromise = this.getFavoriteCategory();
+
+    return new Promise((resolve) => {
+      Promise.all([setThemePromise, getLanguagePromise, getSourcesPromise, getCategoriesPromise, getFavoritePromise])
+        .then(([theme, language, sources, categories, favoriteCategory]) => {
+          let applicationSettings = new ApplicationSettings(theme, language, sources, categories, favoriteCategory);
+          resolve(applicationSettings);
+          this.applicationSettingsChanged.next(applicationSettings);
+        });
+    })
+  }
 }

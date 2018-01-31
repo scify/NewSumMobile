@@ -1,6 +1,6 @@
-<ion-nav #header [root]="rootPage" swipeBackEnabled="false" #mainNav main></ion-nav>
+<ion-nav #header [root]="rootPage" [class]="selectedTheme" swipeBackEnabled="false" #mainNav main></ion-nav>
 
-<ion-menu [content]="header">
+<ion-menu [content]="header" [class]="selectedTheme">
     <ion-header>
         <ion-toolbar>            
             <ion-searchbar

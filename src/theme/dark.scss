@@ -1,0 +1,129 @@
+$white: #fff;
+$dark-gray: #252120;
+$light-gray: #6e625f;
+$red: #c4364b;
+
+ion-nav.dark-theme {
+  ion-navbar {
+    button {
+      color: $white !important;
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  ion-content {
+    background-color: $light-gray;
+    color: $white;
+    ion-card {
+      background-color: $dark-gray !important;
+    }
+  }
+
+  page-summary {
+    #display-sources-toggle {
+      background-color: $light-gray;
+      ion-label {
+        color: lightgray;
+      }
+      .toggle-checked .toggle-icon {
+        background-color: pink;
+        .toggle-inner {
+          background-color: $red;
+        }
+      }
+    }
+    #date-info {
+      color: lightgray;
+    }
+    .summary-snippet {
+      color: $white;
+    }
+    #sources-list a {
+      color: lightgray;
+    }
+  }
+
+  page-settings {
+    .item {
+      background-color: $light-gray !important;
+      color: $white !important;
+      .selected-value {
+        color: lightgray;
+      }
+    }
+  }
+
+  articles-list .not-found-topics p {
+    color: lightgray;
+  }
+
+  .tabbar {
+    background-color: $dark-gray !important;
+    color: $white;
+    .tab-button, ion-icon {
+      color: $white;
+      &[aria-selected="true"] {
+        color: $red;
+        ion-icon {
+          color: $red;
+        }
+      }
+    }
+  }
+
+  .toolbar-title {
+    color: $white;
+  }
+
+  .header .toolbar-background {
+    background-color: $dark-gray;
+  }
+}
+
+ion-menu.dark-theme {
+  ion-header {
+    .toolbar-background {
+      background-color: $dark-gray;
+    }
+  }
+  ion-content {
+    background-color: $dark-gray;
+    .item {
+      background-color: $dark-gray !important;
+      color: $white !important;
+    }
+  }
+}
+
+ion-alert.dark-theme {
+  .alert-wrapper {
+    background-color: $light-gray;
+    color: $white;
+    .alert-head {
+      background-color: $dark-gray;
+    }
+    button {
+      color: white;
+      .alert-radio-label, .alert-checkbox-label {
+        color: $white;
+      }
+      .alert-radio-inner, .alert-checkbox-inner {
+        background-color: $red;
+      }
+      &[aria-checked="true"] {
+        .alert-radio-icon {
+          border-color: $red;
+        }
+        .alert-checkbox-icon {
+          background-color: $red;
+          border-color: $red;
+        }
+        .alert-radio-label {
+          color: $red;
+        }
+      }
+    }
+  }
+}

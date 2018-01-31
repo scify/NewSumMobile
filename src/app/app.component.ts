@@ -22,6 +22,7 @@ export class MyApp {
   @ViewChild('mainNav') navCtrl: NavController;
   rootPage: any = TabsPage;
   availableCategories: Array<string>;
+  selectedTheme: string;
 
   constructor(private platform: Platform,
               private screenOrientation: ScreenOrientation,
@@ -52,6 +53,7 @@ export class MyApp {
     this.rootPage = TabsPage;
 
     this.settingsProvider.getApplicationSettings().then((applicationSettings: ApplicationSettings) => {
+      this.selectedTheme = applicationSettings.activeTheme.toLowerCase() + '-theme';
       this.translate.setDefaultLang(applicationSettings.language.toLowerCase());
       this.translate.use(applicationSettings.language.toLowerCase());
 
@@ -80,6 +82,7 @@ export class MyApp {
   }
 
   private handleApplicationSettingsChange(newApplicationSettings: ApplicationSettings) {
+    this.selectedTheme = newApplicationSettings.activeTheme.toLowerCase() + '-theme';
     this.availableCategories = newApplicationSettings.categories;
     console.log("refreshing category: " + newApplicationSettings.favoriteCategory);
     this.topicsProvider.refreshTopics(newApplicationSettings.favoriteCategory);

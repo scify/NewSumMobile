@@ -22,6 +22,7 @@ export class SettingsPage {
   public selectedCategoriesStringified: string;
   public selectedSourcesStringified: string;
   public selectedImagesLoadOption: string;
+  public selectedTheme: string;
   private static availableLanguages: any = {
     'EL': 'Ελληνικά',
     'EN': 'English'
@@ -35,6 +36,7 @@ export class SettingsPage {
   private categoriesText: string;
   private sourcesText: string;
   private imagesLoadText: string;
+  private themeText: string;
   private allText: string;
   private selectedText: string;
 
@@ -67,6 +69,7 @@ export class SettingsPage {
       let alert = this.alertCtrl.create();
       let selectedLang = applicationSettings.language;
       alert.setTitle(this.selectText + ' ' + this.languageText);
+      alert.setCssClass(this.selectedTheme.toLowerCase() + '-theme');
 
       for (let prop in SettingsPage.availableLanguages) {
         if (SettingsPage.availableLanguages.hasOwnProperty(prop)) {
@@ -109,6 +112,7 @@ export class SettingsPage {
       let favoriteCategory = applicationSettings.favoriteCategory;
       let categories = applicationSettings.categories;
       alert.setTitle(this.selectText + ' ' + this.favoriteCategoryText);
+      alert.setCssClass(this.selectedTheme.toLowerCase() + '-theme');
 
       for (let i = 0; i < categories.length; i++) {
         alert.addInput({
@@ -139,6 +143,7 @@ export class SettingsPage {
       let selectedCategories = applicationSettings.categories;
       let categories = this.settingsProvider.getAllAvailableCategories(applicationSettings.sources, applicationSettings.language);
       alert.setTitle(this.selectText + ' ' + this.categoriesText);
+      alert.setCssClass(this.selectedTheme.toLowerCase() + '-theme');
 
       for (let i = 0; i < categories.length; i++) {
         alert.addInput({
@@ -170,6 +175,7 @@ export class SettingsPage {
       let selectedSources = applicationSettings.sources;
       let sources = this.settingsProvider.getAllAvailableSources(applicationSettings.language);
       alert.setTitle(this.selectText + ' ' + this.sourcesText);
+      alert.setCssClass(this.selectedTheme.toLowerCase() + '-theme');
 
       for (let i = 0; i < sources.length; i++) {
         alert.addInput({
@@ -183,7 +189,6 @@ export class SettingsPage {
       alert.addButton({
         text: this.selectCapsText,
         handler: (selectedSources: Array<any>) => {
-          this.selectedSourcesStringified = selectedSources.join();
           this.settingsProvider.changeSelectedSources(selectedSources)
             .then(() => this.updateDefaultValues());
         }
@@ -196,6 +201,7 @@ export class SettingsPage {
     let alert = this.alertCtrl.create();
     let selectedOption: string = this.imgLoadProvider.getSelectedImageLoadOption();
     alert.setTitle(this.selectText + ' ' + this.imagesLoadText);
+    alert.setCssClass(this.selectedTheme.toLowerCase() + '-theme');
 
     for (let prop in this.availableImageLoadingOptions) {
       if (this.availableImageLoadingOptions.hasOwnProperty(prop)) {
@@ -220,6 +226,37 @@ export class SettingsPage {
     alert.present();
   }
 
+  public selectTheme() {
+    this.settingsProvider.getApplicationSettings().then((applicationSettings: ApplicationSettings) => {
+      let alert = this.alertCtrl.create();
+      let activeTheme = applicationSettings.activeTheme;
+      let themes = ['Dark', 'Light'];
+      alert.setTitle(this.selectText + ' ' + this.themeText);
+      alert.setCssClass(this.selectedTheme.toLowerCase() + '-theme');
+
+      for (let i = 0; i < themes.length; i++) {
+        alert.addInput({
+          type: 'radio',
+          label: themes[i],
+          value: themes[i],
+          checked: (themes[i] === activeTheme)
+        });
+      }
+
+      alert.addButton(this.cancelCapsText);
+      alert.addButton({
+        text: this.selectCapsText,
+        handler: (newTheme: string) => {
+          this.settingsProvider.changeActiveTheme(newTheme)
+            .then(() => this.updateDefaultValues()
+          );
+        }
+      });
+
+      alert.present();
+    });
+
+  }
 
   private fetchTranslationsAndUpdateDefaultValues(lang: string) {
     this.availableImageLoadingOptions.all = this.translate.instant("Always load images");
@@ -232,6 +269,7 @@ export class SettingsPage {
     this.categoriesText = this.translate.instant("Categories");
     this.sourcesText = this.translate.instant("Sources");
     this.imagesLoadText = this.translate.instant("Images Load2");
+    this.themeText = this.translate.instant("Theme");
     this.allText = this.translate.instant("All");
     this.selectedText = this.translate.instant("selected");
     this.updateDefaultValues();
@@ -250,7 +288,7 @@ export class SettingsPage {
       this.selectedImagesLoadOption = this.availableImageLoadingOptions[
         this.imgLoadProvider.getSelectedImageLoadOption()
         ];
-
+      this.selectedTheme = applicationSettings.activeTheme;
       this.loader.hideLoader();
     });
   }
