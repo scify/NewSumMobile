@@ -1,7 +1,8 @@
 $white: #fff;
 $dark-gray: #252120;
 $light-gray: #6e625f;
-$red: #c4364b;
+$yellow: #fede1a;
+$pale-yellow: #fffca3;
 
 ion-nav.dark-theme {
   ion-navbar {
@@ -28,9 +29,9 @@ ion-nav.dark-theme {
         color: lightgray;
       }
       .toggle-checked .toggle-icon {
-        background-color: pink;
+        background-color: $pale-yellow;
         .toggle-inner {
-          background-color: $red;
+          background-color: $yellow;
         }
       }
     }
@@ -65,9 +66,9 @@ ion-nav.dark-theme {
     .tab-button, ion-icon {
       color: $white;
       &[aria-selected="true"] {
-        color: $red;
+        color: $yellow;
         ion-icon {
-          color: $red;
+          color: $yellow;
         }
       }
     }
@@ -110,18 +111,18 @@ ion-alert.dark-theme {
         color: $white;
       }
       .alert-radio-inner, .alert-checkbox-inner {
-        background-color: $red;
+        background-color: $yellow;
       }
       &[aria-checked="true"] {
         .alert-radio-icon {
-          border-color: $red;
+          border-color: $yellow;
         }
         .alert-checkbox-icon {
-          background-color: $red;
-          border-color: $red;
+          background-color: $yellow;
+          border-color: $yellow;
         }
         .alert-radio-label {
-          color: $red;
+          color: $yellow;
         }
       }
     }
