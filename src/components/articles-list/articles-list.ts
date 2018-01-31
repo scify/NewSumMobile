@@ -5,7 +5,7 @@ import {TopicsProvider} from "../../providers/topics/topics";
 import {LoaderProvider} from "../../providers/loader/loader";
 import {NetworkProvider} from "../../providers/network/network";
 import {Subscription} from "rxjs/Subscription";
-import { Platform } from 'ionic-angular';
+import {Platform} from 'ionic-angular';
 import {ImageLoadOptionProvider} from "../../providers/image-load-option/image-load-option";
 import {TranslateService} from "@ngx-translate/core";
 
@@ -31,6 +31,7 @@ export class ArticlesListComponent {
   public selectedImgLoadOption: string;
   private networkConnectionChangeSubscription: Subscription;
   private isConnectedToWiFi: boolean = false;
+  private noTopicsFoundTitle: string = "";
 
   constructor(public navCtrl: NavController,
               protected topicsProvider: TopicsProvider,
@@ -38,12 +39,19 @@ export class ArticlesListComponent {
               protected networkProvider: NetworkProvider,
               protected translate: TranslateService,
               protected platform: Platform,
-              protected loader:LoaderProvider) {}
+              protected loader: LoaderProvider) {
+
+   let subscription =  this.topicsProvider.topicsUpdated.subscribe(() => {
+      //the first time the page loads noTopicsFoundTitle has value "...". Once we have topics update this title
+      this.noTopicsFoundTitle = translate.instant("No topics found");
+      subscription.unsubscribe(); //unsubscribe, no need to update it again.
+    });
+  }
 
   public selectTopicAndDisplaySummary(topic: any) {
     this.loader.showLoader();
-    this.navCtrl.push(SummaryPage, {isSearch: this.isSearch, forcedCategoryTitle: this.forcedCategoryTitle});
-    this.topicsProvider.setSelectedTopic(this.category,topic);
+    this.navCtrl.push('SummaryPage', {isSearch: this.isSearch, forcedCategoryTitle: this.forcedCategoryTitle});
+    this.topicsProvider.setSelectedTopic(this.category, topic);
 
   }
 

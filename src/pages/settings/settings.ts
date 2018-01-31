@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams, AlertController} from 'ionic-angular';
+import {NavController, NavParams, AlertController, IonicPage} from 'ionic-angular';
 import {AboutPage} from "../about/about";
 import {InAppBrowser} from "@ionic-native/in-app-browser";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
@@ -10,7 +10,7 @@ import {ImageLoadOptionProvider} from "../../providers/image-load-option/image-l
 import {TranslateService} from "@ngx-translate/core";
 import {LoaderProvider} from "../../providers/loader/loader";
 
-
+@IonicPage()
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.html',
@@ -50,10 +50,14 @@ export class SettingsPage {
 
     this.fetchTranslationsAndUpdateDefaultValues(this.translate.currentLang);
 
+
+    this.translate.onLangChange.subscribe(()=>{console.log("settings: on lang change")});
+    this.translate.get("Αll news").subscribe((data)=>console.log(data));
+
   }
 
   goToAbout() {
-    this.navCtrl.push(AboutPage)
+    this.navCtrl.push('AboutPage');
   }
 
   goToPrivacyPolicy() {

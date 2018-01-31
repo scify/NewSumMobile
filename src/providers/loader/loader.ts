@@ -19,7 +19,7 @@ export class LoaderProvider {
   showLoader() {
     this.loader = this.loadingCtrl.create({
       spinner: 'crescent',
-      content: 'Please wait...',
+      content: '',
       cssClass: 'loader'
     });
 

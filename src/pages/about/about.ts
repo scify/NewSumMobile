@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
-import {NavController, Platform} from 'ionic-angular';
+import {IonicPage,  Platform} from 'ionic-angular';
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {AppVersion} from '@ionic-native/app-version';
 
+@IonicPage()
 @Component({
   selector: 'page-about',
   templateUrl: 'about.html',

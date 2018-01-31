@@ -8,6 +8,7 @@ import {GoogleAnalytics} from '@ionic-native/google-analytics';
 import {Subscription} from "rxjs";
 import {TopicsUpdatedInfo} from "../../models/TopicsUpdatedInfo";
 import {LoaderProvider} from "../../providers/loader/loader";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'page-all-topics',
@@ -27,7 +28,9 @@ export class AllTopicsPage {
   constructor(protected navCtrl: NavController,
               protected ga: GoogleAnalytics,
               protected loader: LoaderProvider,
-              protected topicsProvider: TopicsProvider) {
+              protected topicsProvider: TopicsProvider
+              ) {
+
   }
 
   ionViewDidLoad() {
@@ -82,7 +85,7 @@ export class AllTopicsPage {
   }
 
   public displaySettingsPage() {
-    this.navCtrl.push(SettingsPage);
+    this.navCtrl.push('SettingsPage');
   }
 
   public refreshArticles(refresher) {

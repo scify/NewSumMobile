@@ -2,16 +2,10 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {IonicApp, IonicModule} from 'ionic-angular';
 import { MyApp } from './app.component';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
-import { AboutPage } from '../pages/about/about';
 import { AllTopicsPage } from '../pages/all-topics/all-topics';
 import { TabsPage } from '../pages/tabs/tabs';
 import { HotTopicsPage } from "../pages/hot-topics/hot-topics";
-import { SummaryPage } from "../pages/summary/summary";
-import { SearchResultsPage } from "../pages/search-results/search-results";
-import { SettingsPage } from "../pages/settings/settings";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -20,7 +14,6 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { IonicStorageModule } from '@ionic/storage';
 import { TopicsProvider } from '../providers/topics/topics';
 import {ScreenOrientation} from "@ionic-native/screen-orientation";
-import {ComponentsModule} from "../components/components.module";
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { Network } from '@ionic-native/network';
 import { NetworkProvider } from '../providers/network/network';
@@ -32,21 +25,20 @@ import {SoapApiCaller} from "../providers/api-service/soap-api-caller";
 import {CustomErrorHandler} from "../providers/error/customErrorHandler";
 import { CodePush } from '@ionic-native/code-push'
 import {AppVersion} from "@ionic-native/app-version";
+import {ComponentsModule} from "../components/components.module";
+import {TranslateModule} from "@ngx-translate/core";
+import {translationServiceConfig} from "./translation-module-config";
 
-export function createTranslationLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
+
+
+
 
 @NgModule({
   declarations: [
     MyApp,
-    AboutPage,
     AllTopicsPage,
     TabsPage,
-    HotTopicsPage,
-    SummaryPage,
-    SearchResultsPage,
-    SettingsPage
+    HotTopicsPage
   ],
   imports: [
     BrowserModule,
@@ -54,24 +46,14 @@ export function createTranslationLoader(http: HttpClient) {
     IonicStorageModule.forRoot(),
     HttpClientModule,
     ComponentsModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslationLoader),
-        deps: [HttpClient]
-      }
-    })
+    TranslateModule.forRoot(translationServiceConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    AboutPage,
     AllTopicsPage,
     TabsPage,
-    HotTopicsPage,
-    SummaryPage,
-    SearchResultsPage,
-    SettingsPage
+    HotTopicsPage
   ],
   providers: [
     CodePush,

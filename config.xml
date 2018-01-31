@@ -90,9 +90,9 @@
     <allow-navigation href="http://192.168.1.20:8100" />
     <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
     <plugin name="cordova-plugin-code-push" spec="~1.11.3" />
+    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <engine name="browser" spec="5.0.3" />
-    <engine name="android" spec="7.0.0" />
     <engine name="ios" spec="4.5.4" />
     <engine name="windows" spec="5.0.0" />
-    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
+    <engine name="android" spec="7.0.0" />
 </widget>
