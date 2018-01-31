@@ -21,8 +21,8 @@ export class SoapApiCaller{
     try {
       return JSON.parse(result);
     } catch(error) {
-      this.storeEndpointSwitchValueAndDisplayErrorMessage(error);
-      return [];
+      this.setEndpointUsageSwitch(this.calculateEndpointSwitchValueForStorage());
+      throw error;
     }
   }
 
@@ -37,8 +37,8 @@ export class SoapApiCaller{
     }).then(result => {
       return JSON.parse(result as any);
     }).catch((error) => {
-      this.storeEndpointSwitchValueAndDisplayErrorMessage(error);
-      return [];
+      this.setEndpointUsageSwitch(this.calculateEndpointSwitchValueForStorage());
+      throw error;
     });
   }
 
@@ -55,11 +55,9 @@ export class SoapApiCaller{
     return this.soapClient.invoke(this.apiEndpoint + APP_CONFIG.wsdlPath, methodToInvoke, parameters, async, null);
   }
 
-  private storeEndpointSwitchValueAndDisplayErrorMessage(error) {
+  private calculateEndpointSwitchValueForStorage() {
     // when the main api endpoint fails, switch to true to use the backup server the next time the app starts,
     // else switch to false and use the main server
-    this.setEndpointUsageSwitch(this.apiEndpoint === APP_CONFIG.apiEndpoint).then(() => {
-      this.errorHandler.handleError(error);
-    });
+    return this.apiEndpoint === APP_CONFIG.apiEndpoint;
   }
 }

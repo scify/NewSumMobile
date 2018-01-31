@@ -42,13 +42,13 @@ export class SummaryPage {
   }
 
   ionViewDidLoad() {
-    this.initPage();
     this.subscribeToChanges();
   }
 
   ionViewDidEnter() {
     this.selectedImgLoadOption = this.imgLoadProvider.getSelectedImageLoadOption();
     this.subscribeToNetworkConnectionChanges();
+    this.initPage();
   }
 
   ionViewDidLeave() {

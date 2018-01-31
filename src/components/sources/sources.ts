@@ -20,6 +20,5 @@ export class SourcesComponent {
   ngOnChanges() {
     this.allSources = [];
     this.allSources = this.allSources.concat([this.sentence.Source], this.sentence.AlternateSources);
-    console.log(this.allSources);
   }
 }
