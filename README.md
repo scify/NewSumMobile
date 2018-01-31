@@ -15,10 +15,8 @@ News are fetched by consuming a free SOAP service defined by SciFY.
 
   
 # How to build
-
 This project was built using the following versions of nodejs and npm:
-
-```$xslt
+```bash
 $ node -v
 v8.9.1
 
@@ -29,27 +27,26 @@ $ npm -v
 It is very easy to install multiple versions of nodejs and npm, by using [Node Version Manager (nvm)](https://github.com/creationix/nvm):
 
 Install node v8.9.1
-```$xslt
+```bash
 $ nvm install v8.9.1
 ```
 Set node v8.9.1 as the default version
-```$xslt
+```bash
 $ nvm alias default v8.9.1
-
 ``````
-
-
-
 ## Install project dependencies:
 
 ```bash
 $ npm install -g ionic cordova
 $ npm install
-$ ionic serve
 ```
 
 ## Execution
-
+Run on browser:
+```bash
+$ ionic serve
+```
+Run on android emulator:
 ```bash
 $ ionic cordova platform add android
 $ ionic cordova emulate android
