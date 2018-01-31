@@ -6,8 +6,6 @@ import {TopicsUpdatedInfo} from "../../models/TopicsUpdatedInfo";
 import {ApiServiceProvider} from "../api-service/apiService";
 import {SelectTopicEnum} from "../../models/selectTopicEnum";
 
-// TODO: move to configuration file
-const NUMBER_OF_HOT_TOPICS_TO_DISPLAY: number = 10;
 
 @Injectable()
 export class TopicsProvider {
@@ -178,7 +176,7 @@ export class TopicsProvider {
           return -1;
         return 0;
       });
-    return topicsCopy.slice(0, NUMBER_OF_HOT_TOPICS_TO_DISPLAY);
+    return topicsCopy.slice(0);
   }
 
   private formatDateAndTimeForTopics(topics: Array<any>) {
