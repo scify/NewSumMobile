@@ -92,6 +92,7 @@ export class MyApp {
 
   public selectCategory(newSelectedCategory: string) {
     this.loader.showLoader();
+    this.menuCtrl.close();
     this.topicsProvider.refreshTopics(newSelectedCategory);
   }
 
