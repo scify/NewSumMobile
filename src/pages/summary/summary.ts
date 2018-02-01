@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {IonicPage, NavParams, Platform} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {Content, IonicPage, NavParams, Platform} from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
@@ -15,6 +15,7 @@ import {LoaderProvider} from "../../providers/loader/loader";
   templateUrl: 'summary.html',
 })
 export class SummaryPage {
+  @ViewChild(Content) content: Content;
 
   public selectedCategory: string;
   public selectedCategoryDefaultImage: string;
@@ -72,6 +73,7 @@ export class SummaryPage {
         this.selectedTopic = data.topic;
         this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(data.category);
         this.summaryIsConstructedByMoreThanOneSources = this.selectedSummary.Sources.length > 1;
+        this.content.scrollToTop();
         this.ga.trackView("Summary: " + this.selectedTopic.Title);
       }
     });
