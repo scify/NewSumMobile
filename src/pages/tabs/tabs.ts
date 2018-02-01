@@ -4,7 +4,6 @@ import {AllTopicsPage} from '../all-topics/all-topics';
 import {HotTopicsPage} from '../hot-topics/hot-topics';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {TopicsUpdatedInfo} from "../../models/TopicsUpdatedInfo";
-import {ApplicationSettingsProvider} from "../../providers/applicationSettings/applicationSettings";
 import {Tabs} from "ionic-angular";
 import {TranslateService} from "@ngx-translate/core";
 
@@ -21,29 +20,16 @@ export class TabsPage {
   public hotTopicsTitle: string = "...";
   public allTopicsCounter: string = "";
   public hotTopicsCounter: string = "";
-  public fetchedIndex: boolean;
 
   constructor(private topicsProvider: TopicsProvider,
-              private translate: TranslateService,
-              private applicationSettings: ApplicationSettingsProvider) {
-    this.applicationSettings.getDefaultSelectedTabIndex().then((selectedTabIndex: number) => {
-      if (selectedTabIndex)
-        this.tabs.select(selectedTabIndex);
-      this.fetchedIndex = true;
-    });
+              private translate: TranslateService) {
     this.topicsProvider.topicsUpdated.subscribe((topicsUpdatedInfo: TopicsUpdatedInfo) => {
-
       this.allTopicsTitle = translate.instant("Αll news");
       this.allTopicsCounter = "(" + topicsUpdatedInfo.topicsCount + ")";
       this.hotTopicsTitle = translate.instant("Ηot news");
       this.hotTopicsCounter = "(" + topicsUpdatedInfo.hotTopicsCount + ")";
+      this.tabs.select(topicsUpdatedInfo.hotTopicsCount > 0 ? 0 : 1);
     });
-
-  }
-
-  public updateDefaultSelectedTab(indexOfTab: number) {
-    if (this.fetchedIndex)
-      this.applicationSettings.setDefaultSelectedTabIndex(indexOfTab);
   }
 }
 
