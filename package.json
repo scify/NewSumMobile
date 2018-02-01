@@ -38,6 +38,7 @@
     "cordova-ios": "4.5.4",
     "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-code-push": "~1.11.3",
+    "cordova-plugin-crosswalk-webview": "^2.4.0",
     "cordova-plugin-device": "^1.1.7",
     "cordova-plugin-google-analytics": "^1.8.3",
     "cordova-plugin-inappbrowser": "^2.0.1",
@@ -74,7 +75,14 @@
       "cordova-plugin-google-analytics": {},
       "cordova-plugin-network-information": {},
       "cordova-plugin-code-push": {},
-      "cordova-plugin-app-version": {}
+      "cordova-plugin-app-version": {},
+      "cordova-plugin-crosswalk-webview": {
+        "XWALK_VERSION": "23+",
+        "XWALK_LITEVERSION": "xwalk_core_library_canary:17+",
+        "XWALK_COMMANDLINE": "--disable-pull-to-refresh-effect",
+        "XWALK_MODE": "embedded",
+        "XWALK_MULTIPLEAPK": "true"
+      }
     },
     "platforms": [
       "browser",
