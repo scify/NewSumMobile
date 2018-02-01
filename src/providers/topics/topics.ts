@@ -27,7 +27,7 @@ export class TopicsProvider {
     this.selectedTopicUpdated = new BehaviorSubject<any>(null);
   }
 
-  public refreshTopics(category: string): Promise<any> {
+  public refreshTopics(category: string, triggeredFromSettings: boolean = false): Promise<any> {
     this.topics = [];
     let refreshPromise = new Promise((resolve) => {
       this.applicationSettings.getApplicationSettings()
@@ -43,7 +43,7 @@ export class TopicsProvider {
               this.orderTopicsChronologically(this.topics);
               //get topics by taking into account the filters
               let topicsToDisplay = this.getTopics();
-              let topicsUpdatedInfo = new TopicsUpdatedInfo(category, topicsToDisplay, this.topics.length, this.filterHotTopics().length);
+              let topicsUpdatedInfo = new TopicsUpdatedInfo(category, topicsToDisplay, this.topics.length, this.filterHotTopics().length, triggeredFromSettings);
               this.topicsUpdated.next(topicsUpdatedInfo);
               resolve(topicsUpdatedInfo);
             });

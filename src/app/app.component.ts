@@ -79,7 +79,7 @@ export class MyApp {
     this.selectedTheme = newApplicationSettings.activeTheme.toLowerCase() + '-theme';
     this.availableCategories = newApplicationSettings.categories;
     console.log("refreshing category: " + newApplicationSettings.favoriteCategory);
-    this.topicsProvider.refreshTopics(newApplicationSettings.favoriteCategory);
+    this.topicsProvider.refreshTopics(newApplicationSettings.favoriteCategory, true);
   }
 
   private initGoogleAnalytics() {
