@@ -8,7 +8,7 @@
           ? article.imageUrls[0]  : selectedCategoryDefaultImage) +')' }" >
       <img src=""/>
       <div class="info-background">
-        <div class="category"><span>{{selectedCategoryForUppercase}}</span><span>{{article.DisplayTime | translate}}</span></div>
+        <div class="category"><span>{{selectedCategoryForUppercase}}</span><span>{{article.DaysAgo ? (("BEFORE" | translate) + article.DaysAgo + ("DAYS" | translate)) : (article.DisplayTime | translate)}}</span></div>
 
       </div>
     </div>

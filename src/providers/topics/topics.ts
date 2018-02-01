@@ -181,7 +181,7 @@ export class TopicsProvider {
 
   private formatDateAndTimeForTopics(topics: Array<any>) {
     let now: Date = new Date();
-    now.setHours(0, 0, 0);
+    now.setHours(0, 0, 0, 0);
     let nowDateFormatted = (now.getDate() < 10 ? '0' : '') + now.getDate() + '-' +
       ((now.getMonth() + 1) < 10 ? '0' : '') + (now.getMonth() + 1) + '-' + now.getFullYear();
     topics.map(t => {
@@ -195,9 +195,9 @@ export class TopicsProvider {
       if (nowDateFormatted === t.DateFormatted)
         t.DisplayTime = t.TimeFormatted;
       else if (t.Date.getTime() > now.getTime() - (TopicsProvider.DAY_IN_MILLIS))
-        t.DisplayTime = 'yesterday';
+        t.DisplayTime = 'YESTERDAY';
       else
-        t.DisplayTime = 'previously';
+        t.DaysAgo = parseInt((((now.getTime() - t.Date.getTime()) / (TopicsProvider.DAY_IN_MILLIS)) + 1).toString());
       return t;
     });
   }
