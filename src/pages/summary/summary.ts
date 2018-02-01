@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {AlertController, IonicPage, NavParams, Platform, ViewController} from 'ionic-angular';
+import {IonicPage, NavParams, Platform} from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
 import {GoogleAnalytics} from '@ionic-native/google-analytics';
@@ -38,8 +38,7 @@ export class SummaryPage {
               private networkProvider: NetworkProvider,
               private platform: Platform,
               private storage: Storage,
-              private loader: LoaderProvider,
-              private alertCtrl: AlertController) {
+              private loader: LoaderProvider) {
   }
 
   ionViewDidLoad() {
@@ -116,7 +115,6 @@ export class SummaryPage {
   private subscribeToNetworkConnectionChanges() {
     if (this.platform.is('cordova')) {
       this.networkConnectionChangeSubscription = this.networkProvider.networkConnectionChanged.subscribe((newConnectionType) => {
-        this.alertMe('connection', newConnectionType);
         this.isConnectedToWiFi = newConnectionType === 'wifi';
       });
     }
@@ -126,19 +124,5 @@ export class SummaryPage {
     if (this.platform.is('cordova')) {
       this.networkConnectionChangeSubscription.unsubscribe();
     }
-  }
-
-  alertMe(olo, yolo) {
-    let alert = this.alertCtrl.create({
-      title: 'Info!',
-      message: olo + ': ' + yolo,
-      buttons: [
-        {
-          text: 'Restart',
-          handler: () => {}
-        }
-      ]
-    });
-    alert.present();
   }
 }
