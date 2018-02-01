@@ -18,6 +18,8 @@ export class TopicsProvider {
   public topicsUpdated: Subject<any>;
   public selectedTopicUpdated: BehaviorSubject<any>;
 
+  private static DAY_IN_MILLIS: number = 24 * 60 * 60 * 1000;
+
   constructor(private serviceClient: ApiServiceProvider,
               private applicationSettings: ApplicationSettingsProvider) {
     this.topicsUpdated = new Subject<any>();
@@ -178,24 +180,32 @@ export class TopicsProvider {
   }
 
   private formatDateAndTimeForTopics(topics: Array<any>) {
+    let now: Date = new Date();
+    now.setHours(0, 0, 0);
+    let nowDateFormatted = (now.getDate() < 10 ? '0' : '') + now.getDate() + '-' +
+      ((now.getMonth() + 1) < 10 ? '0' : '') + (now.getMonth() + 1) + '-' + now.getFullYear();
     topics.map(t => {
       let newestDate: any = t.NewestDate;
       t.DateFormatted = (newestDate.dayOfMonth < 10 ? '0' : '') + newestDate.dayOfMonth + '-' +
         ((newestDate.month + 1) < 10 ? '0' : '') + (newestDate.month + 1) + '-' + newestDate.year;
       t.TimeFormatted = (newestDate.hourOfDay < 10 ? '0' : '') + newestDate.hourOfDay + ':' +
         (newestDate.minute < 10 ? '0' : '') + newestDate.minute;
+      t.Date = new Date(Date.UTC(newestDate.year, newestDate.month, newestDate.dayOfMonth,
+        newestDate.hourOfDay, newestDate.minute, newestDate.second));
+      if (nowDateFormatted === t.DateFormatted)
+        t.DisplayTime = t.TimeFormatted;
+      else if (t.Date.getTime() > now.getTime() - (TopicsProvider.DAY_IN_MILLIS))
+        t.DisplayTime = 'yesterday';
+      else
+        t.DisplayTime = 'previously';
       return t;
     });
   }
 
   private orderTopicsChronologically(topics: Array<any>) {
     topics.sort((a: any, b: any): number => {
-      let newestDateA = a.NewestDate;
-      let newestDateB = b.NewestDate;
-      let dateA: Date = new Date(Date.UTC(newestDateA.year, newestDateA.month, newestDateA.dayOfMonth,
-        newestDateA.hourOfDay, newestDateA.minute, newestDateA.second));
-      let dateB: Date = new Date(Date.UTC(newestDateB.year, newestDateB.month, newestDateB.dayOfMonth,
-        newestDateB.hourOfDay, newestDateB.minute, newestDateB.second));
+      let dateA: Date = a.Date;
+      let dateB: Date = b.Date;
       if (dateB > dateA) {
         return 1;
       } else if (dateB < dateA) {
