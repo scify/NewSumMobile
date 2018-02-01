@@ -112,6 +112,7 @@ ion-alert.dark-theme {
       }
       .alert-radio-inner, .alert-checkbox-inner {
         background-color: $yellow;
+        border-color: $dark-gray;
       }
       &[aria-checked="true"] {
         .alert-radio-icon {
