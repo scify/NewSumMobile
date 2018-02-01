@@ -192,8 +192,10 @@ export class TopicsProvider {
     topics.sort((a: any, b: any): number => {
       let newestDateA = a.NewestDate;
       let newestDateB = b.NewestDate;
-      let dateA: Date = new Date(newestDateA.year, newestDateA.month, newestDateA.dayOfMonth, newestDateA.hourOfDay, newestDateA.minute, newestDateA.second);
-      let dateB: Date = new Date(newestDateB.year, newestDateB.month, newestDateB.dayOfMonth, newestDateB.hourOfDay, newestDateB.minute, newestDateB.second);
+      let dateA: Date = new Date(Date.UTC(newestDateA.year, newestDateA.month, newestDateA.dayOfMonth,
+        newestDateA.hourOfDay, newestDateA.minute, newestDateA.second));
+      let dateB: Date = new Date(Date.UTC(newestDateB.year, newestDateB.month, newestDateB.dayOfMonth,
+        newestDateB.hourOfDay, newestDateB.minute, newestDateB.second));
       if (dateB > dateA) {
         return 1;
       } else if (dateB < dateA) {
