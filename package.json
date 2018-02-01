@@ -78,9 +78,9 @@
     },
     "platforms": [
       "browser",
-      "ios",
       "windows",
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
