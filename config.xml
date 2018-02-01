@@ -4,7 +4,7 @@
     <description>News summaries from different sources in a single text.</description>
     <author email="info@scify.org" href="http://scify.org/">SciFY NPO</author>
     <content src="index.html" />
-    <access origin="*" />1
+    <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
