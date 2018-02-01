@@ -38,6 +38,7 @@
   "ABOUT_MORE":"More on NewSum",
   "ABOUT_CODE":"Application code",
   "ABOUT_INFO": "NewSum automatically summarizes information from many sources and combines them in a single text. It gives you the main points of all the different information that you would get if you read all the articles from the sources you visit. With the use of artificial intelligence technology, news are summarized and all repeated information is not duplicated.<br> NewSum is an open source project, and is offered for free without ads.",
-  "yesterday": "yesterday",
-  "previously": "previously"
+  "YESTERDAY": "YESTERDAY",
+  "BEFORE": "",
+  "DAYS": " DAYS AGO"
 }
