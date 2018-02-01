@@ -26,19 +26,25 @@ export class ApiServiceProvider {
   }
 
   public getCategories(selectedSources: Array<string>, selectedLang: string): Array<string> {
-    return this.soapApiCaller.getResource('getCategories', {
+    let categories: Array<string> = this.soapApiCaller.getResource('getCategories', {
       sUserSources: selectedSources,
       sLang: selectedLang
-    });
+    }).sort();
+    // latin alphabet comes before the greek one, so SciFY News will be the top category while browsing in greek
+    // we are moving that category to the end of the list
+    if (categories[0].search('SciFY') !== -1) {
+      let deletedCategories: Array<string> = categories.splice(0, 1);
+      categories.push(deletedCategories[0]);
+    }
+    return categories;
   }
 
   public getTopics(selectedSources: Array<string>, selectedCategory: string, selectedLang: string): Promise<any> {
-    return this.soapApiCaller.getResourceAsync('getTopics',
-      {
-        sUserSources: selectedSources,
-        sCategory: selectedCategory,
-        sLang: selectedLang
-      });
+    return this.soapApiCaller.getResourceAsync('getTopics', {
+      sUserSources: selectedSources,
+      sCategory: selectedCategory,
+      sLang: selectedLang
+    });
   }
 
   public getTopicsByKeyword(keyword: string, selectedSources: Array<string>, selectedLang: string): Array<any> {

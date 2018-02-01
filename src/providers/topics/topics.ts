@@ -38,6 +38,7 @@ export class TopicsProvider {
               this.topics = topics;
               this.category = category;
               this.formatDateAndTimeForTopics(this.topics);
+              this.orderTopicsChronologically(this.topics);
               //get topics by taking into account the filters
               let topicsToDisplay = this.getTopics();
               let topicsUpdatedInfo = new TopicsUpdatedInfo(category, topicsToDisplay, this.topics.length, this.filterHotTopics().length);
@@ -148,8 +149,7 @@ export class TopicsProvider {
       this.setSelectedTopic(category, existingTopics[index + 1]);
   }
 
-  public
-  loadPreviousTopic(category: any, currentTopic: any, isSearch: boolean) {
+  public loadPreviousTopic(category: any, currentTopic: any, isSearch: boolean) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
     let index = existingTopics.indexOf(currentTopic);
     if (index == 0) //we have reached the start,
@@ -162,13 +162,11 @@ export class TopicsProvider {
       this.setSelectedTopic(category, existingTopics[index - 1]);
   }
 
-  private
-  filterHotTopics(): Array<any> {
+  private filterHotTopics(): Array<any> {
     let topicsCopy = this.topics.slice(0);
-// get the first *NUMBER_OF_HOT_TOPICS_TO_DISPLAY* topics with the most sources as hot topics
     topicsCopy = topicsCopy
       .filter((topic) => topic.FromArticles > 1)
-      .sort((a: any, b: any): any => {
+      .sort((a: any, b: any): number => {
         // sorting with DESC order
         if (a.FromArticles < b.FromArticles)
           return 1;
@@ -187,6 +185,21 @@ export class TopicsProvider {
       t.TimeFormatted = (newestDate.hourOfDay < 10 ? '0' : '') + newestDate.hourOfDay + ':' +
         (newestDate.minute < 10 ? '0' : '') + newestDate.minute;
       return t;
+    });
+  }
+
+  private orderTopicsChronologically(topics: Array<any>) {
+    topics.sort((a: any, b: any): number => {
+      let newestDateA = a.NewestDate;
+      let newestDateB = b.NewestDate;
+      let dateA: Date = new Date(newestDateA.year, newestDateA.month, newestDateA.dayOfMonth, newestDateA.hourOfDay, newestDateA.minute, newestDateA.second);
+      let dateB: Date = new Date(newestDateB.year, newestDateB.month, newestDateB.dayOfMonth, newestDateB.hourOfDay, newestDateB.minute, newestDateB.second);
+      if (dateB > dateA) {
+        return 1;
+      } else if (dateB < dateA) {
+        return -1;
+      }
+      return 0;
     });
   }
 }
