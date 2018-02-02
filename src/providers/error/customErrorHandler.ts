@@ -44,7 +44,7 @@ export class CustomErrorHandler implements ErrorHandler {
         ]
       });
       alert.present();
-    } else if (err && err.rejection.name === 'NetworkError') {
+    } else if (err && err.rejection && err.rejection.name === 'NetworkError') {
       let alert = this.alertCtrl.create({
         title: 'Couldn\'t connect to server!',
         message: 'Please try again by clicking the button below.',
