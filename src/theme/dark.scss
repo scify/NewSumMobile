@@ -44,6 +44,12 @@ ion-nav.dark-theme {
     #sources-list a {
       color: lightgray;
     }
+    #summaries-navigator {
+      background-color: $dark-gray;
+      a {
+        color: lightgray;
+      }
+    }
   }
 
   page-settings {
