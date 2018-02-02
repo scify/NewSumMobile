@@ -1,6 +1,6 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {SummaryPage} from "../../pages/summary/summary";
-import {NavController} from "ionic-angular";
+import {NavController, Tabs} from "ionic-angular";
 import {TopicsProvider} from "../../providers/topics/topics";
 import {LoaderProvider} from "../../providers/loader/loader";
 import {NetworkProvider} from "../../providers/network/network";
@@ -50,7 +50,10 @@ export class ArticlesListComponent {
 
   public selectTopicAndDisplaySummary(topic: any) {
     this.loader.showLoader();
-    this.navCtrl.push('SummaryPage', {isSearch: this.isSearch, forcedCategoryTitle: this.forcedCategoryTitle});
+    this.navCtrl.push('SummaryPage', {
+      isSearch: this.isSearch,
+      forcedCategoryTitle: this.forcedCategoryTitle
+    });
     this.topicsProvider.setSelectedTopic(this.category, topic);
 
   }

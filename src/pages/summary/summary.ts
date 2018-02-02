@@ -32,7 +32,7 @@ export class SummaryPage {
 
   private networkConnectionChangeSubscription: Subscription;
 
-  constructor(private  navParams: NavParams,
+  constructor(private navParams: NavParams,
               private topicsProvider: TopicsProvider,
               private ga: GoogleAnalytics,
               private imgLoadProvider: ImageLoadOptionProvider,

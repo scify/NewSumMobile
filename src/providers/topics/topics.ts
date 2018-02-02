@@ -27,7 +27,7 @@ export class TopicsProvider {
     this.selectedTopicUpdated = new BehaviorSubject<any>(null);
   }
 
-  public refreshTopics(category: string, triggeredFromSettings: boolean = false): Promise<any> {
+  public refreshTopics(category: string, shouldUpdateTabsSelection: boolean = true): Promise<any> {
     this.topics = [];
     let refreshPromise = new Promise((resolve) => {
       this.applicationSettings.getApplicationSettings()
@@ -43,7 +43,7 @@ export class TopicsProvider {
               this.orderTopicsChronologically(this.topics);
               //get topics by taking into account the filters
               let topicsToDisplay = this.getTopics();
-              let topicsUpdatedInfo = new TopicsUpdatedInfo(category, topicsToDisplay, this.topics.length, this.filterHotTopics().length, triggeredFromSettings);
+              let topicsUpdatedInfo = new TopicsUpdatedInfo(category, topicsToDisplay, this.topics.length, this.filterHotTopics().length, shouldUpdateTabsSelection);
               this.topicsUpdated.next(topicsUpdatedInfo);
               resolve(topicsUpdatedInfo);
             });
@@ -127,21 +127,26 @@ export class TopicsProvider {
   private getTopicsAndSelect(category, topicToSelect: SelectTopicEnum) {
     if (category) {
       let topicToSelectAfterRetrieval = topicToSelect;
-      this.refreshTopics(category)
+      this.refreshTopics(category, false)
         .then((topicsUpdatedInfo: TopicsUpdatedInfo) => {
           if (topicsUpdatedInfo.topics && topicsUpdatedInfo.topics.length > 0) {
             let topicToSelect = topicToSelectAfterRetrieval == SelectTopicEnum.FIRST ?
               topicsUpdatedInfo.topics[0] : topicsUpdatedInfo.topics[topicsUpdatedInfo.topics.length - 1];
             this.setSelectedTopic(topicsUpdatedInfo.category, topicToSelect);
+          } else {
+            if (topicToSelectAfterRetrieval === SelectTopicEnum.FIRST)
+              this.loadNextTopic(category, null, false);
+            else
+              this.loadPreviousTopic(category, null, false);
           }
         });
     }
   }
 
-  public  loadNextTopic(category: any, currentTopic: any, isSearch: boolean) {
+  public loadNextTopic(category: any, currentTopic: any, isSearch: boolean) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
     let index = existingTopics.indexOf(currentTopic);
-    if (index == existingTopics.length - 1) //we have reached the end,select next category
+    if (index == existingTopics.length - 1 || index === -1) //we have reached the end or no current topic was passed
     {
       if (!isSearch) //for search results there is no next/previous category to navigate
         this.getNextCategory(category)
@@ -154,7 +159,7 @@ export class TopicsProvider {
   public loadPreviousTopic(category: any, currentTopic: any, isSearch: boolean) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
     let index = existingTopics.indexOf(currentTopic);
-    if (index == 0) //we have reached the start,
+    if (index == 0 || index === -1) //we have reached the start or no current topic was passed
     {
       if (!isSearch)
         this.getPreviousCategory(category)
@@ -203,6 +208,7 @@ export class TopicsProvider {
   }
 
   private orderTopicsChronologically(topics: Array<any>) {
+    // sorting with DESC order
     topics.sort((a: any, b: any): number => {
       let dateA: Date = a.Date;
       let dateB: Date = b.Date;
