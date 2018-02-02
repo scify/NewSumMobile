@@ -42,7 +42,6 @@
     "cordova-plugin-device": "^1.1.7",
     "cordova-plugin-google-analytics": "^1.8.3",
     "cordova-plugin-inappbrowser": "^2.0.1",
-    "cordova-plugin-ionic-webview": "^1.1.16",
     "cordova-plugin-network-information": "^2.0.1",
     "cordova-plugin-screen-orientation": "^3.0.1",
     "cordova-plugin-splashscreen": "^4.1.0",
@@ -69,7 +68,6 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-ionic-webview": {},
       "cordova-plugin-screen-orientation": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-google-analytics": {},
@@ -87,8 +85,8 @@
     "platforms": [
       "browser",
       "windows",
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }
