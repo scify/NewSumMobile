@@ -1,5 +1,5 @@
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
-import {AlertController, ToastController} from "ionic-angular";
+import {AlertController, Platform, ToastController} from "ionic-angular";
 import {LoaderProvider} from "../loader/loader";
 import {ErrorHandler, Injectable} from "@angular/core";
 import {SplashScreen} from "@ionic-native/splash-screen";
@@ -13,17 +13,22 @@ export class CustomErrorHandler implements ErrorHandler {
               private toastCtrl: ToastController,
               private alertCtrl: AlertController,
               private splashScreen: SplashScreen,
-              private network: Network) {}
+              private network: Network,
+              private platform: Platform) {
+  }
 
   handleError(err: any): void {
-    this.loader.hideLoader();
-    this.splashScreen.hide();
-    this.presentError(err);
-    this.ga.trackException(err, false);
+    console.log(err);
+    this.platform.ready().then(() => {
+      this.loader.hideLoader();
+      this.splashScreen.hide();
+      this.presentError(err);
+      this.ga.trackException(err, false);
+    });
   }
 
   presentError(err = undefined) {
-    console.error(err);
+
     if (this.network.type === 'none') {
       let alert = this.alertCtrl.create({
         title: 'Connection lost!',
