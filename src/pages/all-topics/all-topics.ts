@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Content, NavController, Refresher} from 'ionic-angular';
+import {Content, NavController, Platform, Refresher} from 'ionic-angular';
 import {TopicsProvider} from "../../providers/topics/topics";
 import {TextManipulationService} from "../../lib/text-manipulation";
 import {CategoriesViewManager} from "../../lib/categories-view-manager";
@@ -28,7 +28,8 @@ export class AllTopicsPage {
   constructor(protected navCtrl: NavController,
               protected ga: GoogleAnalytics,
               protected loader: LoaderProvider,
-              protected topicsProvider: TopicsProvider
+              protected topicsProvider: TopicsProvider,
+              protected platform:Platform
               ) {
 
   }
@@ -76,7 +77,9 @@ export class AllTopicsPage {
           // when the category is changed, scroll to top,
           // otherwise the scroll will remain on the place it was before the category change
           this.content.scrollToTop();
-          this.ga.trackView(nameOfFilter + ' page for ' + this.selectedCategory);
+          this.platform.ready().then(() => {
+            this.ga.trackView(nameOfFilter + ' page for ' + this.selectedCategory);
+          });
         } else {
           this.topics = [];
         }
