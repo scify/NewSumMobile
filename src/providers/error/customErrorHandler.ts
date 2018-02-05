@@ -5,7 +5,7 @@ import {ErrorHandler, Injectable} from "@angular/core";
 import {SplashScreen} from "@ionic-native/splash-screen";
 import {Network} from "@ionic-native/network";
 import Raven from 'raven-js';
-import {APP_CONFIG} from "app/app-config"
+import {APP_CONFIG} from "../../app/app-config"
 
 
 
