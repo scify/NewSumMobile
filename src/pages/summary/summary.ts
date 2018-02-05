@@ -61,12 +61,11 @@ export class SummaryPage {
 
   subscribeToChanges() {
     this.topicUpdatedSubscription = this.topicsProvider.selectedTopicUpdated.subscribe((data) => {
-      this.loader.hideLoader()
       if (data == null) {
         this.selectedSummary = null;
         this.selectedTopic = null;
-      }
-      else {
+      } else {
+        this.loader.hideLoader()
         this.selectedCategory = data.category;
         this.selectedSummary = data.summary;
         this.selectedTopic = data.topic;

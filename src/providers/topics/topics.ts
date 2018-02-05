@@ -89,9 +89,6 @@ export class TopicsProvider {
         this.selectedTopicUpdated.next(null);
         this.summariesProvider.getSummary(topic, category, applicationSettings).then((summaryInfo: any) => {
           this.selectedTopicUpdated.next(summaryInfo);
-          // this.summariesProvider.callServiceForMultipleSummariesFetch();
-          // let self = this;
-          // setTimeout(() => {self.summariesProvider.callServiceForMultipleSummariesFetch();}, 1000)
         });
       });
   }

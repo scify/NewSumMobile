@@ -1,4 +1,3 @@
-import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {AlertController, Platform, ToastController} from "ionic-angular";
 import {LoaderProvider} from "../loader/loader";
 import {ErrorHandler, Injectable} from "@angular/core";
