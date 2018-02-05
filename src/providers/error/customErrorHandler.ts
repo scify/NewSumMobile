@@ -4,17 +4,24 @@ import {LoaderProvider} from "../loader/loader";
 import {ErrorHandler, Injectable} from "@angular/core";
 import {SplashScreen} from "@ionic-native/splash-screen";
 import {Network} from "@ionic-native/network";
+import Raven from 'raven-js';
+import {APP_CONFIG} from "app/app-config"
+
+
 
 @Injectable()
 export class CustomErrorHandler implements ErrorHandler {
 
-  constructor(private ga: GoogleAnalytics,
-              private loader: LoaderProvider,
+  constructor(private loader: LoaderProvider,
               private toastCtrl: ToastController,
               private alertCtrl: AlertController,
               private splashScreen: SplashScreen,
               private network: Network,
               private platform: Platform) {
+
+    Raven
+      .config(APP_CONFIG.sentryUrl)
+      .install();
   }
 
   handleError(err: any): void {
@@ -23,7 +30,7 @@ export class CustomErrorHandler implements ErrorHandler {
       this.loader.hideLoader();
       this.splashScreen.hide();
       this.presentError(err);
-      this.ga.trackException(err, false);
+      Raven.captureException(err.originalError || err);
     });
   }
 
