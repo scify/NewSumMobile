@@ -28,6 +28,7 @@ import {AppVersion} from "@ionic-native/app-version";
 import {ComponentsModule} from "../components/components.module";
 import {TranslateModule} from "@ngx-translate/core";
 import {translationServiceConfig} from "./translation-module-config";
+import { SummariesProvider } from '../providers/summaries/summaries';
 
 
 
@@ -71,7 +72,8 @@ import {translationServiceConfig} from "./translation-module-config";
     NetworkProvider,
     ImageLoadOptionProvider,
     {provide: ErrorHandler, useClass: CustomErrorHandler},
-    AppVersion
+    AppVersion,
+    SummariesProvider
   ]
 })
 export class AppModule {}

@@ -5,6 +5,7 @@ import {ApplicationSettingsProvider} from "../applicationSettings/applicationSet
 import {TopicsUpdatedInfo} from "../../models/TopicsUpdatedInfo";
 import {ApiServiceProvider} from "../api-service/apiService";
 import {SelectTopicEnum} from "../../models/selectTopicEnum";
+import {SummariesProvider} from "../summaries/summaries";
 
 
 @Injectable()
@@ -21,7 +22,8 @@ export class TopicsProvider {
   private static DAY_IN_MILLIS: number = 24 * 60 * 60 * 1000;
 
   constructor(private serviceClient: ApiServiceProvider,
-              private applicationSettings: ApplicationSettingsProvider) {
+              private applicationSettings: ApplicationSettingsProvider,
+              private summariesProvider: SummariesProvider) {
     this.topicsUpdated = new Subject<any>();
     this.getOnlyHotTopics = true; //todo :load from local storage
     this.selectedTopicUpdated = new BehaviorSubject<any>(null);
@@ -45,6 +47,7 @@ export class TopicsProvider {
               let topicsToDisplay = this.getTopics();
               let topicsUpdatedInfo = new TopicsUpdatedInfo(category, topicsToDisplay, this.topics.length, this.filterHotTopics().length, shouldUpdateTabsSelection);
               this.topicsUpdated.next(topicsUpdatedInfo);
+              this.summariesProvider.fetchSummariesForAllTopics(this.topics, category, applicationSettings);
               resolve(topicsUpdatedInfo);
             });
         });
@@ -81,15 +84,15 @@ export class TopicsProvider {
   }
 
   public setSelectedTopic(category: any, topic: any) {
-
     this.applicationSettings.getApplicationSettings()
       .then((applicationSettings) => {
         this.selectedTopicUpdated.next(null);
-        this.serviceClient
-          .getSummary(topic.ID, applicationSettings.sources, applicationSettings.language)
-          .then((summary) => {
-            this.selectedTopicUpdated.next({category: category, topic: topic, summary: summary});
-          })
+        this.summariesProvider.getSummary(topic, category, applicationSettings).then((summaryInfo: any) => {
+          this.selectedTopicUpdated.next(summaryInfo);
+          // this.summariesProvider.callServiceForMultipleSummariesFetch();
+          // let self = this;
+          // setTimeout(() => {self.summariesProvider.callServiceForMultipleSummariesFetch();}, 1000)
+        });
       });
   }
 

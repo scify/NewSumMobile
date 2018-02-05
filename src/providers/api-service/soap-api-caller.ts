@@ -17,7 +17,7 @@ export class SoapApiCaller{
   }
 
   public getResource(methodToInvoke, parameters): Array<any> {
-    let result = this.invokeSOAPClient(methodToInvoke, parameters, false);
+    let result = this.invokeSOAPClient(methodToInvoke, parameters, false, null);
     try {
       return JSON.parse(result);
     } catch(error) {
@@ -28,14 +28,13 @@ export class SoapApiCaller{
 
   public getResourceAsync(methodToInvoke, parameters): Promise<any> {
     return new Promise((resolve, reject) => {
-      let result = this.invokeSOAPClient(methodToInvoke, parameters, false);
-      if (result) {
-        resolve(result);
-      } else {
-        reject();
-      }
-    }).then(result => {
-      return JSON.parse(result as any);
+      this.invokeSOAPClient(methodToInvoke, parameters, true, (result) => {
+          if (result) {
+          resolve(JSON.parse(result));
+        } else {
+          reject();
+        }
+      });
     }).catch((error) => {
       this.setEndpointUsageSwitch(this.calculateEndpointSwitchValueForStorage());
       throw error;
@@ -51,8 +50,8 @@ export class SoapApiCaller{
     return this.appStorage.set("use-backup-endpoint", endpointSwitch);
   }
 
-  private invokeSOAPClient(methodToInvoke, parameters, async): any {
-    return this.soapClient.invoke(this.apiEndpoint + APP_CONFIG.wsdlPath, methodToInvoke, parameters, async, null);
+  private invokeSOAPClient(methodToInvoke, parameters, async, callback): any {
+    return this.soapClient.invoke(this.apiEndpoint + APP_CONFIG.wsdlPath, methodToInvoke, parameters, async, callback);
   }
 
   private calculateEndpointSwitchValueForStorage() {
