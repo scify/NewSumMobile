@@ -13,8 +13,7 @@
 </ion-header>
 
 
-<ion-content
-  [ngClass]="{'displaySourcesUponSentence':displaySourcesUponEachSentence}">
+<ion-content class="displaySourcesUponSentence">
 
   <div *ngIf="selectedSummary" (swipe)="swipeActivity($event)">
     <div id="img-container">
@@ -23,13 +22,8 @@
         <div id="title" [innerHtml]="selectedTopic.Title"></div>
       </div>
     </div>
-    <ion-item id="display-sources-toggle">
-      <ion-label>{{ "Display references" | translate }}</ion-label>
-      <ion-toggle [(ngModel)]="displaySourcesUponEachSentence"
-                  (ionChange)="toggleDisplaySources()"></ion-toggle>
-    </ion-item>
-    <ion-grid id="sources-grid" padding>
 
+    <ion-grid id="sources-grid" padding>
       <ion-row>
         <ion-col>
           <div class="summary-snippet" *ngFor="let sentence of selectedSummary.Sentences">

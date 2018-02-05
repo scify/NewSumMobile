@@ -2,33 +2,31 @@ page-summary {
   ion-title {
     text-align: left;
   }
-  #sources-grid{
+  #sources-grid {
     margin-bottom: 50px;
   }
   .grid {
-    padding-top:0;
+    padding-top: 0;
   }
-  #display-sources-toggle
-  {
+  #display-sources-toggle {
     ion-label {
-      text-align:right;
-      font-size:11px;
-      color:gray;
-      padding:0;
-      margin:0;
-      border:none;
+      text-align: right;
+      font-size: 11px;
+      color: gray;
+      padding: 0;
+      margin: 0;
+      border: none;
     }
 
-    .item-inner
-    {
-      border:none;
+    .item-inner {
+      border: none;
     }
   }
   #img-container {
     position: relative;
     img {
       width: 100%;
-      vertical-align:middle;
+      vertical-align: middle;
     }
     #title-background {
       position: absolute;
@@ -55,18 +53,19 @@ page-summary {
   .summary-snippet {
     color: black;
     padding: 0;
-    margin-top:0;
+    margin-top: 0;
     line-height: 1.5em;
-    p{
-      margin-top:0;
-      margin-bottom:5px;
+    p {
+      margin-top: 0;
+      margin-bottom: 5px;
     }
+
   }
 
-  #sources-list{
+  #sources-list {
     list-style-type: none;
-    padding-left:1px;
-    margin-top:5px;
+    padding-left: 1px;
+    margin-top: 5px;
     a {
       text-decoration: none;
       color: gray;
@@ -75,13 +74,13 @@ page-summary {
   }
 
   .sentence-sources {
-    display:none;
-    color:lightgrey;
-    font-size:11px;
+    display: none;
+    color: lightgrey;
+    font-size: 11px;
   }
   .displaySourcesUponSentence {
-     .sentence-sources {
-      display:block;
+    .sentence-sources {
+      display: block;
 
     }
 
@@ -107,5 +106,12 @@ page-summary {
     a {
       text-decoration: none;
     }
+  }
+}
+
+.light-theme {
+  #sources-list a,
+  sources .source a {
+    color: #424242;
   }
 }
