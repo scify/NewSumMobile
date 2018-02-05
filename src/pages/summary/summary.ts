@@ -22,7 +22,6 @@ export class SummaryPage {
   public selectedTopic: any;
   public selectedSummary: any;
   public isSearch: boolean;
-  public displaySourcesUponEachSentence: boolean = true;
   public summaryIsConstructedByMoreThanOneSources: boolean;
   public selectedImgLoadOption: string;
   public isConnectedToWiFi: boolean = false;
@@ -85,12 +84,6 @@ export class SummaryPage {
 
   initPage() {
 
-    this.storage.ready().then(() => {
-      this.storage.get("displaySources").then((val) => {
-        this.displaySourcesUponEachSentence = val == 1;
-      })
-    });
-
     this.isSearch = this.navParams.get('isSearch');
     if (this.isSearch) {
       this.selectedCategory = this.navParams.get('forcedCategoryTitle');
@@ -99,11 +92,6 @@ export class SummaryPage {
       this.selectedCategory = this.topicsProvider.getCategory();
       this.selectedCategoryDefaultImage = CategoriesViewManager.getCategoryDefaultImage(this.selectedCategory);
     }
-  }
-
-
-  public toggleDisplaySources() {
-    this.storage.set("displaySources", this.displaySourcesUponEachSentence);
   }
 
   swipeActivity(event) {
