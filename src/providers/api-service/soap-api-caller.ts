@@ -29,7 +29,7 @@ export class SoapApiCaller{
   public getResourceAsync(methodToInvoke, parameters): Promise<any> {
     return new Promise((resolve, reject) => {
       this.invokeSOAPClient(methodToInvoke, parameters, true, (result) => {
-          if (result) {
+        if (result) {
           resolve(JSON.parse(result));
         } else {
           reject();
