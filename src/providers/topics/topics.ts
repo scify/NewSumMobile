@@ -47,7 +47,6 @@ export class TopicsProvider {
               let topicsToDisplay = this.getTopics();
               let topicsUpdatedInfo = new TopicsUpdatedInfo(category, topicsToDisplay, this.topics.length, this.filterHotTopics().length, shouldUpdateTabsSelection);
               this.topicsUpdated.next(topicsUpdatedInfo);
-              this.summariesProvider.fetchSummariesForAllTopics(this.topics, category, applicationSettings);
               resolve(topicsUpdatedInfo);
             });
         });
@@ -89,6 +88,7 @@ export class TopicsProvider {
         this.selectedTopicUpdated.next(null);
         this.summariesProvider.getSummary(topic, category, applicationSettings).then((summaryInfo: any) => {
           this.selectedTopicUpdated.next(summaryInfo);
+          this.summariesProvider.fetchSummariesForCachingPurposes(this.topics, category, applicationSettings, topic);
         });
       });
   }
@@ -135,19 +135,19 @@ export class TopicsProvider {
             this.setSelectedTopic(topicsUpdatedInfo.category, topicToSelect);
           } else {
             if (topicToSelectAfterRetrieval === SelectTopicEnum.FIRST)
-              this.loadNextTopic(category, null, false);
+              this.loadNextTopic(category, null, false, true);
             else
-              this.loadPreviousTopic(category, null, false);
+              this.loadPreviousTopic(category, null, false, true);
           }
         });
     }
   }
 
-  public loadNextTopic(category: any, currentTopic: any, isSearch: boolean) {
+  public loadNextTopic(category: any, currentTopic: any, isSearch: boolean, shouldForceNextCategory: boolean = false) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
-    let index = existingTopics.indexOf(currentTopic);
-    if (index == existingTopics.length - 1 || index === -1) //we have reached the end or no current topic was passed
-    {
+    let index = currentTopic ? existingTopics.map(x => x.ID).indexOf(currentTopic.ID) : -1;
+    //we have reached the end or should force the next category selection
+    if (index == existingTopics.length - 1 || shouldForceNextCategory) {
       if (!isSearch) //for search results there is no next/previous category to navigate
         this.getNextCategory(category)
           .then((nextCategory) => this.getTopicsAndSelect(nextCategory, SelectTopicEnum.FIRST));
@@ -156,11 +156,11 @@ export class TopicsProvider {
       this.setSelectedTopic(category, existingTopics[index + 1]);
   }
 
-  public loadPreviousTopic(category: any, currentTopic: any, isSearch: boolean) {
+  public loadPreviousTopic(category: any, currentTopic: any, isSearch: boolean, shouldForcePreviousCategory: boolean = false) {
     let existingTopics = isSearch ? this.topicsByKeyword : this.getTopics();
-    let index = existingTopics.indexOf(currentTopic);
-    if (index == 0 || index === -1) //we have reached the start or no current topic was passed
-    {
+    let index = currentTopic ? existingTopics.map(x => x.ID).indexOf(currentTopic.ID) : -1;
+    //we have reached the start or should force the previous category selection
+    if (index == 0 || shouldForcePreviousCategory) {
       if (!isSearch)
         this.getPreviousCategory(category)
           .then((previousCateg) => this.getTopicsAndSelect(previousCateg, SelectTopicEnum.LAST));

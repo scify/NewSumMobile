@@ -28,10 +28,16 @@ export class SummariesProvider {
     });
   }
 
-  public fetchSummariesForAllTopics(topics: Array<any>, category: string, applicationSettings: any) {
-    for (let topic of topics) {
-      if (!this.fetchedSummaries[topic.ID]) {
-        this.fetchSummaryFromService(topic, category, applicationSettings);
+  public fetchSummariesForCachingPurposes(topics: Array<any>, category: string, applicationSettings: any, currentTopic: any) {
+    let index: number = topics.indexOf(currentTopic);
+    let firstIndexToFetch: number = index - 10;
+    let lastIndexToFetch: number = index + 10;
+    for (let i = firstIndexToFetch; i <= lastIndexToFetch; i++) {
+      if (topics[i]) {
+        let topic = topics[i];
+        if (!this.fetchedSummaries[topic.ID]) {
+          this.fetchSummaryFromService(topic, category, applicationSettings);
+        }
       }
     }
   }
