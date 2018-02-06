@@ -133,5 +133,17 @@ ion-alert.dark-theme {
         }
       }
     }
+    // fixes for ios
+    .alert-ios {
+      .alert-message {
+        background-color: $dark-gray;
+      }
+      button {
+        .alert-radio-inner {
+          background-color: transparent;
+          border-color: $yellow;
+        }
+      }
+    }
   }
 }
