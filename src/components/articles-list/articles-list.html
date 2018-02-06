@@ -4,9 +4,9 @@
 
 <div class="card-background-page">
   <ion-card  *ngFor="let article of articles" (click)="selectTopicAndDisplaySummary(article)">
-    <div class="img-holder" [ngStyle]="{'background-image': 'url('+(article.imageUrls.length > 0 && (isConnectedToWiFi || selectedImgLoadOption === 'all')
-          ? article.imageUrls[0]  : selectedCategoryDefaultImage) +')' }" >
-      <img src=""/>
+    <div class="img-holder">
+      <img src="{{(article.imageUrls.length > 0 && (isConnectedToWiFi || selectedImgLoadOption === 'all')
+          ? article.imageUrls[0]  : selectedCategoryDefaultImage)}}"/>
       <div class="info-background">
         <div class="category"><span>{{selectedCategoryForUppercase}}</span><span>{{article.DaysAgo ? (("BEFORE" | translate) + article.DaysAgo + ("DAYS" | translate)) : (article.DisplayTime | translate)}}</span></div>
 
