@@ -93,7 +93,7 @@ export class AllTopicsPage {
 
   public refreshArticles(refresher) {
     this.isRefreshing = true;
-    this.topicsProvider.refreshTopics(this.selectedCategory).then(() => {
+    this.topicsProvider.refreshTopics(this.selectedCategory, false).then(() => {
       this.isRefreshing = false;
       refresher.complete();
     });
