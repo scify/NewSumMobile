@@ -136,12 +136,12 @@ ion-alert.dark-theme {
     // fixes for ios
     .alert-ios {
       .alert-message {
-        background-color: $dark-gray;
+        padding: 0;
       }
-      button {
+      [aria-checked="true"] {
         .alert-radio-inner {
-          background-color: transparent;
-          border-color: $yellow;
+          background-color: transparent !important;
+          border-color: $yellow !important;
         }
       }
     }

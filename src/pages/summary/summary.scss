@@ -2,9 +2,6 @@ page-summary {
   ion-title {
     text-align: left;
   }
-  #sources-grid {
-    margin-bottom: 50px;
-  }
   .grid {
     padding-top: 0;
   }
@@ -37,7 +34,6 @@ page-summary {
     }
   }
   #title {
-    //font-weight: bold;
     color: white;
     padding: 12px;
     position: relative;
@@ -87,8 +83,7 @@ page-summary {
   }
 
   #summaries-navigator {
-    position: fixed;
-    -webkit-overflow-scrolling: auto;
+    position: relative;
     bottom: 0;
     display: table;
     width: 100%;

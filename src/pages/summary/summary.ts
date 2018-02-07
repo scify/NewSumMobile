@@ -82,7 +82,6 @@ export class SummaryPage {
   }
 
   initPage() {
-
     this.isSearch = this.navParams.get('isSearch');
     if (this.isSearch) {
       this.selectedCategory = this.navParams.get('forcedCategoryTitle');
