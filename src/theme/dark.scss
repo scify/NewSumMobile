@@ -135,8 +135,8 @@ ion-alert.dark-theme {
     }
     // fixes for ios
     .alert-ios {
-      .alert-message {
-        padding: 0;
+      .alert-message:empty {
+        background-color: $dark-gray;
       }
       [aria-checked="true"] {
         .alert-radio-inner {
