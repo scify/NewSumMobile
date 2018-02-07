@@ -19,7 +19,25 @@ export class CustomErrorHandler implements ErrorHandler {
               private platform: Platform) {
 
     Raven
-      .config(APP_CONFIG.sentryUrl)
+      .config(APP_CONFIG.sentryUrl,
+        {release: APP_CONFIG.sentryProjectRelease,
+          dataCallback: data => {
+
+            if (data.culprit) {
+              data.culprit = data.culprit.substring(data.culprit.lastIndexOf('/'));
+            }
+
+            let stacktrace = data.stacktrace ||
+              data.exception &&
+              data.exception.values[0].stacktrace;
+
+            if (stacktrace) {
+              stacktrace.frames.forEach(function (frame) {
+                frame.filename = frame.filename.substring(frame.filename.lastIndexOf('/'));
+              });
+            }
+          }
+        })
       .install();
   }
 
