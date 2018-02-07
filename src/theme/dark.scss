@@ -133,16 +133,16 @@ ion-alert.dark-theme {
         }
       }
     }
-    // fixes for ios
-    .alert-ios {
-      .alert-message:empty {
-        background-color: $dark-gray;
-      }
-      [aria-checked="true"] {
-        .alert-radio-inner {
-          background-color: transparent !important;
-          border-color: $yellow !important;
-        }
+  }
+  // fixes for ios
+  &.alert-ios {
+    .alert-message:empty {
+      background-color: $dark-gray;
+    }
+    [aria-checked="true"] {
+      .alert-radio-inner {
+        background-color: transparent !important;
+        border-color: $yellow !important;
       }
     }
   }
