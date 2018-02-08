@@ -25,9 +25,6 @@ articles-list {
     background-size: cover;
     @media (min-width: 800px) {
       height: 500px;
-      img {
-        display: none;
-      }
     }
 
     background-repeat: no-repeat;
