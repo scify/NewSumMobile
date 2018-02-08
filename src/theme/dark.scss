@@ -102,6 +102,9 @@ ion-menu.dark-theme {
       color: $white !important;
     }
   }
+  .toolbar .searchbar-ios .searchbar-input {
+    background-color: $white;
+  }
 }
 
 ion-alert.dark-theme {
