@@ -14,6 +14,7 @@ import {LoaderProvider} from "../providers/loader/loader";
 import {TopicsProvider} from "../providers/topics/topics";
 import {ApplicationSettingsProvider} from "../providers/applicationSettings/applicationSettings";
 import {CodePush} from "@ionic-native/code-push";
+import {NetworkProvider} from "../providers/network/network";
 
 @Component({
   templateUrl: 'app.html'
@@ -36,7 +37,8 @@ export class MyApp {
               private imgLoadProvider: ImageLoadOptionProvider,
               private translate: TranslateService,
               private notification: NotificationsProvider,
-              private codePush: CodePush) {
+              private codePush: CodePush,
+              private networkProvider: NetworkProvider) {
 
     platform.ready().then(this.platformReadyHandler.bind(this));
     this.settingsProvider.applicationSettingsChanged.subscribe(this.handleApplicationSettingsChange.bind(this));
