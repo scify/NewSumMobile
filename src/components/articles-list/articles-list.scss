@@ -14,22 +14,31 @@ articles-list {
     }
   }
   .img-holder {
-    position:relative;
-    //height:150px;
-    //@media (min-width:600px)  {
-    //  height:200px;
-    //}
-    //
-    //background-size:cover;
-    //background-repeat: no-repeat;
-    //background-position:center center;
+    position: relative;
+    @media (min-width: 600px) {
+      height: 250px;
+      img {
+        display: none;
+      }
+    }
+
+    background-size: cover;
+    @media (min-width: 800px) {
+      height: 500px;
+      img {
+        display: none;
+      }
+    }
+
+    background-repeat: no-repeat;
+    background-position: center center;
     .info-background {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      background-color:rgba(0,0,0,0.5);
-      padding:07px 16px;
+      background-color: rgba(0,0,0,0.5);
+      padding: 7px 16px;
     }
   }
   .category{
