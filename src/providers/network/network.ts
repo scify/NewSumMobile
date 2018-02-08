@@ -14,13 +14,15 @@ export class NetworkProvider {
   public networkConnectionChanged: Subject<any>;
 
   constructor(public network: Network, private platform: Platform) {
-    this.networkConnectionChanged = new Subject<any>();
-    if (this.platform.is('cordova')) {
-      this.network.onchange().subscribe(() => {
-        this.networkConnectionChanged.next(this.network.type);
-      }, error => console.error('Could not observe network changes', error));
-    } else {
-      console.error('Network connection could not be set (need an emulator or device to work properly).');
-    }
+    this.platform.ready().then(() => {
+      this.networkConnectionChanged = new Subject<any>();
+      if (this.platform.is('cordova')) {
+        this.network.onchange().subscribe(() => {
+          this.networkConnectionChanged.next(this.network.type);
+        }, error => console.error('Could not observe network changes', error));
+      } else {
+        console.error('Network connection could not be set (need an emulator or device to work properly).');
+      }
+    });
   }
 }
