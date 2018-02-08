@@ -39,7 +39,6 @@ export class MyApp {
               private codePush: CodePush) {
 
     platform.ready().then(this.platformReadyHandler.bind(this));
-    this.settingsProvider.applicationSettingsChanged.subscribe(this.handleApplicationSettingsChange.bind(this));
   }
 
   private platformReadyHandler() {
@@ -60,6 +59,7 @@ export class MyApp {
     this.screenOrientation.lock('portrait').then(() => console.log('Screen orientation locked successfully'),
       error => console.error('An error occurred while trying to lock screen orientation', error)
     );
+    this.settingsProvider.applicationSettingsChanged.subscribe(this.handleApplicationSettingsChange.bind(this));
   }
 
   private checkForNewUpdates() {
