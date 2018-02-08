@@ -31,7 +31,6 @@ export class ArticlesListComponent {
   public selectedImgLoadOption: string;
   private networkConnectionChangeSubscription: Subscription;
   private isConnectedToWiFi: boolean = false;
-  private noTopicsFoundTitle: string = "";
 
   constructor(public navCtrl: NavController,
               protected topicsProvider: TopicsProvider,
@@ -39,14 +38,7 @@ export class ArticlesListComponent {
               protected networkProvider: NetworkProvider,
               protected translate: TranslateService,
               protected platform: Platform,
-              protected loader: LoaderProvider) {
-
-   let subscription =  this.topicsProvider.topicsUpdated.subscribe(() => {
-      //the first time the page loads noTopicsFoundTitle has value "...". Once we have topics update this title
-      this.noTopicsFoundTitle = translate.instant("No topics found");
-      subscription.unsubscribe(); //unsubscribe, no need to update it again.
-    });
-  }
+              protected loader: LoaderProvider) {}
 
   public selectTopicAndDisplaySummary(topic: any) {
     this.loader.showLoader();
