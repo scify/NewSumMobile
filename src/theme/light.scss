@@ -4,20 +4,10 @@ $almost-white: rgb(248, 248, 248);
 ion-nav.light-theme {
   page-summary {
     #summaries-navigator {
-      background-color: $almost-white;
       a {
+        border: 1px solid $dark-gray;
+        background-color: $almost-white;
         color: $dark-gray;
-      }
-      &:before {
-        left: 0;
-        top: -5px;
-        background-position: left 0 bottom -2px;
-        position: absolute;
-        width: 100%;
-        height: 5px;
-        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAHBAMAAADzDtBxAAAAD1BMVEUAAAAAAAAAAAAAAAAAAABPDueNAAAABXRSTlMUCS0gBIh/TXEAAAAaSURBVAjXYxCEAgY4UIICBmMogMsgFLtAAQCNSwXZKOdPxgAAAABJRU5ErkJggg==);
-        background-repeat: repeat-x;
-        content: "";
       }
     }
   }

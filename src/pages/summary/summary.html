@@ -53,14 +53,16 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <div id="summaries-navigator">
-      <div id="nav-to-previous">
-        <a href="javascript:void(0)" (click)="swipeActivity({direction: 4})"><ion-icon name="arrow-back"></ion-icon> {{"Previous" | translate}}</a>
-      </div>
-      <div id="nav-to-next">
-        <a href="javascript:void(0)" (click)="swipeActivity({direction: 2})">{{"Next" | translate}} <ion-icon name="arrow-forward"></ion-icon></a>
-      </div>
-    </div>
+    <ion-grid id="summaries-navigator" padding>
+      <ion-row>
+        <ion-col>
+          <a id="nav-to-previous" href="javascript:void(0)" (click)="swipeActivity({direction: 4})"><ion-icon name="arrow-back"></ion-icon> {{"Previous" | translate}}</a>
+        </ion-col>
+        <ion-col>
+          <a id="nav-to-next" href="javascript:void(0)" (click)="swipeActivity({direction: 2})">{{"Next" | translate}} <ion-icon name="arrow-forward"></ion-icon></a>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
 
 </ion-content>
