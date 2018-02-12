@@ -11,13 +11,18 @@ import {APP_CONFIG} from "../../app/app-config"
 @Injectable()
 export class CustomErrorHandler implements ErrorHandler {
 
+  private isConnectionLostAlertDisplayed: boolean = false;
+  private isServerConnectionFailedAlertDisplayed: boolean = false;
+  private initLocation: string;
+
   constructor(private loader: LoaderProvider,
               private toastCtrl: ToastController,
               private alertCtrl: AlertController,
               private splashScreen: SplashScreen,
               private network: Network,
               private platform: Platform) {
-
+    // save initial window location to use when restarting the app
+    this.initLocation = window.location.href;
     Raven
       .config(APP_CONFIG.sentryUrl,
         {release: APP_CONFIG.sentryProjectRelease,
@@ -54,35 +59,43 @@ export class CustomErrorHandler implements ErrorHandler {
   presentError(err = undefined) {
 
     if (this.network.type === 'none') {
-      let alert = this.alertCtrl.create({
-        title: 'Connection lost!',
-        message: 'It seems you don\'t have an internet connection. Try to connect and click restart',
-        buttons: [
-          {
-            text: 'Restart',
-            handler: () => {
-              this.loader.showLoader();
-              this.restartApplication();
+      if (!this.isConnectionLostAlertDisplayed) {
+        this.isConnectionLostAlertDisplayed = true;
+        let alert = this.alertCtrl.create({
+          title: 'Connection lost!',
+          message: 'It seems you don\'t have an internet connection. Try to connect and click restart',
+          enableBackdropDismiss: false,
+          buttons: [
+            {
+              text: 'Restart',
+              handler: () => {
+                this.loader.showLoader();
+                this.restartApplication();
+              }
             }
-          }
-        ]
-      });
-      alert.present();
+          ]
+        });
+        alert.present();
+      }
     } else if (err && err.rejection && err.rejection.name === 'NetworkError') {
-      let alert = this.alertCtrl.create({
-        title: 'Couldn\'t connect to server!',
-        message: 'Please try again by clicking the button below.',
-        buttons: [
-          {
-            text: 'Retry',
-            handler: () => {
-              this.loader.showLoader();
-              this.restartApplication();
+      if (!this.isServerConnectionFailedAlertDisplayed) {
+        this.isServerConnectionFailedAlertDisplayed = true;
+        let alert = this.alertCtrl.create({
+          title: 'Couldn\'t connect to server!',
+          message: 'Please try again by clicking the button below.',
+          enableBackdropDismiss: false,
+          buttons: [
+            {
+              text: 'Retry',
+              handler: () => {
+                this.loader.showLoader();
+                this.restartApplication();
+              }
             }
-          }
-        ]
-      });
-      alert.present();
+          ]
+        });
+        alert.present();
+      }
     } else {
       //if not connectivity here change the error message
       let toast = this.toastCtrl.create({
@@ -97,6 +110,6 @@ export class CustomErrorHandler implements ErrorHandler {
   }
 
   private restartApplication() {
-    window.location.reload();
+    window.location.href = this.initLocation;
   }
 }
