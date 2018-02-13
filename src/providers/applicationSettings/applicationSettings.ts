@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {ApplicationSettings} from "../../models/applicationSettings";
 import {ApiServiceProvider} from "../api-service/apiService";
 import {Subject} from "rxjs";
+import {APP_CONFIG} from "../../app/app-config";
 
 
 @Injectable()
@@ -143,8 +144,9 @@ export class ApplicationSettingsProvider {
       if (favoriteCategoryFromStorage) //favorite category already set
         resolveFavCategPromise(favoriteCategoryFromStorage);
       else {
-        categoriesPromise.then((categories) => {
-          let defaultFavCategory = categories[0];
+        Promise.all([languagePromise, categoriesPromise]).then((values) => {
+          // set default favourite category depending on system language, values[0] is the language code
+          let defaultFavCategory = APP_CONFIG['defaultFavouriteCategory_' + values[0]];
           this.setFavoriteCategory(defaultFavCategory).then(() => {
             resolveFavCategPromise(defaultFavCategory);
           });
@@ -169,7 +171,7 @@ export class ApplicationSettingsProvider {
     let setSourcesPromise = this.setSelectedSources(sources);
     let categories = this.serviceClient.getCategories(sources, newLanguage);
     let setCategoriesPromise = this.setSelectedCategories(categories);
-    let favoriteCategory = categories[0];
+    let favoriteCategory = APP_CONFIG['defaultFavouriteCategory_' + newLanguage];
     let setFavoritePromise = this.setFavoriteCategory(favoriteCategory);
     let getThemePromise = this.getActiveTheme();
 
@@ -192,7 +194,8 @@ export class ApplicationSettingsProvider {
         let setSourcesPromise = this.setSelectedSources(newSources);
         let categories = this.serviceClient.getCategories(newSources, language);
         let setCategoriesPromise = this.setSelectedCategories(categories);
-        let favoriteCategory = categories[0];
+        let favoriteCategory = categories.indexOf(APP_CONFIG['defaultFavouriteCategory_' + language]) !== -1 ?
+          APP_CONFIG['defaultFavouriteCategory_' + language] : categories[0];
         let setFavoritePromise = this.setFavoriteCategory(favoriteCategory);
         let getThemePromise = this.getActiveTheme();
 
@@ -210,7 +213,12 @@ export class ApplicationSettingsProvider {
   public changeSelectedCategories(newCategories) {
     return new Promise((resolve) => {
       let setCategoriesPromise = this.setSelectedCategories(newCategories);
-      let favoriteCategory =newCategories[0];
+      // if default favourite category for english exists in newCategories, set it,
+      // else check if the favourite category in greek exists and set it, otherwise, just set the first category
+      let favoriteCategory = newCategories.indexOf(APP_CONFIG['defaultFavouriteCategory_EN']) !== -1 ?
+        APP_CONFIG['defaultFavouriteCategory_EN'] :
+          (newCategories.indexOf(APP_CONFIG['defaultFavouriteCategory_EL']) !== -1 ?
+            APP_CONFIG['defaultFavouriteCategory_EL'] : newCategories[0]);
       let setFavoriteCatPromise = this.setFavoriteCategory(favoriteCategory );
       let getLanguagePromise = this.getSelectedLanguage();
       let getSourcesPromise = this.getSelectedSources();
