@@ -42,5 +42,8 @@
   "BEFORE": "",
   "DAYS": " DAYS AGO",
   "Previous": "Previous",
-  "Next": "Next"
+  "Next": "Next",
+  "Incorrect Selection": "Incorrect Selection",
+  "You need to select at least one category": "You need to select at least one category",
+  "You need to select at least one source": "You need to select at least one source"
 }

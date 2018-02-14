@@ -114,6 +114,16 @@ ion-alert.dark-theme {
     .alert-head {
       background-color: $dark-gray;
     }
+    .alert-message {
+      border-top: 1px solid #dedede;
+      border-bottom: 1px solid #dedede;
+      color: $white;
+      padding: 25px;
+      &:empty {
+        border: none;
+        padding: 0;
+      }
+    }
     button {
       color: white;
       .alert-radio-label, .alert-checkbox-label {
@@ -139,8 +149,16 @@ ion-alert.dark-theme {
   }
   // fixes for ios
   &.alert-ios {
-    .alert-message:empty {
+    .alert-message {
       background-color: $dark-gray;
+      border-top: 1px solid #dedede;
+      border-bottom: 1px solid #dedede;
+      color: $white;
+      padding: 25px;
+      &:empty {
+        border: none;
+        padding: 0;
+      }
     }
     [aria-checked="true"] {
       .alert-radio-inner {

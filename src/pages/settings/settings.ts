@@ -9,6 +9,7 @@ import * as _ from "lodash";
 import {ImageLoadOptionProvider} from "../../providers/image-load-option/image-load-option";
 import {TranslateService} from "@ngx-translate/core";
 import {LoaderProvider} from "../../providers/loader/loader";
+import {getDOM} from "@angular/platform-browser/src/dom/dom_adapter";
 
 @IonicPage()
 @Component({
@@ -39,6 +40,9 @@ export class SettingsPage {
   private themeText: string;
   private allText: string;
   private selectedText: string;
+  private incorrectSelectionTitleText: string;
+  private incorrectSelectionCategoriesText: string;
+  private incorrectSelectionSourcesText: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private alertCtrl: AlertController,
@@ -66,6 +70,15 @@ export class SettingsPage {
     this.ga.trackView("Privacy policy page");
     const url = "http://www.scify.gr/site/el/impact-areas/169-newsum/433-newsum-privacy-policy";
     this.iab.create(url, "_blank", "location=yes");
+  }
+
+  private displayErrorAlert(title: string, message: string) {
+    let alert = this.alertCtrl.create();
+    alert.setTitle(title);
+    alert.setCssClass(this.selectedTheme.toLowerCase() + '-theme');
+    alert.setMessage(message);
+    alert.addButton('OK');
+    alert.present();
   }
 
   public selectLanguage() {
@@ -162,9 +175,14 @@ export class SettingsPage {
       alert.addButton({
         text: this.selectCapsText,
         handler: (selectedCategories: Array<string>) => {
-          this.selectedCategoriesStringified = selectedCategories.join();
-          this.settingsProvider.changeSelectedCategories(selectedCategories)
-            .then(() => this.updateDefaultValues());
+          if (selectedCategories.length > 0) {
+            this.selectedCategoriesStringified = selectedCategories.join();
+            this.settingsProvider.changeSelectedCategories(selectedCategories)
+              .then(() => this.updateDefaultValues());
+          } else {
+            this.displayErrorAlert(this.incorrectSelectionTitleText, this.incorrectSelectionCategoriesText);
+            return false;
+          }
         }
       });
 
@@ -193,8 +211,13 @@ export class SettingsPage {
       alert.addButton({
         text: this.selectCapsText,
         handler: (selectedSources: Array<any>) => {
+          if (selectedSources.length > 0) {
           this.settingsProvider.changeSelectedSources(selectedSources)
             .then(() => this.updateDefaultValues());
+          } else {
+            this.displayErrorAlert(this.incorrectSelectionTitleText, this.incorrectSelectionSourcesText);
+            return false;
+          }
         }
       });
       alert.present();
@@ -276,6 +299,9 @@ export class SettingsPage {
     this.themeText = this.translate.instant("Theme");
     this.allText = this.translate.instant("All");
     this.selectedText = this.translate.instant("selected");
+    this.incorrectSelectionTitleText = this.translate.instant("Incorrect Selection");
+    this.incorrectSelectionCategoriesText = this.translate.instant("You need to select at least one category");
+    this.incorrectSelectionSourcesText = this.translate.instant("You need to select at least one source");
     this.updateDefaultValues();
   }
 

@@ -12,3 +12,29 @@ ion-nav.light-theme {
     }
   }
 }
+
+ion-alert.light-theme {
+  .alert-wrapper {
+    .alert-message {
+      border-top: 1px solid #dedede;
+      border-bottom: 1px solid #dedede;
+      padding: 25px;
+      &:empty {
+        border: none;
+        padding: 0;
+      }
+    }
+  }
+  // fixes for ios
+  &.alert-ios {
+    .alert-message {
+      border-top: 1px solid #dedede;
+      border-bottom: 1px solid #dedede;
+      padding: 25px;
+      &:empty {
+        border: none;
+        padding: 0;
+      }
+    }
+  }
+}

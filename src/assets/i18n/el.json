@@ -42,5 +42,8 @@
   "BEFORE": "ΠΡΙΝ ",
   "DAYS": " ΗΜΕΡΕΣ",
   "Previous": "Προηγούμενο",
-  "Next": "Επόμενο"
+  "Next": "Επόμενο",
+  "Incorrect Selection": "Λανθασμένη Επιλογή",
+  "You need to select at least one category": "Θα πρέπει να επιλέξετε τουλάχιστον μία κατηγορία",
+  "You need to select at least one source": "Θα πρέπει να επιλέξετε τουλάχιστον μία πηγή"
 }
