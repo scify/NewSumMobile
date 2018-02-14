@@ -21,7 +21,15 @@ export class ApiServiceProvider {
   }
 
   public getFeedSources(selectedLang: string): Array<any> {
-    let sources = this.soapApiCaller.getResource('getFeedSources', {sLang: selectedLang});
+    let sources = this.soapApiCaller.getResource('getFeedSources', {
+      sLang: selectedLang
+    }).sort((a: any, b: any) => {
+      if (a.sFeedLabel > b.sFeedLabel)
+        return 1;
+      else if (a.sFeedLabel < b.sFeedLabel)
+        return -1;
+      return 0;
+    });
     return sources;
   }
 
