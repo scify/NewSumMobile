@@ -50,7 +50,7 @@ export class MyApp {
       if (!appHasBeenUsedBefore) {
         let alert = this.alertCtrl.create({
           title: this.translate.instant("Welcome to NewSum!"),
-          message: `<p>${this.translate.instant("This version uses")} ${applicationSettings.sources.length} ` +
+          message: `<p>${this.translate.instant("This version uses")} ` +
             `${this.translate.instant("RSS sources from popular websites to summarize your daily news.")}</p>` +
             `<p>${this.translate.instant("You can configure (add or remove) these RSS sources via Settings.")}</p>`,
           cssClass: applicationSettings.activeTheme.toLowerCase() + '-theme',

@@ -119,15 +119,10 @@ export class ApplicationSettingsProvider {
       if (sourcesFromStorage) //sources already set
         resolveSourcesPromise(sourcesFromStorage);
       else {
-        //when we have the language
-        languagePromise.then((language: string) => {
-          //fetch from service all sources
-          console.log(`applicationSettings: ${language}`);
-          let defaultSources: Array<any> = this.serviceClient.getFeedSources(language);
-          //save to storage and we are done! now we have default sources
-          this.setSelectedSources(defaultSources)
-            .then(() => resolveSourcesPromise(defaultSources));
-        });
+        let defaultSources: Array<any> = ['ALL'];
+        //save to storage and we are done! now we have default sources
+        this.setSelectedSources(defaultSources)
+          .then(() => resolveSourcesPromise(defaultSources));
       }
     });
 
@@ -175,7 +170,7 @@ export class ApplicationSettingsProvider {
 
   public changeApplicationLanguage(newLanguage: string): Promise<ApplicationSettings> {
     let setLanguagePromise = this.setSelectedLanguage(newLanguage);
-    let sources = this.serviceClient.getFeedSources(newLanguage);
+    let sources = ['ALL'];
     let setSourcesPromise = this.setSelectedSources(sources);
     let categories = this.serviceClient.getCategories(sources, newLanguage);
     let setCategoriesPromise = this.setSelectedCategories(categories);

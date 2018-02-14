@@ -9,7 +9,6 @@ import * as _ from "lodash";
 import {ImageLoadOptionProvider} from "../../providers/image-load-option/image-load-option";
 import {TranslateService} from "@ngx-translate/core";
 import {LoaderProvider} from "../../providers/loader/loader";
-import {getDOM} from "@angular/platform-browser/src/dom/dom_adapter";
 
 @IonicPage()
 @Component({
@@ -204,7 +203,8 @@ export class SettingsPage {
           type: 'checkbox',
           label: sources[i].sFeedLabel,
           value: sources[i],
-          checked: (_.findIndex(selectedSources, (s) => _.isEqual(s, sources[i])) >= 0)
+          checked: ((selectedSources.length === 1 && selectedSources[0] === 'ALL') ||
+            _.findIndex(selectedSources, (s) => _.isEqual(s, sources[i])) >= 0)
         });
       }
       alert.addButton(this.cancelCapsText);
@@ -212,7 +212,7 @@ export class SettingsPage {
         text: this.selectCapsText,
         handler: (selectedSources: Array<any>) => {
           if (selectedSources.length > 0) {
-          this.settingsProvider.changeSelectedSources(selectedSources)
+          this.settingsProvider.changeSelectedSources(selectedSources.length === sources.length ? ['ALL'] : selectedSources)
             .then(() => this.updateDefaultValues());
           } else {
             this.displayErrorAlert(this.incorrectSelectionTitleText, this.incorrectSelectionSourcesText);
@@ -312,8 +312,7 @@ export class SettingsPage {
       let selectedCategories = applicationSettings.categories;
       this.selectedCategoriesStringified = selectedCategories.join();
       let selectedSources = applicationSettings.sources;
-      let allAvailableSources = this.settingsProvider.getAllAvailableSources(applicationSettings.language);
-      this.selectedSourcesStringified = ((selectedSources.length === allAvailableSources.length) ?
+      this.selectedSourcesStringified = ((selectedSources.length === 1 && selectedSources[0] === 'ALL') ?
           this.allText : selectedSources.length) + ' ' + this.selectedText;
       this.selectedImagesLoadOption = this.availableImageLoadingOptions[
         this.imgLoadProvider.getSelectedImageLoadOption()
