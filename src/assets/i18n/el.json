@@ -45,5 +45,10 @@
   "Next": "Επόμενο",
   "Incorrect Selection": "Λανθασμένη Επιλογή",
   "You need to select at least one category": "Θα πρέπει να επιλέξετε τουλάχιστον μία κατηγορία",
-  "You need to select at least one source": "Θα πρέπει να επιλέξετε τουλάχιστον μία πηγή"
+  "You need to select at least one source": "Θα πρέπει να επιλέξετε τουλάχιστον μία πηγή",
+  "Welcome to NewSum!": "Καλωσορίσατε στο NewSum!",
+  "This version uses": "Η παρούσα έκδοση χρησιμοποιεί",
+  "RSS sources from popular websites to summarize your daily news.": "RSS πηγές από δημοφιλή sites για να συνοψίσει τις καθημερινές σας ειδήσεις.",
+  "You can configure (add or remove) these RSS sources via Settings.": "Μπορείτε να διαμορφώσετε (προσθέσετε ή αφαιρέσετε) τις RSS πηγές μέσω των \"Ρυθμίσεων\".",
+  "Go to settings": "ΡΥΘΜΙΣΕΙΣ"
 }

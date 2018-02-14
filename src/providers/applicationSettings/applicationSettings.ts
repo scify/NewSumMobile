@@ -36,6 +36,10 @@ export class ApplicationSettingsProvider {
     return this.appStorage.get("active-theme");
   }
 
+  public getAppHasBeenUsedBefore(): Promise<boolean> {
+    return this.appStorage.get("app-been-used");
+  }
+
   private setSelectedLanguage(language: string): Promise<any> {
     return this.appStorage.set("selected-language", language);
   }
@@ -54,6 +58,10 @@ export class ApplicationSettingsProvider {
 
   private setActiveTheme(theme: string): Promise<any> {
     return this.appStorage.set("active-theme", theme);
+  }
+
+  public setAppHasBeenUsedBefore(appBeenUsed: boolean): Promise<boolean> {
+    return this.appStorage.set("app-been-used", appBeenUsed);
   }
 
   public getApplicationSettings(): Promise<ApplicationSettings> {

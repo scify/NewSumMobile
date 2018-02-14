@@ -28,6 +28,7 @@ import {ComponentsModule} from "../components/components.module";
 import {TranslateModule} from "@ngx-translate/core";
 import {translationServiceConfig} from "./translation-module-config";
 import { SummariesProvider } from '../providers/summaries/summaries';
+import {SettingsPageModule} from "../pages/settings/settings.module";
 
 
 
@@ -46,7 +47,8 @@ import { SummariesProvider } from '../providers/summaries/summaries';
     IonicStorageModule.forRoot(),
     HttpClientModule,
     ComponentsModule,
-    TranslateModule.forRoot(translationServiceConfig)
+    TranslateModule.forRoot(translationServiceConfig),
+    SettingsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

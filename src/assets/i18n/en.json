@@ -45,5 +45,10 @@
   "Next": "Next",
   "Incorrect Selection": "Incorrect Selection",
   "You need to select at least one category": "You need to select at least one category",
-  "You need to select at least one source": "You need to select at least one source"
+  "You need to select at least one source": "You need to select at least one source",
+  "Welcome to NewSum!": "Welcome to NewSum!",
+  "This version uses": "This version uses",
+  "RSS sources from popular websites to summarize your daily news.": "RSS sources from popular websites to summarize your daily news.",
+  "You can configure (add or remove) these RSS sources via Settings.": "You can configure (add or remove) these RSS sources via \"Settings\".",
+  "Go to settings": "Go to settings"
 }

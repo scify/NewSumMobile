@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {NavController, Platform, MenuController} from 'ionic-angular';
+import {NavController, Platform, MenuController, AlertController, App} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {TabsPage} from '../pages/tabs/tabs';
@@ -14,6 +14,7 @@ import {LoaderProvider} from "../providers/loader/loader";
 import {TopicsProvider} from "../providers/topics/topics";
 import {ApplicationSettingsProvider} from "../providers/applicationSettings/applicationSettings";
 import {CodePush} from "@ionic-native/code-push";
+import {SettingsPage} from "../pages/settings/settings";
 
 @Component({
   templateUrl: 'app.html'
@@ -36,10 +37,44 @@ export class MyApp {
               private imgLoadProvider: ImageLoadOptionProvider,
               private translate: TranslateService,
               private notification: NotificationsProvider,
+              private alertCtrl: AlertController,
+              private appCtrl: App,
               private codePush: CodePush) {
 
     platform.ready().then(this.platformReadyHandler.bind(this));
     this.settingsProvider.applicationSettingsChanged.subscribe(this.handleApplicationSettingsChange.bind(this));
+  }
+
+  private displayFirstTimeAlert(applicationSettings: any) {
+    this.settingsProvider.getAppHasBeenUsedBefore().then((appHasBeenUsedBefore) => {
+      if (!appHasBeenUsedBefore) {
+        let alert = this.alertCtrl.create({
+          title: this.translate.instant("Welcome to NewSum!"),
+          message: `<p>${this.translate.instant("This version uses")} ${applicationSettings.sources.length} ` +
+            `${this.translate.instant("RSS sources from popular websites to summarize your daily news.")}</p>` +
+            `<p>${this.translate.instant("You can configure (add or remove) these RSS sources via Settings.")}</p>`,
+          cssClass: applicationSettings.activeTheme.toLowerCase() + '-theme',
+          buttons: [
+            {
+              text: 'OK',
+              handler: () => {
+                this.settingsProvider.setAppHasBeenUsedBefore(true);
+              }
+            },
+            {
+              text: this.translate.instant("Go to settings"),
+              handler: () => {
+                this.settingsProvider.setAppHasBeenUsedBefore(true);
+                this.appCtrl.getRootNav().push(SettingsPage);
+
+              }
+            }
+          ],
+          enableBackdropDismiss: false
+        });
+        alert.present();
+      }
+    });
   }
 
   private platformReadyHandler() {
@@ -50,7 +85,9 @@ export class MyApp {
     this.settingsProvider.getApplicationSettings().then((applicationSettings: ApplicationSettings) => {
       this.selectedTheme = applicationSettings.activeTheme.toLowerCase() + '-theme';
       this.translate.setDefaultLang(applicationSettings.language.toLowerCase());
-      this.translate.use(applicationSettings.language.toLowerCase());
+      this.translate.use(applicationSettings.language.toLowerCase()).subscribe(() => {
+        this.displayFirstTimeAlert(applicationSettings);
+      });
       this.availableCategories = applicationSettings.categories;
       this.topicsProvider.refreshTopics(applicationSettings.favoriteCategory);
       this.initGoogleAnalytics();
