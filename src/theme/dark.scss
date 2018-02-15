@@ -149,17 +149,6 @@ ion-alert.dark-theme {
   }
   // fixes for ios
   &.alert-ios {
-    .alert-message {
-      background-color: $dark-gray;
-      border-top: 1px solid #dedede;
-      border-bottom: 1px solid #dedede;
-      color: $white;
-      padding: 25px;
-      &:empty {
-        border: none;
-        padding: 0;
-      }
-    }
     [aria-checked="true"] {
       .alert-radio-inner {
         background-color: transparent !important;
