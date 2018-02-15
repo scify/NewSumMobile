@@ -89,7 +89,7 @@ export class SOAPClientParameters {
                   break;
               }
               if (type === "string") {
-                s += '["' + o.join('","') + '"]';
+                s += '[' + o.map(e => this._serialize(e)).join(',') + ']';
                 break;
               } else {
                 s += "<" + type + ">" + this._serialize(o[p]) + "</" + type + ">"

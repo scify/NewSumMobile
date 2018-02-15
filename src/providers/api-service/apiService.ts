@@ -33,9 +33,9 @@ export class ApiServiceProvider {
     return sources;
   }
 
-  public getCategories(selectedSources: Array<string>, selectedLang: string): Array<string> {
+  public getCategories(selectedSources: Array<any>, selectedLang: string): Array<string> {
     let categories: Array<string> = this.soapApiCaller.getResource('getCategories', {
-      sUserSources: selectedSources,
+      sUserSources: this.getSourcesUrls(selectedSources),
       sLang: selectedLang
     }).sort();
     // latin alphabet comes before the greek one, so SciFY News will be the top category while browsing in greek
@@ -47,27 +47,31 @@ export class ApiServiceProvider {
     return categories;
   }
 
-  public getTopics(selectedSources: Array<string>, selectedCategory: string, selectedLang: string): Promise<any> {
+  public getTopics(selectedSources: Array<any>, selectedCategory: string, selectedLang: string): Promise<any> {
     return this.soapApiCaller.getResourceAsync('getTopics', {
-      sUserSources: selectedSources,
+      sUserSources: this.getSourcesUrls(selectedSources),
       sCategory: selectedCategory,
       sLang: selectedLang
     });
   }
 
-  public getTopicsByKeyword(keyword: string, selectedSources: Array<string>, selectedLang: string): Array<any> {
+  public getTopicsByKeyword(keyword: string, selectedSources: Array<any>, selectedLang: string): Array<any> {
     return this.soapApiCaller.getResource('getTopicsByKeyword',
-      {sKeyword: keyword, sUserSources: selectedSources, sLang: selectedLang}
+      {sKeyword: keyword, sUserSources: this.getSourcesUrls(selectedSources), sLang: selectedLang}
     );
   }
 
-  public getSummary(topicId: string, selectedSources: Array<string>, selectedLang: string): Promise<any> {
+  public getSummary(topicId: string, selectedSources: Array<any>, selectedLang: string): Promise<any> {
     return this.soapApiCaller.getResourceAsync('getSummary',
       {
         sTopicID: topicId,
-        sUserSources: selectedSources,
+        sUserSources: this.getSourcesUrls(selectedSources),
         sLang: selectedLang
       }
     );
+  }
+
+  private getSourcesUrls(sources: Array<any>): Array<string> {
+    return (sources[0] === 'ALL') ? sources : sources.map(s => s.sFeedLink);
   }
 }
